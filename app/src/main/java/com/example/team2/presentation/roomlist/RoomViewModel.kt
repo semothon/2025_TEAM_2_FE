@@ -1,4 +1,4 @@
-package com.example.team2.roomlist
+package com.example.team2.presentation.roomlist
 
 import androidx.lifecycle.ViewModel
 import com.example.team2.model.Room

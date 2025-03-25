@@ -1,4 +1,4 @@
-package com.example.team2.roomlist
+package com.example.team2.presentation.roomlist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
