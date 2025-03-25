@@ -1,4 +1,4 @@
-package com.example.team2.model
+package com.example.team2.presentation.roomlist.model
 
 data class Room(
     val name: String,
