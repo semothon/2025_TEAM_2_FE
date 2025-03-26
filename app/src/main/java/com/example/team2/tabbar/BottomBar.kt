@@ -10,6 +10,7 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -18,14 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.BottomNavigationItem
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomBar(navController: NavHostController) {
-    var selectedItem by rememberSaveable { mutableStateOf(BottomNavigationItem.Home.title) }
+fun BottomBar(navController: NavController) {
+    var selectedItem by rememberSaveable { mutableStateOf("") }
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val bottomItems = listOf(
         BottomNavigationItem.Home,
         BottomNavigationItem.Send,
@@ -33,26 +36,34 @@ fun BottomBar(navController: NavHostController) {
         BottomNavigationItem.Person
     )
 
+    LaunchedEffect(currentBackStackEntry) {
+        selectedItem = currentBackStackEntry?.destination?.route ?: ""
+    }
+
     BottomNavigation(backgroundColor = Color.Gray) {
         bottomItems.forEach { item ->
             BottomNavigationItem(
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.title
+                        contentDescription = item.destination
                     )
                 },
-                selected = selectedItem == item.title,
+                selected = selectedItem == item.destination,
                 selectedContentColor = Color.Blue,
                 unselectedContentColor = Color.Gray,
                 onClick = {
-                    selectedItem = item.title
-                    navController.navigate(item.title)
+                    navController.navigate(item.destination) {
+                        selectedItem = item.destination
+                        popUpTo(bottomItems.first().destination) { inclusive = false }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 modifier = Modifier
                     .padding(4.dp)
                     .background(
-                        if (selectedItem == item.title) Color.Blue
+                        if (selectedItem == item.destination) Color.Blue
                         else Color.Gray,
                         RoundedCornerShape(16.dp)
                     )
@@ -61,7 +72,7 @@ fun BottomBar(navController: NavHostController) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun BottomNavigationBarPreview() {
     BottomBar(rememberNavController())
