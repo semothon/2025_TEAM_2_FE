@@ -14,19 +14,20 @@ import com.example.team2.tabbar.BottomBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationGraph() {
+fun BottomNavigationGraph() {
     val navController = rememberNavController()
+
     Scaffold(
         bottomBar = { BottomBar(navController) }
     ) {
         NavHost(
             navController = navController,
-            startDestination = BottomNavigationItem.Home.title
+            startDestination = BottomNavigationItem.Home.destination
         ) {
-            composable(BottomNavigationItem.Home.title) { RoomListScreen() }
-            composable(BottomNavigationItem.Send.title) { ChatListScreen() }
-            composable(BottomNavigationItem.Check.title) { ParticipationListScreen() }
-            composable(BottomNavigationItem.Person.title) { UserScreen() }
+            composable(BottomNavigationItem.Home.destination) { RoomListScreen() }
+            composable(BottomNavigationItem.Send.destination) { ChatListScreen() }
+            composable(BottomNavigationItem.Check.destination) { ParticipationListScreen() }
+            composable(BottomNavigationItem.Person.destination) { UserScreen() }
         }
     }
 }

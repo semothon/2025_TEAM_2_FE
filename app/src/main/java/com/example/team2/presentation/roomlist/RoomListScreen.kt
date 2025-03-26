@@ -56,7 +56,7 @@ fun RoomItem(room: Room) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun RoomListPreview() {
     RoomListScreen()

@@ -103,7 +103,7 @@ fun ChatRoomItem(chatRoom: Chat) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun ChatPreview() {
     ChatListScreen()
