@@ -13,6 +13,14 @@ class RoomListViewModel : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
+    private val _allKeywords = MutableStateFlow(
+        listOf("같이 먹을래요", "따로 먹을게요", "동성만", "양식", "분식", "만나서 갈래요?", "비혼연애만 좋겠어요", "한식", "일식")
+    )
+    val allKeywords: StateFlow<List<String>> = _allKeywords
+
+    private val _selectedKeywords = MutableStateFlow(listOf<String>())
+    val selectedKeywords: StateFlow<List<String>> = _selectedKeywords
+
     init {
         loadRooms()
     }
@@ -26,5 +34,17 @@ class RoomListViewModel : ViewModel() {
         _rooms.value = _rooms.value.filter {
             it.name.contains(query, ignoreCase = true)
         }
+    }
+
+    fun addKeyword(keyword: String) {
+        _selectedKeywords.value += keyword
+    }
+
+    fun removeKeyword(keyword: String) {
+        _selectedKeywords.value = _selectedKeywords.value.filter { it != keyword }
+    }
+
+    fun emptyListKeywords() {
+        _selectedKeywords.value = emptyList()
     }
 }
