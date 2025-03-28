@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.presentation.chatlist.ChatListScreen
 import com.example.team2.presentation.participationlist.ParticipationListScreen
@@ -16,18 +17,34 @@ import com.example.team2.tabbar.BottomBar
 @Composable
 fun BottomNavigationGraph() {
     val navController = rememberNavController()
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     Scaffold(
-        bottomBar = { BottomBar(navController) }
+        bottomBar = {
+            if (currentRoute != "AddRoom") {
+                BottomBar(navController)
+            }
+        }
     ) {
         NavHost(
             navController = navController,
             startDestination = BottomNavigationItem.Home.destination
         ) {
-            composable(BottomNavigationItem.Home.destination) { RoomListScreen() }
-            composable(BottomNavigationItem.Send.destination) { ChatListScreen() }
-            composable(BottomNavigationItem.Check.destination) { ParticipationListScreen() }
-            composable(BottomNavigationItem.Person.destination) { UserScreen() }
+            composable(BottomNavigationItem.Home.destination) {
+                RoomListScreen(navController)
+            }
+            composable("AddRoom") {
+                RoomListNavigationGraph()
+            }
+            composable(BottomNavigationItem.Send.destination) {
+                ChatListScreen()
+            }
+            composable(BottomNavigationItem.Check.destination) {
+                ParticipationListScreen()
+            }
+            composable(BottomNavigationItem.Person.destination) {
+                UserScreen()
+            }
         }
     }
 }
