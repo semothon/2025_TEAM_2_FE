@@ -1,4 +1,4 @@
-package com.example.team2.roomlist
+package com.example.team2.presentation.roomlist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,10 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.team2.model.Room
+import com.example.team2.presentation.roomlist.model.Room
 
 @Composable
-fun RoomListScreen(viewModel: RoomViewModel = RoomViewModel()) {
+fun RoomListScreen(viewModel: RoomListViewModel = RoomListViewModel()) {
     val rooms by viewModel.rooms.collectAsState(emptyList())
     val searchQuery by viewModel.searchQuery.collectAsState("")
 
@@ -56,7 +56,7 @@ fun RoomItem(room: Room) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun RoomListPreview() {
     RoomListScreen()
