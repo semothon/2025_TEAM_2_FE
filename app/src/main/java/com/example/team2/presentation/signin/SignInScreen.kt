@@ -38,8 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
+import com.example.team2.navigation.SignNavigationItem
+import com.example.team2.ui.theme.Brown2
+import com.example.team2.ui.theme.Gray3
+import com.example.team2.ui.theme.InnerPadding
+import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     navController: NavController,
@@ -52,8 +57,8 @@ fun SignInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(255, 204, 1, 255))
-            .padding(16.dp),
+            .background(MainColor)
+            .padding(InnerPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.weight(3f))
@@ -61,16 +66,25 @@ fun SignInScreen(
             painter = painterResource(R.drawable.logo),
             contentDescription = "logo"
         )
-        Spacer(Modifier.weight(2f))
+        Spacer(Modifier.height(30.dp))
+        Text(
+            text = "학교 이메일로 로그인이 가능합니다 :)",
+            style = TextStyle(color = Brown2),
+        )
 
+        Spacer(Modifier.weight(2f))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            placeholder = { Text("학교 이메일 입력") },
+            placeholder = {
+                Text(
+                    text = "학교 이메일 입력",
+                    style = TextStyle(color = Gray3),
+                )
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(7.86.dp)),
-            textStyle = TextStyle(color = Color.LightGray),
+                .background(MainWhite, RoundedCornerShape(8.dp)),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
@@ -81,13 +95,17 @@ fun SignInScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            placeholder = { Text("비밀번호") },
+            placeholder = {
+                Text(
+                    text = "비밀번호",
+                    style = TextStyle(color = Gray3)
+                )
+            },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(7.86.dp)),
-            textStyle = TextStyle(color = Color.LightGray),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
+                .background(MainWhite, RoundedCornerShape(8.dp)),
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent
             ),
@@ -105,12 +123,14 @@ fun SignInScreen(
         Spacer(Modifier.height(8.dp))
         Button(
             onClick = {
-//                if (viewModel.login(email, password))
-                navController.navigate("BottomNavigationGraph")
+                if (viewModel.login(email, password))
+                    navController.navigate("BottomNavigationGraph")
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(87, 76, 77, 255), RoundedCornerShape(7.86.dp)),
+                .height(55.dp)
+                .background(Brown2, RoundedCornerShape(8.dp)),
+            shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
         ) {
             Text(text = "로그인")
@@ -120,7 +140,7 @@ fun SignInScreen(
         SignOptions(
             onIdClick = { },
             onPasswordClick = { },
-            onSignUpClick = { navController.navigate("") }
+            onSignUpClick = { navController.navigate(SignNavigationItem.SignUp.destination) }
         )
         Spacer(Modifier.weight(3f))
     }
@@ -136,35 +156,33 @@ fun SignOptions(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = "아이디 찾기",
-            modifier = Modifier.clickable {
-                onIdClick()
-            }
-        )
+        SignOptionsText("아이디 찾기") { onIdClick() }
+
         HorizontalDivider(
             modifier = Modifier
                 .size(1.dp, 10.dp)
-                .background(Color.Gray)
+                .background(Brown2)
         )
-        Text(
-            text = "비밀번호 찾기",
-            modifier = Modifier.clickable {
-                onPasswordClick()
-            }
-        )
+
+        SignOptionsText("비밀번호 찾기") { onPasswordClick() }
+
         HorizontalDivider(
             modifier = Modifier
                 .size(1.dp, 10.dp)
-                .background(Color.Gray)
+                .background(Brown2)
         )
-        Text(
-            text = "회원가입",
-            modifier = Modifier.clickable {
-                onSignUpClick()
-            }
-        )
+
+        SignOptionsText("회원가입") { onSignUpClick() }
     }
+}
+
+@Composable
+fun SignOptionsText(text: String, onClick: () -> Unit) {
+    Text(
+        text = text,
+        modifier = Modifier.clickable { onClick() },
+        style = TextStyle(color = Brown2)
+    )
 }
 
 @Preview(showBackground = true)
