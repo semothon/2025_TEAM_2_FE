@@ -6,10 +6,9 @@ import com.example.team2.presentation.roomlist.model.Room
 
 fun exRoomData(): List<Room> {
     return listOf(
-        Room("방 제목 1", "상세 설명 1"),
-        Room("방 제목 2", "상세 설명 2"),
-        Room("방 제목 3", "상세 설명 3"),
-        Room("방 제목 4", "상세 설명 4")
+        Room("맥도날드", "정건 맥날 같이 시커드실 분 구합니다.", listOf("따로 먹을래요", "패스트푸드", "4인팟"), 4),
+        Room("미미카츠", "기숙사 1층에서 같이 드실 분!", listOf("같이 먹을래요", "동성만!", "3인팟"), 3),
+        Room("포케올데이", "포케 같이 시켜먹으실 분", listOf("따로 먹을래요", "샐러드", "5인팟"), 5)
     )
 }
 

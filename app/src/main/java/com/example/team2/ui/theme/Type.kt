@@ -34,4 +34,4 @@ val Typography = Typography(
     */
 )
 
-val InnerPadding = 16.dp
+val InnerPadding = 20.dp
