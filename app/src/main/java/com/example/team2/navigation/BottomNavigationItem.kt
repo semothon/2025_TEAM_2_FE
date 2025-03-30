@@ -1,17 +1,12 @@
 package com.example.team2.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.team2.R
 
 sealed class BottomNavigationItem(
-    val destination: String, val icon: ImageVector
+    val destination: String, val icon: Int
 ) {
-    data object Home : BottomNavigationItem("홈", Icons.Default.Home)
-    data object Send : BottomNavigationItem("채팅", Icons.AutoMirrored.Filled.Send)
-    data object Check : BottomNavigationItem("거래내역", Icons.Default.Check)
-    data object Person : BottomNavigationItem("마이페이지", Icons.Default.Person)
+    data object Home : BottomNavigationItem("홈", R.drawable.home_icon)
+    data object Send : BottomNavigationItem("채팅", R.drawable.chat_icon)
+    data object Check : BottomNavigationItem("거래내역", R.drawable.transaction_icon)
+    data object Person : BottomNavigationItem("마이페이지", R.drawable.user_icon)
 }
