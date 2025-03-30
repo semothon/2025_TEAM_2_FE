@@ -21,7 +21,7 @@ fun SignNavigationGraph() {
         composable(SignNavigationItem.SignUp.destination) {
             SignUpScreen(navController)
         }
-        composable("BottomNavigationGraph") {
+        composable(SignNavigationItem.BottomNavigationGraph.destination) {
             BottomNavigationGraph()
         }
     }

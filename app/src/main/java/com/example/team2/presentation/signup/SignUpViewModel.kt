@@ -2,6 +2,7 @@ package com.example.team2.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.team2.R
 import com.example.team2.presentation.signup.model.SignUp
 import com.example.team2.presentation.signup.model.TextValue
 import com.example.team2.presentation.signup.model.UserInfo
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.Year
+import kotlin.random.Random
 
 class SignUpViewModel : ViewModel() {
     private val _buttonEnableCheck = MutableStateFlow(false)
@@ -27,6 +29,7 @@ class SignUpViewModel : ViewModel() {
 
     private suspend fun performNetworkCheck(info: SignUp): Boolean {
         delay(100)
+        // 학교 학생 확인 되면
         return true
     }
 
@@ -60,6 +63,9 @@ class SignUpViewModel : ViewModel() {
     private val _yearOptions = MutableStateFlow((2010..Year.now().value).map { it.toString() })
     val yearOptions: MutableStateFlow<List<String>> = _yearOptions
 
+    private var _userInfo = MutableStateFlow(UserInfo("", "", "", "", ""))
+    val userInfo: MutableStateFlow<UserInfo> = _userInfo
+
     fun infoSave(userInfo: UserInfo) {
         viewModelScope.launch {
             if (userInfo.name.isNotEmpty()
@@ -67,18 +73,47 @@ class SignUpViewModel : ViewModel() {
                 && userInfo.department.isNotEmpty()
                 && userInfo.year.isNotEmpty()
                 && userInfo.gender.isNotEmpty()
-            )
+            ) {
+                // 중복이 아니면
                 _buttonEnableCheck.value = true
-            else
+                _userInfo.value = userInfo
+            } else
                 _buttonEnableCheck.value = false
         }
     }
 
-    fun duplicationCheck(nickName: String) {
+    private val imageResources = listOf(
+        R.drawable.profile_illustration_1,
+        R.drawable.profile_illustration_2,
+        R.drawable.profile_illustration_3,
+        R.drawable.profile_illustration_4,
+        R.drawable.profile_illustration_5,
+        R.drawable.profile_illustration_6
+    )
 
+    private val _randomProfileIllustration =
+        MutableStateFlow(imageResources[Random.nextInt(imageResources.size)])
+    val randomProfileIllustration: StateFlow<Int> = _randomProfileIllustration
+
+    private var _nickName = MutableStateFlow("")
+    val nickName: StateFlow<String> = _nickName
+
+    fun buttonEnableFalse() {
+        _buttonEnableCheck.value = false
     }
 
-    fun signUp() {
+    fun refreshRandomProfileIllustration() {
+        _randomProfileIllustration.value = imageResources[Random.nextInt(imageResources.size)]
+    }
 
+    fun duplicationCheck(nickName: String) {
+        _nickName.value = nickName
+        // 중복이 아니면
+        if (nickName.isNotEmpty()) _buttonEnableCheck.value = true
+        else _buttonEnableCheck.value = false
+    }
+
+    fun signUp(userInfo: UserInfo, profileIllustration: Int, nickName: String) {
+        // 회원가입 성공
     }
 }

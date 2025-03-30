@@ -124,7 +124,7 @@ fun SignInScreen(
         Button(
             onClick = {
                 if (viewModel.login(email, password))
-                    navController.navigate("BottomNavigationGraph")
+                    navController.navigate(SignNavigationItem.BottomNavigationGraph.destination)
             },
             modifier = Modifier
                 .fillMaxWidth()

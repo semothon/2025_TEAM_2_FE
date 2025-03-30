@@ -23,18 +23,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.navigation.SignNavigationItem
 import com.example.team2.presentation.component.TopBar
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainColor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = SignUpViewModel()) {
-    var selectedTabIndex by remember { mutableIntStateOf(1) }
+fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = viewModel()) {
     val buttonEnable by viewModel.buttonEnableCheck.collectAsState()
+    val userInfo by viewModel.userInfo.collectAsState()
+    val nickName by viewModel.nickName.collectAsState()
+    val profileIllustration by viewModel.randomProfileIllustration.collectAsState()
+    var selectedTabIndex by remember { mutableIntStateOf(1) }
 
     if (selectedTabIndex > 1)
         BackHandler { selectedTabIndex -= 1 }
@@ -61,10 +69,14 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = Sign
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {
-                    when (selectedTabIndex) {
-                        1 -> selectedTabIndex += 1
-                        2 -> selectedTabIndex += 1
-                        3 -> viewModel.signUp()
+                    if (selectedTabIndex < 3)
+                        selectedTabIndex += 1
+                    else {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            viewModel.signUp(userInfo, profileIllustration, nickName)
+                        }
+                        navController.navigate(SignNavigationItem.BottomNavigationGraph.destination)
+                        // 회원가입 후 로그인 버튼을 누른 것처럼 user info 받아오기
                     }
                 },
                 modifier = Modifier
