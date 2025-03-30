@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.team2.presentation.component.SignUpCustomText
+import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.signup.model.UserInfo
 import com.example.team2.ui.theme.Brown1
 import com.example.team2.ui.theme.Brown2
@@ -62,7 +62,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
 
     Column {
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText("이름")
+        CustomText("이름")
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = userName,
@@ -83,7 +83,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
         )
 
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText("학교")
+        CustomText("학교")
         Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
@@ -113,7 +113,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
         }
 
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText("학과")
+        CustomText("학과")
         Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
@@ -143,7 +143,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
         }
 
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText("입학연도")
+        CustomText("입학연도")
         Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
@@ -173,7 +173,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
         }
 
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText("성별")
+        CustomText("성별")
         Spacer(Modifier.height(8.dp))
         Row {
             Button(

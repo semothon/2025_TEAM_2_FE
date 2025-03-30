@@ -38,7 +38,7 @@ fun SignUpRowTextAndButton(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(20.dp))
-        SignUpCustomText(label)
+        CustomText(label)
 
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
