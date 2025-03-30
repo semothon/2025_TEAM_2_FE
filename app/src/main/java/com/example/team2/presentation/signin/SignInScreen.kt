@@ -52,7 +52,6 @@ fun SignInScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val errorMessage by viewModel.errorMessage.collectAsState()
 
     Column(
         modifier = Modifier
@@ -112,19 +111,13 @@ fun SignInScreen(
             maxLines = 1
         )
 
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                color = Color.Red,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-
         Spacer(Modifier.height(8.dp))
         Button(
             onClick = {
                 if (viewModel.login(email, password))
-                    navController.navigate(SignNavigationItem.BottomNavigationGraph.destination)
+                    navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
+                        popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
+                    }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,21 +150,17 @@ fun SignOptions(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         SignOptionsText("아이디 찾기") { onIdClick() }
-
         HorizontalDivider(
             modifier = Modifier
                 .size(1.dp, 10.dp)
                 .background(Brown2)
         )
-
         SignOptionsText("비밀번호 찾기") { onPasswordClick() }
-
         HorizontalDivider(
             modifier = Modifier
                 .size(1.dp, 10.dp)
                 .background(Brown2)
         )
-
         SignOptionsText("회원가입") { onSignUpClick() }
     }
 }

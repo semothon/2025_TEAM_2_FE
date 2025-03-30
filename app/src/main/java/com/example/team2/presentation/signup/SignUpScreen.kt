@@ -75,7 +75,9 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                         CoroutineScope(Dispatchers.IO).launch {
                             viewModel.signUp(userInfo, profileIllustration, nickName)
                         }
-                        navController.navigate(SignNavigationItem.BottomNavigationGraph.destination)
+                        navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
+                            popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
+                        }
                         // 회원가입 후 로그인 버튼을 누른 것처럼 user info 받아오기
                     }
                 },
