@@ -91,6 +91,8 @@ fun BottomBar(navController: NavController) {
                     navController.navigate(item.destination) {
                         selectedItem = item.destination
                         popUpTo(bottomItems.first().destination) { inclusive = false }
+                        launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 modifier = Modifier.align(Alignment.CenterVertically)
