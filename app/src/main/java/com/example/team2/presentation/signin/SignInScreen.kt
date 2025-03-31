@@ -15,12 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,6 +33,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
@@ -48,8 +47,9 @@ import com.example.team2.ui.theme.MainWhite
 @Composable
 fun SignInScreen(
     navController: NavController,
-    viewModel: SignInViewModel = SignInViewModel()
+    viewModel: SignInViewModel = viewModel()
 ) {
+    val isSignIn by viewModel.isSignIn.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -114,7 +114,8 @@ fun SignInScreen(
         Spacer(Modifier.height(8.dp))
         Button(
             onClick = {
-                if (viewModel.login(email, password))
+                viewModel.signIn(email, password)
+                if (isSignIn)
                     navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
                         popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
                     }
