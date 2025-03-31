@@ -11,11 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.team2.presentation.component.SignUpRowTextAndButton
-import com.example.team2.presentation.signup.model.SignUp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.team2.presentation.signup.component.SignUpRowTextAndButton
 
 @Composable
 fun SignUpVerificationScreen(viewModel: SignUpViewModel) {
@@ -50,27 +46,17 @@ fun SignUpVerificationScreen(viewModel: SignUpViewModel) {
                 },
                 onClick = {
                     when (value.label) {
-                        "학교 이메일" -> {}
-                        "인증 코드" -> {}
+                        "학교 이메일" -> viewModel.univVerifyCodeRequest(email)
+                        "인증 코드" -> viewModel.univVerifyCodeCertRequest(email, verificationCode)
                         "비밀번호" -> {}
-                        "비밀번호 확인" -> {
+                        "비밀번호 확인" ->
                             if (password == confirmPassword) {
                                 keyboardController?.hide()
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    viewModel.verification(
-                                        SignUp(
-                                            email,
-                                            verificationCode,
-                                            password,
-                                            confirmPassword
-                                        )
-                                    )
-                                }
-                            }
-                            else
+                                viewModel.savePassword(password)
+                            } else
                                 Toast.makeText(context, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT)
                                     .show()
-                        }
+
                     }
                 }
             )

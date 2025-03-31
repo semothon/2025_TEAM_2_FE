@@ -1,4 +1,4 @@
-package com.example.team2.presentation.component
+package com.example.team2.presentation.signup.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

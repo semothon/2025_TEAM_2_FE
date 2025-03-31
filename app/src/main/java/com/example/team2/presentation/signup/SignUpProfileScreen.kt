@@ -23,17 +23,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.team2.R
-import com.example.team2.presentation.component.SignUpRowTextAndButton
-import com.example.team2.presentation.signup.model.UserInfo
+import com.example.team2.presentation.signup.component.SignUpRowTextAndButton
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.MainWhite
-import kotlin.random.Random
 
 @Composable
 fun SignUpProfileScreen(viewModel: SignUpViewModel) {

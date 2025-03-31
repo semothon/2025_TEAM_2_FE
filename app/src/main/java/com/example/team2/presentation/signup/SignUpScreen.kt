@@ -1,6 +1,10 @@
 package com.example.team2.presentation.signup
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.SignNavigationItem
-import com.example.team2.presentation.component.TopBar
+import com.example.team2.presentation.signup.component.TopBar
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.InnerPadding
@@ -38,14 +42,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = viewModel()) {
-    val buttonEnable by viewModel.buttonEnableCheck.collectAsState()
-    val userInfo by viewModel.userInfo.collectAsState()
-    val nickName by viewModel.nickName.collectAsState()
-    val profileIllustration by viewModel.randomProfileIllustration.collectAsState()
+    val buttonEnable by viewModel.isButtonEnable.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(1) }
 
-    if (selectedTabIndex > 1)
-        BackHandler { selectedTabIndex -= 1 }
+    BackHandler {
+        if (selectedTabIndex > 1) selectedTabIndex -= 1
+    }
 
     Scaffold(
         topBar = {
@@ -60,10 +62,24 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                 .padding(it)
                 .padding(InnerPadding)
         ) {
-            when (selectedTabIndex) {
-                1 -> SignUpVerificationScreen(viewModel)
-                2 -> SignUpInfoScreen(viewModel)
-                3 -> SignUpProfileScreen(viewModel)
+            AnimatedContent(
+                targetState = selectedTabIndex,
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        slideInHorizontally(initialOffsetX = { it }) togetherWith slideOutHorizontally(
+                            targetOffsetX = { -it })
+                    } else {
+                        slideInHorizontally(initialOffsetX = { -it }) togetherWith slideOutHorizontally(
+                            targetOffsetX = { it })
+                    }
+                },
+                label = ""
+            ) { targetState ->
+                when (targetState) {
+                    1 -> SignUpVerificationScreen(viewModel)
+                    2 -> SignUpInfoScreen(viewModel)
+                    3 -> SignUpProfileScreen(viewModel)
+                }
             }
 
             Spacer(Modifier.weight(1f))
@@ -73,12 +89,13 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                         selectedTabIndex += 1
                     else {
                         CoroutineScope(Dispatchers.IO).launch {
-                            viewModel.signUp(userInfo, profileIllustration, nickName)
+                            viewModel.signUp()
                         }
-                        navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
-                            popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
+                        navController.navigate(SignNavigationItem.SignIn.destination) {
+                            popUpTo(SignNavigationItem.SignIn.destination) { inclusive = false }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        // 회원가입 후 로그인 버튼을 누른 것처럼 user info 받아오기
                     }
                 },
                 modifier = Modifier
