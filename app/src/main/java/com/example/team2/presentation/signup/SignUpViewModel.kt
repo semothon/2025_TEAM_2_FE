@@ -1,5 +1,8 @@
 package com.example.team2.presentation.signup
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.team2.R
@@ -8,6 +11,7 @@ import com.example.team2.network.model.ApiResponse
 import com.example.team2.network.model.SignUpRequest
 import com.example.team2.network.model.VerifyCodeCertRequest
 import com.example.team2.network.model.VerifyCodeRequest
+import com.example.team2.presentation.signup.model.Infos
 import com.example.team2.presentation.signup.model.TextValue
 import com.example.team2.presentation.signup.model.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,7 +104,8 @@ class SignUpViewModel : ViewModel() {
     val departmentOptions: MutableStateFlow<List<String>> = _departmentOptions
 
     private val _yearOptions =
-        MutableStateFlow((Year.now().value..Year.now().value - 10).map { it.toString() })
+        MutableStateFlow(
+            (Year.now().value - 10..Year.now().value).sortedDescending().map { it.toString() })
     val yearOptions: MutableStateFlow<List<String>> = _yearOptions
 
     private val _userInfo = MutableStateFlow(UserInfo("", "", "", "", ""))

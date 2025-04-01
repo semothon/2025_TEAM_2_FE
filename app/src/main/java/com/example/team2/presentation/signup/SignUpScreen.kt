@@ -31,11 +31,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.SignNavigationItem
-import com.example.team2.presentation.signup.component.TopBar
+import com.example.team2.presentation.signup.component.SignUpTopBar
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.InnerPadding
+import com.example.team2.ui.theme.MainBlack
 import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +53,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
 
     Scaffold(
         topBar = {
-            TopBar(selectedTabIndex) {
+            SignUpTopBar(selectedTabIndex) {
                 if (selectedTabIndex > 1) selectedTabIndex -= 1
                 else navController.popBackStack()
             }
@@ -101,10 +103,13 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(55.dp)
-                    .background(if (buttonEnable) MainColor else Gray2, RoundedCornerShape(8.dp)),
+                    .background(
+                        if (buttonEnable) MainColor else Gray2,
+                        RoundedCornerShape(8.dp)
+                    ),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                enabled = buttonEnable
+//                enabled = buttonEnable
             ) {
                 Text(
                     text = if (selectedTabIndex == 3) "완료" else "다음",

@@ -24,7 +24,7 @@ import com.example.team2.ui.theme.MainColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(progress: Int, onClick: () -> Unit) {
+fun SignUpTopBar(progress: Int, onClick: () -> Unit) {
     TopAppBar(
         title = {
             Column {
@@ -54,6 +54,6 @@ fun TopBar(progress: Int, onClick: () -> Unit) {
                     trackColor = Gray2,
                 )
             }
-        },
+        }
     )
 }
