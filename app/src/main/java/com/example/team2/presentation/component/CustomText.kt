@@ -40,3 +40,15 @@ fun CustomText3(text: String) {
         )
     )
 }
+
+@Composable
+fun CustomText4(text: String) {
+    Text(
+        text = text,
+        style = TextStyle(
+            color = Brown2,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+    )
+}
