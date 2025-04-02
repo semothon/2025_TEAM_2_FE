@@ -32,7 +32,7 @@ fun UserScreenNavigation() {
             PolicyScreen(navController)
         }
         composable("notice") {
-            NoticeScreen()
+            NoticeScreen(navController)
         }
         composable("inquiry") {
             InquiryScreen()
