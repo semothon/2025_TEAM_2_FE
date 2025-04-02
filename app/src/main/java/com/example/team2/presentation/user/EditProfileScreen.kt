@@ -1,5 +1,6 @@
 package com.example.team2.presentation.user
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,9 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.team2.R
 import com.example.team2.presentation.user.model.ProfileInfo
 import com.example.team2.ui.theme.Gray1
 import com.example.team2.ui.theme.Gray4
@@ -47,6 +51,16 @@ fun EditProfileScreen(
     Column(modifier = Modifier.padding(16.dp)) {
         Text("프로필 수정", style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(16.dp))
+
+        val image = painterResource(R.drawable.profile_illustration_1)
+        Box() {
+            Image(
+                painter = image,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                alpha = 0.5F
+            )
+        }
 
         // 닉네임 입력
         OutlinedTextField(
