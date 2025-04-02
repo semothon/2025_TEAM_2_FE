@@ -1,6 +1,8 @@
 package com.example.team2.presentation.roomlist
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,22 +10,30 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.R
+import com.example.team2.navigation.RoomListNavigationItem
 import com.example.team2.presentation.component.SearchBar
 import com.example.team2.presentation.roomlist.component.KeywordList
 import com.example.team2.ui.theme.InnerPadding
@@ -60,14 +70,14 @@ fun RoomListScreen(
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate("AddRoom") },
+            onClick = { navController.navigate(RoomListNavigationItem.AddRoom.destination) },
             modifier = Modifier
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomEnd)
                 .padding(bottom = 80.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = ""
+            Image(
+                painter = painterResource(R.drawable.room_add_button),
+                contentDescription = "add"
             )
         }
     }

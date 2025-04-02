@@ -1,11 +1,10 @@
 package com.example.team2.presentation.roomlist
 
 import androidx.lifecycle.ViewModel
-import com.example.team2.presentation.roomlist.model.Room
 import com.example.team2.network.exRoomData
+import com.example.team2.presentation.roomlist.model.Room
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
 
 class RoomListViewModel : ViewModel() {
 
@@ -15,7 +14,7 @@ class RoomListViewModel : ViewModel() {
     val initialKeywords: StateFlow<List<String>> = _initialKeywords
 
     private val _additionalKeywords = MutableStateFlow(
-        listOf("디저트", "양식", "아시안", "중식", "고기", "분식", "치킨")
+        listOf("패스트푸드","디저트", "양식", "아시안", "중식", "고기", "분식", "치킨")
     )
     val additionalKeywords: StateFlow<List<String>> = _additionalKeywords
 

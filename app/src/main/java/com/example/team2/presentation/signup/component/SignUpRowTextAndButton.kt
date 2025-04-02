@@ -1,4 +1,4 @@
-package com.example.team2.presentation.component
+package com.example.team2.presentation.signup.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.team2.presentation.component.CustomText
 import com.example.team2.ui.theme.Brown1
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray3

@@ -1,4 +1,4 @@
-package com.example.team2.presentation.addroom.model
+package com.example.team2.presentation.roomadd.model
 
 data class AddRoom(
     val title: String,

@@ -1,21 +1,31 @@
 package com.example.team2.presentation.signup
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.team2.R
-import com.example.team2.presentation.signup.model.SignUp
+import com.example.team2.network.RetrofitClient
+import com.example.team2.network.model.ApiResponse
+import com.example.team2.network.model.SignUpRequest
+import com.example.team2.network.model.VerifyCodeCertRequest
+import com.example.team2.network.model.VerifyCodeRequest
+import com.example.team2.presentation.signup.model.Infos
 import com.example.team2.presentation.signup.model.TextValue
 import com.example.team2.presentation.signup.model.UserInfo
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.Year
 import kotlin.random.Random
 
 class SignUpViewModel : ViewModel() {
-    private val _buttonEnableCheck = MutableStateFlow(false)
-    val buttonEnableCheck: StateFlow<Boolean> = _buttonEnableCheck
+    private val _isButtonEnable = MutableStateFlow(false)
+    val isButtonEnable: StateFlow<Boolean> = _isButtonEnable
 
     private val _signUpVerificationList = MutableStateFlow(
         listOf(
@@ -27,30 +37,63 @@ class SignUpViewModel : ViewModel() {
     )
     val signUpVerificationList: MutableStateFlow<List<TextValue>> = _signUpVerificationList
 
-    private suspend fun performNetworkCheck(info: SignUp): Boolean {
-        delay(100)
-        // 학교 학생 확인 되면
-        return true
+    private val _isCodeVerify = MutableStateFlow(false)
+    private val _userEmail = MutableStateFlow("")
+    private val _password = MutableStateFlow("")
+
+    fun univVerifyCodeRequest(email: String) {
+        val requestBody = VerifyCodeRequest(email)
+        viewModelScope.launch {
+            RetrofitClient.apiService.verifyCodeRequest(requestBody)
+                .enqueue(object : Callback<ApiResponse> {
+                    override fun onResponse(
+                        call: Call<ApiResponse>,
+                        response: Response<ApiResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            // 성공적인 응답 처리
+                            response.body()
+                        } else {
+//                            responseMessage = "Error: ${response.message()}"
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+//                        responseMessage = "Request failed: ${t.message}"
+                    }
+                })
+        }
     }
 
-    fun verification(user: SignUp) {
+    fun savePassword(password: String) {
+        if (_isCodeVerify.value) {
+            _password.value = password
+            _isButtonEnable.value = true
+        }
+    }
+
+    fun univVerifyCodeCertRequest(email: String, verificationCode: String) {
+        val requestBody = VerifyCodeCertRequest(email, verificationCode)
         viewModelScope.launch {
-            if (user.email.isNotEmpty()
-                && user.verificationCode.isNotEmpty()
-                && user.password.isNotEmpty()
-                && user.confirmPassword.isNotEmpty()
-            )
-                try {
-                    if (performNetworkCheck(user)) {
-                        _buttonEnableCheck.value = true
-                    } else {
-                        _buttonEnableCheck.value = false
+            RetrofitClient.apiService.verifyCodeCertRequest(requestBody)
+                .enqueue(object : Callback<ApiResponse> {
+                    override fun onResponse(
+                        call: Call<ApiResponse>,
+                        response: Response<ApiResponse>
+                    ) {
+                        if (response.isSuccessful) {
+//                        responseMessage.value = response.body()?.message ?: "Success"
+                            _isCodeVerify.value = true
+                            _userEmail.value = email
+                        } else {
+//                        responseMessage.value = "Error: ${response.message()}"
+                        }
                     }
-                } catch (e: Exception) {
-                    _buttonEnableCheck.value = false
-                }
-            else
-                _buttonEnableCheck.value = false
+
+                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+//                    responseMessage.value = "Request failed: ${t.message}"
+                    }
+                })
         }
     }
 
@@ -60,25 +103,34 @@ class SignUpViewModel : ViewModel() {
     private val _departmentOptions = MutableStateFlow(listOf("소프트웨어융합학과", "컴퓨터공학과", "인공지능학과"))
     val departmentOptions: MutableStateFlow<List<String>> = _departmentOptions
 
-    private val _yearOptions = MutableStateFlow((2010..Year.now().value).map { it.toString() })
+    private val _yearOptions =
+        MutableStateFlow(
+            (Year.now().value - 10..Year.now().value).sortedDescending().map { it.toString() })
     val yearOptions: MutableStateFlow<List<String>> = _yearOptions
 
-    private var _userInfo = MutableStateFlow(UserInfo("", "", "", "", ""))
-    val userInfo: MutableStateFlow<UserInfo> = _userInfo
+    private val _userInfo = MutableStateFlow(UserInfo("", "", "", "", ""))
+
+    fun buttonEnableFalse() {
+        _isButtonEnable.value = false
+    }
 
     fun infoSave(userInfo: UserInfo) {
-        viewModelScope.launch {
-            if (userInfo.name.isNotEmpty()
-                && userInfo.univ.isNotEmpty()
-                && userInfo.department.isNotEmpty()
-                && userInfo.year.isNotEmpty()
-                && userInfo.gender.isNotEmpty()
-            ) {
-                // 중복이 아니면
-                _buttonEnableCheck.value = true
-                _userInfo.value = userInfo
-            } else
-                _buttonEnableCheck.value = false
+        if (userInfo.name.isNotEmpty()
+            && userInfo.univ.isNotEmpty()
+            && userInfo.department.isNotEmpty()
+            && userInfo.year.isNotEmpty()
+            && userInfo.gender.isNotEmpty()
+        ) {
+            _userInfo.value = UserInfo(
+                userInfo.name,
+                userInfo.univ,
+                userInfo.department,
+                userInfo.year,
+                userInfo.gender
+            )
+            _isButtonEnable.value = true
+        } else {
+            _isButtonEnable.value = false
         }
     }
 
@@ -96,11 +148,6 @@ class SignUpViewModel : ViewModel() {
     val randomProfileIllustration: StateFlow<Int> = _randomProfileIllustration
 
     private var _nickName = MutableStateFlow("")
-    val nickName: StateFlow<String> = _nickName
-
-    fun buttonEnableFalse() {
-        _buttonEnableCheck.value = false
-    }
 
     fun refreshRandomProfileIllustration() {
         _randomProfileIllustration.value = imageResources[Random.nextInt(imageResources.size)]
@@ -109,11 +156,40 @@ class SignUpViewModel : ViewModel() {
     fun duplicationCheck(nickName: String) {
         _nickName.value = nickName
         // 중복이 아니면
-        if (nickName.isNotEmpty()) _buttonEnableCheck.value = true
-        else _buttonEnableCheck.value = false
+        if (nickName.isNotEmpty()) _isButtonEnable.value = true
+        else _isButtonEnable.value = false
     }
 
-    fun signUp(userInfo: UserInfo, profileIllustration: Int, nickName: String) {
-        // 회원가입 성공
+    fun signUp() {
+        val requestBody = SignUpRequest(
+            name = _userInfo.value.name,
+            password = _password.value,
+            year = _userInfo.value.year,
+            department = _userInfo.value.department,
+            gender = _userInfo.value.gender,
+            nickName = _nickName.value,
+            illustration = _randomProfileIllustration.value.toString(),
+            email = _userEmail.value
+        )
+        viewModelScope.launch {
+            RetrofitClient.apiService.signUpRequest(requestBody)
+                .enqueue(object : Callback<ApiResponse> {
+                    override fun onResponse(
+                        call: Call<ApiResponse>,
+                        response: Response<ApiResponse>
+                    ) {
+                        if (response.isSuccessful) {
+//                            responseMessage.value =
+//                                response.body()?.message ?: "Registration Successful"
+                        } else {
+//                            responseMessage.value = "Error: ${response.message()}"
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+//                        responseMessage.value = "Request failed: ${t.message}"
+                    }
+                })
+        }
     }
 }
