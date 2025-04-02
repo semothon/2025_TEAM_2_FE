@@ -15,8 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
 import com.example.team2.presentation.user.model.ProfileInfo
 import com.example.team2.ui.theme.Gray1
@@ -33,7 +35,6 @@ fun EditProfileScreen(
 ) {
     val profileInfo by viewModel.profileInfo.collectAsState()
 
-    // 🟡 상태 변수 - 초기값은 ViewModel에서 가져오기
     var nickname by rememberSaveable { mutableStateOf(profileInfo.nickname) }
     var major by rememberSaveable { mutableStateOf(profileInfo.major) }
     var year by rememberSaveable { mutableStateOf(profileInfo.year) }
@@ -48,9 +49,13 @@ fun EditProfileScreen(
     val yearOptions by viewModel.yearOptions.collectAsState()
     val addressOptions by viewModel.addressOptions.collectAsState()
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 24.dp)
+    ) {
         Text("프로필 수정", style = MaterialTheme.typography.titleLarge)
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(20.dp))
 
         val image = painterResource(R.drawable.profile_illustration_1)
         Box() {
@@ -62,7 +67,6 @@ fun EditProfileScreen(
             )
         }
 
-        // 닉네임 입력
         OutlinedTextField(
             value = nickname,
             onValueChange = { nickname = it },
@@ -70,14 +74,15 @@ fun EditProfileScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
 
-        // 학과 드롭다운
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clickable { majorExpanded = true }
-            .padding(12.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { majorExpanded = true }
+                .padding(12.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+        ) {
             Text(text = major)
         }
         DropdownMenu(
@@ -95,14 +100,15 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
 
-        // 입학년도 드롭다운
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clickable { yearExpanded = true }
-            .padding(12.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { yearExpanded = true }
+                .padding(12.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+        ) {
             Text(text = year)
         }
         DropdownMenu(
@@ -120,9 +126,9 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
 
-        // 성별 선택 버튼
+        Text("성별", modifier = Modifier.padding(bottom = 8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("남성", "여성").forEach { option ->
                 Button(
@@ -136,14 +142,15 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(16.dp))
 
-        // 주소 드롭다운
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .clickable { addressExpanded = true }
-            .padding(12.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { addressExpanded = true }
+                .padding(12.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+        ) {
             Text(text = address)
         }
         DropdownMenu(
@@ -161,9 +168,8 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(32.dp))
 
-        // 완료 버튼 → ViewModel에 업데이트 + 뒤로가기
         Button(
             onClick = {
                 viewModel.updateProfile(
