@@ -43,7 +43,7 @@ fun BottomNavigationGraph() {
                 ParticipationListScreen()
             }
             composable(BottomNavigationItem.Person.destination) {
-                UserScreen()
+                UserScreenNavigation()
             }
         }
     }
