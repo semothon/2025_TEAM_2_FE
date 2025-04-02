@@ -1,14 +1,19 @@
 package com.example.team2.presentation.user
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.R
 import com.example.team2.presentation.user.model.ProfileInfo
 
 
@@ -30,25 +35,43 @@ fun UserScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // 프로필 정보 표시 (원래는 이미지도 있지만 지금은 생략)
-        Text(profileInfo.nickname, style = MaterialTheme.typography.titleMedium)
-        Text("pordoneo@khu.ac.kr") // 이메일 고정값
-        Text("${profileInfo.major} / ${profileInfo.year} / ${profileInfo.gender}")
-        Text(profileInfo.address)
-
-        // 수정 버튼
-        Button(
-            onClick = {
-                navController.navigate("edit_profile_screen")
-            },
-            modifier = Modifier.padding(top = 8.dp)
+        // 🔻 중앙 정렬되는 프로필 영역
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("프로필 수정")
+            val image = painterResource(R.drawable.profile_illustration_1)
+            Box {
+                Image(
+                    painter = image,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.5F,
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+
+            Spacer(Modifier.height(12.dp))
+
+            Text(profileInfo.nickname, style = MaterialTheme.typography.titleMedium)
+            Text("pordoneo@khu.ac.kr")
+            Text("${profileInfo.major} / ${profileInfo.year} / ${profileInfo.gender}")
+            Text(profileInfo.address)
+
+            Spacer(Modifier.height(8.dp))
+
+            Button(onClick = {
+                navController.navigate("edit_profile_screen")
+            }) {
+                Text("프로필 수정")
+            }
         }
 
+        // 🔻 나머지 영역은 기존처럼 좌측 정렬
         Spacer(Modifier.height(16.dp))
 
-        // 좋아요 수
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -59,7 +82,6 @@ fun UserScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // 설정 메뉴 항목
         MenuItem("알림설정") {
             navController.navigate("notification_setting")
         }
@@ -72,8 +94,8 @@ fun UserScreen(
         MenuItem("고객 문의") {
             navController.navigate("inquiry")
         }
-
     }
+
 }
 
 @Composable
