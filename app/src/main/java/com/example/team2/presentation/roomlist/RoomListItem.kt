@@ -1,5 +1,6 @@
 package com.example.team2.presentation.roomlist
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,9 +28,15 @@ import com.example.team2.presentation.roomlist.component.TagChip
 import com.example.team2.presentation.roomlist.model.Room
 
 @Composable
-fun RoomListItem(room: Room) {
+fun RoomListItem(room: Room, onClick: () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                onClick = { onClick() },
+                interactionSource = null,
+                indication = null
+            ),
         color = Color.White,
         shape = RoundedCornerShape(15.dp),
     ) {

@@ -1,9 +1,7 @@
 package com.example.team2.presentation.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,12 +16,12 @@ import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 
 @Composable
-fun CustomRadioButton(isTogether: String, value: String, modifier: Modifier, onClick: () -> Unit) {
+fun CustomRadioButton(boolean: Boolean, value: String, modifier: Modifier, onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
         modifier = modifier
             .background(
-                color = if (value == isTogether) MainColor else MainWhite,
+                color = if (boolean) MainColor else MainWhite,
                 shape = RoundedCornerShape(8.dp)
             ),
         shape = RoundedCornerShape(8.dp),
@@ -32,7 +30,7 @@ fun CustomRadioButton(isTogether: String, value: String, modifier: Modifier, onC
     ) {
         Text(
             text = value,
-            color = if (value == isTogether) Brown2 else Gray5
+            color = if (boolean) Brown2 else Gray5
         )
     }
 }

@@ -34,15 +34,15 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
     var gender by rememberSaveable { mutableStateOf("") }
 
     val univOptions = viewModel.univOptions.collectAsState()
-    val univ = rememberSaveable { mutableStateOf("학교를 선택하세요.") }
+    val univ = rememberSaveable { mutableStateOf("") }
     val univExpanded = remember { mutableStateOf(false) }
 
     val departmentOptions = viewModel.departmentOptions.collectAsState()
-    val department = rememberSaveable { mutableStateOf("학과를 선택하세요.") }
+    val department = rememberSaveable { mutableStateOf("") }
     val departmentExpanded = remember { mutableStateOf(false) }
 
     val yearOptions = viewModel.yearOptions.collectAsState()
-    val year = rememberSaveable { mutableStateOf("입학연도를 선택하세요.") }
+    val year = rememberSaveable { mutableStateOf("") }
     val yearExpanded = remember { mutableStateOf(false) }
 
     LaunchedEffect(userName, univ, department, year, gender) {
@@ -50,15 +50,9 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
     }
 
     val infos = listOf(
-        Infos("학교", univ, univOptions.value, univExpanded, Icons.Default.Search),
-        Infos(
-            "학과",
-            department,
-            departmentOptions.value,
-            departmentExpanded,
-            Icons.Default.KeyboardArrowDown
-        ),
-        Infos("입학연도", year, yearOptions.value, yearExpanded, Icons.Default.KeyboardArrowDown)
+        Infos("학교", univ, "학교를 선택하세요.", univOptions.value, univExpanded, Icons.Default.Search),
+        Infos("학과", department, "학과를 선택하세요.", departmentOptions.value, departmentExpanded, Icons.Default.KeyboardArrowDown),
+        Infos("입학연도", year, "입학연도를 선택하세요.", yearOptions.value, yearExpanded, Icons.Default.KeyboardArrowDown)
     )
 
     Column {
@@ -79,6 +73,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
                 RowTextAndIcon(
                     keyboardController = keyboardController,
                     text = info.selectedText.value,
+                    placeholder = info.placeholder,
                     icon = info.icon,
                     onClickExpanded = { info.expanded.value = true }
                 )

@@ -32,7 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
-import com.example.team2.navigation.SignNavigationItem
+import com.example.team2.navigation.sign.SignNavigationItem
 import com.example.team2.presentation.signin.component.SignOptions
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray3

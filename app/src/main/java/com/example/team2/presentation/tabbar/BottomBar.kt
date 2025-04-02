@@ -2,6 +2,7 @@ package com.example.team2.presentation.tabbar
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -66,7 +67,19 @@ fun BottomBar(navController: NavController) {
                 icon = {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.clickable(
+                            interactionSource = null,
+                            indication = null,
+                            onClick = {
+                                navController.navigate(item.destination) {
+                                    selectedItem = item.destination
+                                    popUpTo(bottomItems.first().destination) { inclusive = false }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }
+                        )
                     ) {
                         Icon(
                             painter = painterResource(item.icon),
@@ -87,15 +100,9 @@ fun BottomBar(navController: NavController) {
                     }
                 },
                 selected = selectedItem == item.destination,
-                onClick = {
-                    navController.navigate(item.destination) {
-                        selectedItem = item.destination
-                        popUpTo(bottomItems.first().destination) { inclusive = false }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                modifier = Modifier.align(Alignment.CenterVertically)
+                onClick = { },
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enabled = false
             )
         }
     }

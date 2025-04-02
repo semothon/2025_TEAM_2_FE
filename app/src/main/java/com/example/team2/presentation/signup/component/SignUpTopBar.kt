@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +56,9 @@ fun SignUpTopBar(progress: Int, onClick: () -> Unit) {
                     trackColor = Gray2,
                 )
             }
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MainWhite
+        )
     )
 }

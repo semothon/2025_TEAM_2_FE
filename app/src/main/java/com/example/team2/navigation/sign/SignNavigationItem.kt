@@ -1,4 +1,4 @@
-package com.example.team2.navigation
+package com.example.team2.navigation.sign
 
 sealed class SignNavigationItem(val destination: String) {
     data object SignIn : SignNavigationItem("로그인")
