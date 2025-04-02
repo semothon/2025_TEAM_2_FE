@@ -56,20 +56,29 @@ fun UserScreen(
         Spacer(Modifier.height(16.dp))
 
         // 설정 메뉴 항목
-        MenuItem("알림설정")
-        MenuItem("약관 및 정책")
-        MenuItem("공지사항")
-        MenuItem("고객 문의")
+        MenuItem("알림설정") {
+            navController.navigate("notification_setting")
+        }
+        MenuItem("약관 및 정책") {
+            navController.navigate("policy")
+        }
+        MenuItem("공지사항") {
+            navController.navigate("notice")
+        }
+        MenuItem("고객 문의") {
+            navController.navigate("inquiry")
+        }
+
     }
 }
 
 @Composable
-fun MenuItem(title: String) {
+fun MenuItem(title: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 12.dp)
-            .clickable { },
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(title)
