@@ -29,7 +29,7 @@ fun UserScreenNavigation() {
             NotificationSettingScreen(navController) // 🔸 알림설정 화면 추가
         }
         composable("policy") {
-            PolicyScreen()
+            PolicyScreen(navController)
         }
         composable("notice") {
             NoticeScreen()
