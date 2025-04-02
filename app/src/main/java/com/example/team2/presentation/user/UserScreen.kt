@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.team2.presentation.user.model.ProfileInfo
+
 
 @Composable
 fun UserScreen(
@@ -86,3 +90,26 @@ fun MenuItem(title: String, onClick: () -> Unit) {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun UserScreenPreview() {
+    val fakeNavController = rememberNavController()
+
+    // 가짜 ViewModel 인스턴스 생성 + 더미 데이터 주입
+    val fakeViewModel = EditProfileViewModel().apply {
+        updateProfile(
+            ProfileInfo(
+                nickname = "프리뷰 닉네임",
+                major = "프리뷰학과",
+                year = "22학번",
+                gender = "여성",
+                address = "프리뷰 주소"
+            )
+        )
+    }
+
+    UserScreen(
+        navController = fakeNavController,
+        viewModel = fakeViewModel
+    )
+}
