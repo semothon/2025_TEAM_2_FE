@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.presentation.user.EditProfileScreen
 import com.example.team2.presentation.user.EditProfileViewModel
+import com.example.team2.presentation.user.FaqScreen
+import com.example.team2.presentation.user.InquiryFormScreen
 import com.example.team2.presentation.user.InquiryScreen
 import com.example.team2.presentation.user.NoticeScreen
 import com.example.team2.presentation.user.NotificationSettingScreen
@@ -35,7 +37,9 @@ fun UserScreenNavigation() {
             NoticeScreen(navController)
         }
         composable("inquiry") {
-            InquiryScreen()
+            InquiryScreen(navController)
         }
+        composable("faq") { FaqScreen(navController) }
+        composable("inquiry_form") { InquiryFormScreen(navController) }
     }
 }
