@@ -5,6 +5,6 @@ data class RoomDetail(
     val content: String,
     val isTogether: Boolean,
     val totalPeople: Int,
-    val genderPreference: String,
+    val gender: String,
     val location: String
 )

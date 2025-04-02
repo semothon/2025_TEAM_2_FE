@@ -11,7 +11,7 @@ class RoomAddViewModel : ViewModel() {
     private val _memberCountOptions = MutableStateFlow((2..10).map { it.toString() })
     val memberCountOptions: MutableStateFlow<List<String>> = _memberCountOptions
 
-    fun makeRoom(newRoom: AddRoom) {
+    fun makeRoom(newRoom: RoomDetail) {
         // 방 추가 로직
     }
 }
