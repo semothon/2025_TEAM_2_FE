@@ -9,9 +9,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.team2.ui.theme.MainWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,5 +36,8 @@ fun TopBar(tobBarText: String, onClick: () -> Unit) {
                 }
             }
         },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MainWhite
+        )
     )
 }

@@ -30,12 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.team2.navigation.SignNavigationItem
+import com.example.team2.navigation.sign.SignNavigationItem
 import com.example.team2.presentation.signup.component.SignUpTopBar
 import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.InnerPadding
-import com.example.team2.ui.theme.MainBlack
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +48,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
 
     BackHandler {
         if (selectedTabIndex > 1) selectedTabIndex -= 1
+        else navController.popBackStack()
     }
 
     Scaffold(
@@ -61,6 +61,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
     ) {
         Column(
             modifier = Modifier
+                .background(MainWhite)
                 .padding(it)
                 .padding(InnerPadding)
         ) {
@@ -108,12 +109,15 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                         RoundedCornerShape(8.dp)
                     ),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    disabledContainerColor = Gray2
+                ),
 //                enabled = buttonEnable
             ) {
                 Text(
                     text = if (selectedTabIndex == 3) "완료" else "다음",
-                    style = TextStyle(color = Brown2)
+                    style = TextStyle(color = Brown2.copy(alpha = 0.7f))
                 )
             }
         }

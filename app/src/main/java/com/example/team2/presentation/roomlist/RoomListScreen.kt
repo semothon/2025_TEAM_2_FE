@@ -73,11 +73,14 @@ fun RoomListScreen(
             onClick = { navController.navigate(RoomListNavigationItem.RoomAdd.destination) },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = 80.dp)
+                .padding(bottom = 80.dp),
+            containerColor = Color.Transparent
         ) {
             Image(
                 painter = painterResource(R.drawable.room_add_button),
                 contentDescription = "add"
+                modifier = Modifier
+                    .padding(top = 20.dp)
             )
         }
     }
