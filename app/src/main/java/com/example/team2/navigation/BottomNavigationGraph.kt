@@ -38,7 +38,7 @@ fun BottomNavigationGraph(viewModel: NavigationViewModel = viewModel()) {
                 ParticipationListScreen()
             }
             composable(BottomNavigationItem.Person.destination) {
-                UserScreen()
+                UserScreenNavigation()
             }
         }
     }
