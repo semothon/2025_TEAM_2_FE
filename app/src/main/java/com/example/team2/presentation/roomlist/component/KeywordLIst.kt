@@ -1,5 +1,6 @@
 package com.example.team2.presentation.roomlist.component
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.component.CustomText2
@@ -57,9 +57,11 @@ fun KeywordList(
             }
 
             Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = Color.White,
-                modifier = Modifier.clickable { expanded = !expanded }
+                shape = RoundedCornerShape(97.dp),
+                color = MainWhite,
+                modifier = Modifier
+                    .clickable { expanded = !expanded }
+                    .border(1.dp, MainColor, RoundedCornerShape(97.dp))
             ) {
                 Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {
                     CustomText2(text = if (expanded) "간단히 보기" else "더보기")
