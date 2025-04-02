@@ -26,7 +26,7 @@ fun UserScreenNavigation() {
             EditProfileScreen(navController = navController, viewModel = sharedViewModel)
         }
         composable("notification_setting") {
-            NotificationSettingScreen() // 🔸 알림설정 화면 추가
+            NotificationSettingScreen(navController) // 🔸 알림설정 화면 추가
         }
         composable("policy") {
             PolicyScreen()
