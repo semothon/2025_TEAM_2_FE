@@ -70,7 +70,7 @@ fun RoomListScreen(
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate(RoomListNavigationItem.AddRoom.destination) },
+            onClick = { navController.navigate(RoomListNavigationItem.RoomAdd.destination) },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 80.dp)

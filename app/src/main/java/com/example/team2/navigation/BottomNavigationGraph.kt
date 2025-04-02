@@ -21,7 +21,7 @@ fun BottomNavigationGraph() {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != RoomListNavigationItem.AddRoom.destination) {
+            if (currentRoute != RoomListNavigationItem.RoomAdd.destination) {
                 BottomBar(navController)
             }
         }
@@ -33,7 +33,7 @@ fun BottomNavigationGraph() {
             composable(BottomNavigationItem.Home.destination) {
                 RoomListScreen(navController)
             }
-            composable(RoomListNavigationItem.AddRoom.destination) {
+            composable(RoomListNavigationItem.RoomAdd.destination) {
                 RoomListNavigationGraph()
             }
             composable(BottomNavigationItem.Send.destination) {

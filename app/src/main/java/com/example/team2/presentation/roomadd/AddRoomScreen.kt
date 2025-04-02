@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,18 +42,20 @@ import com.example.team2.presentation.component.CustomText4
 import com.example.team2.presentation.component.DropDownMenu
 import com.example.team2.presentation.component.RowTextAndIcon
 import com.example.team2.presentation.component.TopBar
+import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 
 @Composable
-fun AddRoomScreen(
+fun RoomAddScreen(
     navController: NavController,
-    viewModel: AddRoomViewModel = viewModel()
+    viewModel: RoomAddViewModel = viewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var restaurantName by rememberSaveable { mutableStateOf("") }
     var roomContent by rememberSaveable { mutableStateOf("") }
+    var location by rememberSaveable { mutableStateOf("") }
     var isTogether by rememberSaveable { mutableStateOf("같이 먹기") }
     var gender by rememberSaveable { mutableStateOf("상관 없어요") }
 
@@ -83,11 +86,12 @@ fun AddRoomScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp)
-                    .background(color = MainColor), //else Gray2),
-                colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                    .background(color = MainColor), // else Gray2),
+//                enabled = restaurantName.isNotEmpty() && roomContent.isNotEmpty() && location.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                CustomText4("생성하기")
+                CustomText4("완료")
             }
         }
     ) { paddingValues ->
@@ -190,14 +194,31 @@ fun AddRoomScreen(
 
             Spacer(Modifier.height(20.dp))
             CustomText3("추천 키워드")
+            // 추천 키워드 추가
 
-
+            Spacer(Modifier.height(20.dp))
+            Row {
+                CustomText3("위치")
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "check",
+                    tint = if (location.isNotEmpty()) MainColor else Gray3,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            CustomOutlinedTextField(
+                value = location,
+                placeholder = "위치를을 입력하세요.",
+                onValueChanged = { location = it }
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun AddRoomPreview() {
-    AddRoomScreen(rememberNavController())
+fun RoomAddPreview() {
+    RoomAddScreen(rememberNavController())
 }

@@ -1,6 +1,6 @@
 package com.example.team2.presentation.roomadd.model
 
-data class AddRoom(
+data class RoomDetail(
     val title: String,
     val content: String,
     val isTogether: Boolean,
