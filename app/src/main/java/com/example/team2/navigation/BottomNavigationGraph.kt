@@ -3,38 +3,33 @@ package com.example.team2.navigation
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.navigation.home.RoomListNavigationGraph
 import com.example.team2.presentation.chatlist.ChatListScreen
 import com.example.team2.presentation.participationlist.ParticipationListScreen
-import com.example.team2.presentation.roomlist.RoomListScreen
-import com.example.team2.presentation.user.UserScreen
 import com.example.team2.presentation.tabbar.BottomBar
+import com.example.team2.presentation.user.UserScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavigationGraph() {
+fun BottomNavigationGraph(viewModel: NavigationViewModel = viewModel()) {
     val navController = rememberNavController()
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val isButton by viewModel.isBottom.collectAsState()
 
     Scaffold(
-        bottomBar = {
-            if (currentRoute != RoomListNavigationItem.RoomAdd.destination) {
-                BottomBar(navController)
-            }
-        }
+        bottomBar = { if (isButton) BottomBar(navController) }
     ) {
         NavHost(
             navController = navController,
             startDestination = BottomNavigationItem.Home.destination
         ) {
             composable(BottomNavigationItem.Home.destination) {
-                RoomListScreen(navController)
-            }
-            composable(RoomListNavigationItem.RoomAdd.destination) {
-                RoomListNavigationGraph()
+                RoomListNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Send.destination) {
                 ChatListScreen()
