@@ -21,58 +21,56 @@ import com.example.team2.ui.theme.Gray5
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 
+
 @Composable
 fun EditProfileScreen(
     viewModel: EditProfileViewModel,
     navController: NavController
 ) {
-    val majorOptions = viewModel.majorOptions.collectAsState()
-    val yearOptions = viewModel.yearOptions.collectAsState()
-    val addressOptions = viewModel.addressOptions.collectAsState()
+    val profileInfo by viewModel.profileInfo.collectAsState()
 
-    var nickname by rememberSaveable { mutableStateOf("") }
-    var major by rememberSaveable { mutableStateOf("학과 선택") }
-    var year by rememberSaveable { mutableStateOf("입학년도 선택") }
-    var gender by rememberSaveable { mutableStateOf("") }
-    var address by rememberSaveable { mutableStateOf("주소 선택") }
+    // 🟡 상태 변수 - 초기값은 ViewModel에서 가져오기
+    var nickname by rememberSaveable { mutableStateOf(profileInfo.nickname) }
+    var major by rememberSaveable { mutableStateOf(profileInfo.major) }
+    var year by rememberSaveable { mutableStateOf(profileInfo.year) }
+    var gender by rememberSaveable { mutableStateOf(profileInfo.gender) }
+    var address by rememberSaveable { mutableStateOf(profileInfo.address) }
 
     var majorExpanded by remember { mutableStateOf(false) }
     var yearExpanded by remember { mutableStateOf(false) }
     var addressExpanded by remember { mutableStateOf(false) }
 
-    // 데이터 자동 저장
-    LaunchedEffect(nickname, major, year, gender, address) {
-        viewModel.saveProfile(ProfileInfo(nickname, major, year, gender, address))
-    }
+    val majorOptions by viewModel.majorOptions.collectAsState()
+    val yearOptions by viewModel.yearOptions.collectAsState()
+    val addressOptions by viewModel.addressOptions.collectAsState()
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text("프로필 수정", style = MaterialTheme.typography.titleLarge)
+        Spacer(Modifier.height(16.dp))
 
-        Spacer(Modifier.height(20.dp))
-        Text("닉네임")
-        Spacer(Modifier.height(8.dp))
+        // 닉네임 입력
         OutlinedTextField(
             value = nickname,
             onValueChange = { nickname = it },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("닉네임을 입력하세요.") },
-            shape = RoundedCornerShape(8.dp)
+            label = { Text("닉네임") },
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(20.dp))
-        Text("학과")
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, Gray4, RoundedCornerShape(8.dp))
-                .padding(16.dp)
-                .clickable { majorExpanded = true }
-        ) {
-            Text(text = major, color = if (major == "학과 선택") Gray4 else Color.Black)
+        Spacer(Modifier.height(12.dp))
+
+        // 학과 드롭다운
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { majorExpanded = true }
+            .padding(12.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+            Text(text = major)
         }
-        DropdownMenu(expanded = majorExpanded, onDismissRequest = { majorExpanded = false }) {
-            majorOptions.value.forEach {
+        DropdownMenu(
+            expanded = majorExpanded,
+            onDismissRequest = { majorExpanded = false }
+        ) {
+            majorOptions.forEach {
                 DropdownMenuItem(
                     text = { Text(it) },
                     onClick = {
@@ -83,20 +81,21 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(20.dp))
-        Text("입학년도")
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, Gray4, RoundedCornerShape(8.dp))
-                .padding(16.dp)
-                .clickable { yearExpanded = true }
-        ) {
-            Text(text = year, color = if (year == "입학년도 선택") Gray4 else Color.Black)
+        Spacer(Modifier.height(12.dp))
+
+        // 입학년도 드롭다운
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { yearExpanded = true }
+            .padding(12.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+            Text(text = year)
         }
-        DropdownMenu(expanded = yearExpanded, onDismissRequest = { yearExpanded = false }) {
-            yearOptions.value.forEach {
+        DropdownMenu(
+            expanded = yearExpanded,
+            onDismissRequest = { yearExpanded = false }
+        ) {
+            yearOptions.forEach {
                 DropdownMenuItem(
                     text = { Text(it) },
                     onClick = {
@@ -107,50 +106,37 @@ fun EditProfileScreen(
             }
         }
 
-        Spacer(Modifier.height(20.dp))
-        Text("성별")
-        Spacer(Modifier.height(8.dp))
-        Row {
+        Spacer(Modifier.height(12.dp))
+
+        // 성별 선택 버튼
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf("남성", "여성").forEach { option ->
                 Button(
                     onClick = { gender = option },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(50.dp)
-                        .border(
-                            if (gender == option) 1.dp else 0.dp,
-                            if (gender == option) MainColor else Color.Transparent,
-                            RoundedCornerShape(8.dp)
-                        )
-                        .background(
-                            if (gender == option) MainWhite else Gray1,
-                            RoundedCornerShape(8.dp)
-                        ),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    Text(
-                        text = option,
-                        color = if (gender == option) MainColor else Gray5
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (gender == option) Color.Yellow else Color.LightGray
                     )
+                ) {
+                    Text(option)
                 }
             }
         }
 
-        Spacer(Modifier.height(20.dp))
-        Text("주소")
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, Gray4, RoundedCornerShape(8.dp))
-                .padding(16.dp)
-                .clickable { addressExpanded = true }
-        ) {
-            Text(text = address, color = if (address == "주소 선택") Gray4 else Color.Black)
+        Spacer(Modifier.height(12.dp))
+
+        // 주소 드롭다운
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .clickable { addressExpanded = true }
+            .padding(12.dp)
+            .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))) {
+            Text(text = address)
         }
-        DropdownMenu(expanded = addressExpanded, onDismissRequest = { addressExpanded = false }) {
-            addressOptions.value.forEach {
+        DropdownMenu(
+            expanded = addressExpanded,
+            onDismissRequest = { addressExpanded = false }
+        ) {
+            addressOptions.forEach {
                 DropdownMenuItem(
                     text = { Text(it) },
                     onClick = {
@@ -160,13 +146,20 @@ fun EditProfileScreen(
                 )
             }
         }
-        Button(onClick = {
-            navController.navigate("user_screen") {
-                popUpTo("user_screen") { inclusive = true } // 스택에서 제거하고 이동
-            }
-        }) {
-            Text("완료", fontWeight = FontWeight.Bold)
-        }
 
+        Spacer(Modifier.height(20.dp))
+
+        // 완료 버튼 → ViewModel에 업데이트 + 뒤로가기
+        Button(
+            onClick = {
+                viewModel.updateProfile(
+                    ProfileInfo(nickname, major, year, gender, address)
+                )
+                navController.popBackStack()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("완료")
+        }
     }
 }

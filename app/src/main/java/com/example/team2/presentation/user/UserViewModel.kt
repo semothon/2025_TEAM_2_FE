@@ -4,10 +4,23 @@ import androidx.lifecycle.ViewModel
 import com.example.team2.presentation.user.model.ProfileInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import android.util.Log
 
 class EditProfileViewModel : ViewModel() {
+
+    private val _profileInfo = MutableStateFlow(
+        ProfileInfo(
+            nickname = "닉네임2",
+            major = "컴퓨터공학과",
+            year = "21학번",
+            gender = "남성",
+            address = "사색의광장 배달존 A"
+        )
+    )
+    val profileInfo: StateFlow<ProfileInfo> = _profileInfo
+
+    fun updateProfile(info: ProfileInfo) {
+        _profileInfo.value = info
+    }
 
     // 드롭다운 항목들
     private val _majorOptions = MutableStateFlow(
@@ -24,15 +37,4 @@ class EditProfileViewModel : ViewModel() {
         listOf("사색의광장 배달존 A", "정문 앞", "우정원", "제2기숙사")
     )
     val addressOptions: StateFlow<List<String>> = _addressOptions
-
-    // 사용자 입력 정보를 임시 저장
-    private val _profileInfo = MutableStateFlow(
-        ProfileInfo("", "", "", "", "")
-    )
-    val profileInfo: StateFlow<ProfileInfo> = _profileInfo
-
-    fun saveProfile(info: ProfileInfo) {
-        _profileInfo.update { info }
-        Log.d("EditProfileViewModel", "저장된 프로필: $info")
-    }
 }

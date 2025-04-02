@@ -14,17 +14,16 @@ import com.example.team2.presentation.user.UserScreen
 fun UserScreenNavigation() {
     val navController = rememberNavController()
 
-    NavHost(
-        navController = navController,
-        startDestination = UserScreenNavigationItem.User.route
-    ) {
-        composable(UserScreenNavigationItem.User.route) {
-            UserScreen(navController)
-        }
-        composable(UserScreenNavigationItem.EditProfile.route) {
-            val viewModel: EditProfileViewModel = viewModel()
-            EditProfileScreen(viewModel = viewModel, navController = navController)
-        }
+    val sharedViewModel: EditProfileViewModel = viewModel()
 
+    NavHost(navController, startDestination = "user_screen") {
+        composable("user_screen") {
+            UserScreen(navController = navController, viewModel = sharedViewModel)
+        }
+        composable("edit_profile_screen") {
+            EditProfileScreen(navController = navController, viewModel = sharedViewModel)
+        }
     }
 }
+
+
