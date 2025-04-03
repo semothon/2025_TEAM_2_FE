@@ -10,9 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.team2.presentation.chatlist.ChatListScreen
 import com.example.team2.presentation.participationlist.ParticipationListScreen
 import com.example.team2.presentation.roomlist.RoomListScreen
-import com.example.team2.presentation.user.UserScreen
 import com.example.team2.presentation.tabbar.BottomBar
-import com.example.team2.presentation.user.DeleteAccountScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
