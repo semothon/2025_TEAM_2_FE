@@ -26,11 +26,13 @@ import com.example.team2.ui.theme.Gray4
 import com.example.team2.ui.theme.Gray5
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 @Composable
 fun EditProfileScreen(
-    viewModel: EditProfileViewModel,
+    viewModel: EditProfileViewModelContract,
     navController: NavController
 ) {
     val profileInfo by viewModel.profileInfo.collectAsState()
@@ -58,7 +60,8 @@ fun EditProfileScreen(
         Spacer(Modifier.height(20.dp))
 
         val image = painterResource(R.drawable.profile_illustration_1)
-        Box() {
+        Box(modifier = Modifier
+            .wrapContentSize(Alignment.Center)) {
             Image(
                 painter = image,
                 contentDescription = null,
@@ -182,4 +185,58 @@ fun EditProfileScreen(
             Text("완료")
         }
     }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Preview 용 인터페이스 + FakeViewModel + Preview 함수
+// ─────────────────────────────────────────────────────────────
+
+interface EditProfileViewModelContract {
+    val profileInfo: StateFlow<ProfileInfo>
+    val majorOptions: StateFlow<List<String>>
+    val yearOptions: StateFlow<List<String>>
+    val addressOptions: StateFlow<List<String>>
+
+    fun updateProfile(newProfile: ProfileInfo)
+}
+
+// 실제 ViewModel은 이렇게 인터페이스를 구현하게 수정 (변경 전 코드엔 영향 없음)
+private class FakeEditProfileViewModel : EditProfileViewModelContract {
+    override val profileInfo = MutableStateFlow(
+        ProfileInfo(
+            nickname = "홍길동",
+            major = "컴퓨터공학과",
+            year = "22학번",
+            gender = "남성",
+            address = "정문 앞"
+        )
+    )
+
+    override val majorOptions = MutableStateFlow(
+        listOf("컴퓨터공학과", "전자공학과", "경영학과")
+    )
+
+    override val yearOptions = MutableStateFlow(
+        listOf("20학번", "21학번", "22학번", "23학번")
+    )
+
+    override val addressOptions = MutableStateFlow(
+        listOf("정문 앞", "사색의광장 배달존 A", "우정원", "제2기숙사")
+    )
+
+    override fun updateProfile(newProfile: ProfileInfo) {
+        // 프리뷰용 no-op
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EditProfileScreenPreview() {
+    val viewModel = remember { FakeEditProfileViewModel() }
+    val navController = rememberNavController()
+
+    EditProfileScreen(
+        viewModel = viewModel,
+        navController = navController
+    )
 }
