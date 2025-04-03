@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.presentation.user.DeleteAccountScreen
 import com.example.team2.presentation.user.EditProfileScreen
 import com.example.team2.presentation.user.EditProfileViewModel
 import com.example.team2.presentation.user.FaqScreen
@@ -41,5 +42,8 @@ fun UserScreenNavigation() {
         }
         composable("faq") { FaqScreen(navController) }
         composable("inquiry_form") { InquiryFormScreen(navController) }
+        composable("deleteAccount") {
+            DeleteAccountScreen(navController)
+        }
     }
 }

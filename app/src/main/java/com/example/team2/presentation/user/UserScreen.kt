@@ -95,7 +95,7 @@ fun UserScreen(
         }
         LogoutAndDeleteButtons(
             onLogoutClick = { /* 로그아웃 처리 */ },
-            onDeleteClick = { /* 회원탈퇴 처리 */ }
+            onDeleteClick = { navController.navigate("deleteAccount") }
         )
     }
 
