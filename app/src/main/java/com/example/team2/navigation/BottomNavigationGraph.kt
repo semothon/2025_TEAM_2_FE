@@ -13,7 +13,6 @@ import com.example.team2.navigation.home.RoomListNavigationGraph
 import com.example.team2.presentation.chatlist.ChatListScreen
 import com.example.team2.presentation.participationlist.ParticipationListScreen
 import com.example.team2.presentation.tabbar.BottomBar
-import com.example.team2.presentation.user.UserScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

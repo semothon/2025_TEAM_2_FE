@@ -5,8 +5,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.presentation.user.DeleteAccountScreen
 import com.example.team2.presentation.user.EditProfileScreen
 import com.example.team2.presentation.user.EditProfileViewModel
+import com.example.team2.presentation.user.FaqScreen
+import com.example.team2.presentation.user.InquiryFormScreen
 import com.example.team2.presentation.user.InquiryScreen
 import com.example.team2.presentation.user.NoticeScreen
 import com.example.team2.presentation.user.NotificationSettingScreen
@@ -26,16 +29,21 @@ fun UserScreenNavigation() {
             EditProfileScreen(navController = navController, viewModel = sharedViewModel)
         }
         composable("notification_setting") {
-            NotificationSettingScreen() // 🔸 알림설정 화면 추가
+            NotificationSettingScreen(navController) // 🔸 알림설정 화면 추가
         }
         composable("policy") {
-            PolicyScreen()
+            PolicyScreen(navController)
         }
         composable("notice") {
-            NoticeScreen()
+            NoticeScreen(navController)
         }
         composable("inquiry") {
-            InquiryScreen()
+            InquiryScreen(navController)
+        }
+        composable("faq") { FaqScreen(navController) }
+        composable("inquiry_form") { InquiryFormScreen(navController) }
+        composable("deleteAccount") {
+            DeleteAccountScreen(navController)
         }
     }
 }
