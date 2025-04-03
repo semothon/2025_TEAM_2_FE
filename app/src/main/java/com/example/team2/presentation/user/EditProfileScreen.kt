@@ -75,15 +75,26 @@ fun EditProfileScreen(
             )
         }
 
+
+        Text(
+            text = "닉네임",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        )
         OutlinedTextField(
             value = nickname,
             onValueChange = { nickname = it },
-            label = { Text("닉네임") },
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(Modifier.height(16.dp))
-
+        Text(
+            text = "학과",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,7 +126,12 @@ fun EditProfileScreen(
         }
 
         Spacer(Modifier.height(16.dp))
-
+        Text(
+            text = "입학년도",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,7 +179,12 @@ fun EditProfileScreen(
         }
 
         Spacer(Modifier.height(16.dp))
-
+        Text(
+            text = "주소",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+        )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
