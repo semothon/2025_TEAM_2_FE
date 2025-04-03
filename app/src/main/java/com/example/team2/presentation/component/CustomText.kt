@@ -42,11 +42,11 @@ fun CustomText3(text: String) {
 }
 
 @Composable
-fun CustomText4(text: String) {
+fun CustomText4(text: String, alpha: Float = 1f) {
     Text(
         text = text,
         style = TextStyle(
-            color = Brown2,
+            color = Brown2.copy(alpha = alpha),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )

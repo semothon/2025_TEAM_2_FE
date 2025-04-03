@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.ui.theme.Brown1
 import com.example.team2.ui.theme.Brown2
+import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.Gray4
 import com.example.team2.ui.theme.MainColor
@@ -46,6 +47,7 @@ fun SignUpRowTextAndButton(
             OutlinedTextField(
                 value = value,
                 onValueChange = onValueChange,
+                textStyle = TextStyle(color = Brown2),
                 modifier = Modifier.weight(0.6f),
                 placeholder = {
                     Text(
@@ -77,7 +79,10 @@ fun SignUpRowTextAndButton(
                         RoundedCornerShape(8.dp)
                     ),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    disabledContainerColor = Gray4.copy(alpha = 0.2f)
+                ),
                 enabled = value.isNotEmpty()
             ) {
                 Text(
