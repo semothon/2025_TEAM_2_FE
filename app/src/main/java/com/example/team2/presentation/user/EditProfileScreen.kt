@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,8 +62,11 @@ fun EditProfileScreen(
         Spacer(Modifier.height(20.dp))
 
         val image = painterResource(R.drawable.profile_illustration_1)
-        Box(modifier = Modifier
-            .wrapContentSize(Alignment.Center)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
             Image(
                 painter = image,
                 contentDescription = null,
@@ -82,11 +87,17 @@ fun EditProfileScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(56.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
                 .clickable { majorExpanded = true }
-                .padding(12.dp)
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Text(text = major)
+            Text(
+                text = major,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
+            )
         }
         DropdownMenu(
             expanded = majorExpanded,
@@ -108,11 +119,17 @@ fun EditProfileScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(56.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
                 .clickable { yearExpanded = true }
-                .padding(12.dp)
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Text(text = year)
+            Text(
+                text = year,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
+            )
         }
         DropdownMenu(
             expanded = yearExpanded,
@@ -150,11 +167,17 @@ fun EditProfileScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(56.dp)
+                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
                 .clickable { addressExpanded = true }
-                .padding(12.dp)
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Text(text = address)
+            Text(
+                text = address,
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
+            )
         }
         DropdownMenu(
             expanded = addressExpanded,
