@@ -1,5 +1,6 @@
 package com.example.team2.presentation.user
 
+import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,7 +34,6 @@ fun UserScreen(
         // 상단 제목
         Text("마이페이지", style = MaterialTheme.typography.titleLarge)
 
-        Spacer(Modifier.height(16.dp))
 
         // 🔻 중앙 정렬되는 프로필 영역
         Column(
@@ -53,14 +53,14 @@ fun UserScreen(
                 )
             }
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(5.dp))
 
             Text(profileInfo.nickname, style = MaterialTheme.typography.titleMedium)
             Text("pordoneo@khu.ac.kr")
             Text("${profileInfo.major} / ${profileInfo.year} / ${profileInfo.gender}")
             Text(profileInfo.address)
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(4.dp))
 
             Button(onClick = {
                 navController.navigate("edit_profile_screen")
@@ -70,7 +70,6 @@ fun UserScreen(
         }
 
         // 🔻 나머지 영역은 기존처럼 좌측 정렬
-        Spacer(Modifier.height(16.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -94,6 +93,10 @@ fun UserScreen(
         MenuItem("고객 문의") {
             navController.navigate("inquiry")
         }
+        LogoutAndDeleteButtons(
+            onLogoutClick = { /* 로그아웃 처리 */ },
+            onDeleteClick = { /* 회원탈퇴 처리 */ }
+        )
     }
 
 }
@@ -111,6 +114,40 @@ fun MenuItem(title: String, onClick: () -> Unit) {
         Text(">")
     }
 }
+
+@Composable
+fun LogoutAndDeleteButtons(
+    onLogoutClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.fillMaxSize() // 화면 전체 크기
+    ) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart) // 좌측 하단 정렬
+                .padding(start = 0.dp, bottom = 70.dp), // 여백 제거
+            verticalArrangement = Arrangement.spacedBy(0.dp) // 버튼 사이 여백 없애기 (원하면 조정 가능)
+        ) {
+            TextButton(
+                onClick = onLogoutClick,
+                contentPadding = PaddingValues(0.dp) // 버튼 안쪽 여백 제거 (선택)
+            ) {
+                Text("로그아웃")
+            }
+            TextButton(
+                onClick = onDeleteClick,
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text("회원탈퇴")
+            }
+        }
+    }
+}
+
+
+
+
 
 @Preview(showBackground = true)
 @Composable
