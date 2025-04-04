@@ -3,6 +3,7 @@ package com.example.team2.presentation.participationlist
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -123,7 +124,10 @@ fun TransactionFilter(viewModel: TransactionViewModel) {
 }
 
 @Composable
-fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> Unit) {
+fun TransactionItem(
+    transaction: Transaction,
+    index: Int, onComplete: (Int) -> Unit,
+) {
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
