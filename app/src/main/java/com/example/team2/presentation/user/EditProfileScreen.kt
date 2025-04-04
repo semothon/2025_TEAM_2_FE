@@ -85,19 +85,17 @@ fun EditProfileScreen(
             )
         }
 
-
         NicknameInputField(
             nickname = nickname,
             onNicknameChange = { nickname = it }
         )
-
-
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(24.dp))
 
         NameInputField(
             name = name,
             onNameChange = { name = it }
         )
+        Spacer(Modifier.height(24.dp))
 
         SchoolSelectField(
             school = school,
@@ -105,6 +103,7 @@ fun EditProfileScreen(
                 // 검색 다이얼로그 띄우거나 이동 처리
             }
         )
+        Spacer(modifier = Modifier.height(24.dp))
 
         SelectField(
             label = "학과",
@@ -112,8 +111,7 @@ fun EditProfileScreen(
             options = majorOptions,
             onOptionSelected = { major = it }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         SelectField(
             label = "입학연도",
@@ -121,20 +119,19 @@ fun EditProfileScreen(
             options = yearOptions,
             onOptionSelected = { year = it }
         )
-
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(24.dp))
 
         GenderSelectField(
             selectedGender = gender,
             onGenderSelected = { gender = it }
         )
+        Spacer(Modifier.height(24.dp))
 
-        Spacer(Modifier.height(16.dp))
-
-//        AddressInputField(
-//            address = address,
-//            onAddressChange = { address = it }
-//        )
+        AddressInputField(
+            address = address,
+            onAddressChange = { address = it }
+        )
+        Spacer(Modifier.height(36.dp))
 
 
         ConfirmButton(
@@ -147,8 +144,7 @@ fun EditProfileScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(1000.dp)) // ← 여유 공간 추가
-
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
