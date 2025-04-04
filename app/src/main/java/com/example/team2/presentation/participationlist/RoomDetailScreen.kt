@@ -1,5 +1,6 @@
 package com.example.yourapp.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -7,46 +8,77 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.team2.R
+import com.example.team2.presentation.participationlist.ParticipationListScreen
 
 
 @Composable
-fun RoomDetailScreen(navController: NavController) {
+fun RoomDetailScreen(navController: NavController? = null) {
     //뒤로가기 바는 Nav 설정 이후에 구현하기
-
     // Title
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF7F7F7))
+            .background(Color(0xFFFFFFFF))
     ) {
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFFFE07D))
-                .padding(12.dp),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 16.dp)
         ) {
+            // 1. 가운데 텍스트
             Text(
                 text = "맥도날드",
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Black,
+                modifier = Modifier.align(Alignment.Center)
             )
+
+            // 2. 왼쪽 아이콘
+            IconButton(
+                onClick = { /* 뒤로가기 동작 없음 */ },
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "뒤로가기",
+                    tint = Color.Black
+                )
+            }
+
+            // 3. 오른쪽 아이콘
+            IconButton(
+                onClick = { /* 알림 아이콘 동작 */ },
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = "알림",
+                    tint = Color.Black
+                )
+            }
         }
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF7F7F7))
+                .background(Color(0xFFF5F5F5))
                 .padding(horizontal = 16.dp)
         ) {
 
@@ -94,6 +126,7 @@ fun MemberSection() {
         members.forEach { (name, dept, isLeader) ->
             MemberItem(name = name, department = dept, isLeader = isLeader)
         }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
@@ -106,11 +139,16 @@ fun MemberItem(name: String, department: String, isLeader: Boolean) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Placeholder profile image
-        Box(
+        Image(
+            painter = painterResource(id = R.drawable.profile_illustration_1),
+            //나중에 진짜 프로필 가져오기
+            contentDescription = "프로필 이미지",
             modifier = Modifier
                 .size(40.dp)
-                .background(Color(0xFFFFE07D), CircleShape)
+                .clip(CircleShape)
+                .background(Color.LightGray) // 로딩 중일 경우 대비
         )
+
 
         Spacer(modifier = Modifier.width(12.dp))
 
@@ -159,21 +197,21 @@ fun RoomDetailSection() {
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = "정건 맥날 같이 시켜드실 분 구합니당.",
             style = MaterialTheme.typography.bodyMedium
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "방 키워드",
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             KeywordChip("따로 먹을래요", Color(0xFFFFC94A))
@@ -214,10 +252,34 @@ fun RoomStatusSection() {
                 .background(Color.White, RoundedCornerShape(12.dp))
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            Text(
-                text = "모집 완료",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Row(
+                modifier = Modifier.align(Alignment.CenterStart),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "모집 완료",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                Spacer(modifier = Modifier.width(250.dp))
+
+                IconButton(
+                    onClick = { /* TODO: 드롭다운 동작 등 */ },
+                    modifier = Modifier.size(24.dp) // 아이콘 사이즈 조절
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = "메뉴 열기",
+                        tint = Color(0xFFD3D3D3)
+                    )
+                }
+            }
         }
     }
+}
+
+@Preview
+@Composable
+fun RoomDetailPreview() {
+    RoomDetailScreen()
 }
