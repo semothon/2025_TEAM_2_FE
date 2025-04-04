@@ -1,5 +1,6 @@
 package com.example.team2.presentation.user
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -148,16 +150,19 @@ fun UserScreen(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "좋아요",
-                        tint = Color(0xFFFF5A5A),
-                        modifier = Modifier.size(16.dp)
+                    Image(
+                        painter = painterResource(id = R.drawable.heart_icon),
+                        contentDescription = "설명",
+                        modifier = Modifier
+                            .size(20.dp) // 원하는 크기
+                            .clip(RoundedCornerShape(8.dp)), // 필요 시 모양 조정
                     )
+
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "33개",
-                        fontSize = 12.sp
+                        fontSize = 13.sp,
+                        color = Brown2
                     )
                 }
             }
@@ -173,8 +178,9 @@ fun UserScreen(
             ) {
                 Text(
                     text = "기타",
-                    fontSize = 12.sp,
-                    color = Color.Blue
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Brown2
                 )
                 MenuItem("알림설정", ic_bell) {
                     navController.navigate("notification_setting")
