@@ -25,10 +25,7 @@ import com.example.team2.presentation.component.CustomText2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParticipationListScreen(
-    viewModel: TransactionViewModel = TransactionViewModel(),
-    navController: NavController? = null
-) {
+fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel(), navController: NavController? = null) {
     val transactions by viewModel.transactions.collectAsState()
     val (filterText, _) = viewModel.filter.collectAsState().value
 
