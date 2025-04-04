@@ -41,6 +41,7 @@ fun ChatListScreen(viewModel: ChatListViewModel = ChatListViewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .padding(bottom = 80.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

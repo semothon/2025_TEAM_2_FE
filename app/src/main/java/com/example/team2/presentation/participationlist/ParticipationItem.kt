@@ -1,7 +1,7 @@
-package com.example.team2.presentation.roomlist
+package com.example.team2.presentation.participationlist
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -21,17 +19,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.component.CustomText3
-import com.example.team2.presentation.roomlist.component.TagChip
-import com.example.team2.presentation.roomlist.model.Room
+import com.example.team2.presentation.component.CustomText7
+import com.example.team2.presentation.participationlist.model.ParticipationRoom
+import com.example.team2.ui.theme.Gray3
+import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
 @Composable
-fun RoomListItem(room: Room, onClick: () -> Unit) {
+fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .border(1.dp, if (deal.roomStatus == "2") MainColor else MainWhite)
             .clickable(
                 onClick = { onClick() },
                 interactionSource = null,
@@ -51,16 +54,23 @@ fun RoomListItem(room: Room, onClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    CustomText3(room.restaurantName)
-                    Spacer(Modifier.height(4.dp))
-                    CustomText(room.content, 0.8f)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(room.tagChips.drop(4)) { keyword ->
-                    TagChip(keyword)
+                    if (deal.roomStatus == "2") {
+                        Row {
+                            CustomText3(deal.restaurantName, 0.6f)
+                            Spacer(Modifier.width(4.dp))
+                            CustomText7("완료", Gray3)
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        CustomText(deal.roomContent, 0.6f)
+                    } else {
+                        Row {
+                            CustomText3(deal.restaurantName)
+                            Spacer(Modifier.width(4.dp))
+                            CustomText7("진행중", MainColor)
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        CustomText(deal.roomContent, 0.8f)
+                    }
                 }
             }
         }

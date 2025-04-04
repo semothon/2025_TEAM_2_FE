@@ -1,4 +1,4 @@
-package com.example.team2.navigation
+package com.example.team2.navigation.user
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,8 +40,12 @@ fun UserScreenNavigation() {
         composable("inquiry") {
             InquiryScreen(navController)
         }
-        composable("faq") { FaqScreen(navController) }
-        composable("inquiry_form") { InquiryFormScreen(navController) }
+        composable("faq") {
+            FaqScreen(navController)
+        }
+        composable("inquiry_form") {
+            InquiryFormScreen(navController)
+        }
         composable("deleteAccount") {
             DeleteAccountScreen(navController)
         }

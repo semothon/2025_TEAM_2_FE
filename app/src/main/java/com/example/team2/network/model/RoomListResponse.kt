@@ -1,9 +1,9 @@
 package com.example.team2.network.model
 
+import com.example.team2.presentation.roomlist.model.Room
 import com.google.gson.annotations.SerializedName
 
-data class SignInResponse(
+data class RoomListResponse(
     @SerializedName("message") val message: String,
-    @SerializedName("token") val token: String,
-    @SerializedName("userId") val userId: String
+    @SerializedName("groups") val roomList: List<Room>
 )

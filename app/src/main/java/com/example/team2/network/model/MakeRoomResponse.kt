@@ -2,8 +2,7 @@ package com.example.team2.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SignInResponse(
+data class MakeRoomResponse(
     @SerializedName("message") val message: String,
-    @SerializedName("token") val token: String,
-    @SerializedName("userId") val userId: String
+    @SerializedName("groupId") val groupId: String
 )
