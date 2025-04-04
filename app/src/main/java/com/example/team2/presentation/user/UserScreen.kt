@@ -28,7 +28,8 @@ fun UserScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(20.dp)
+            .padding(bottom = 80.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // 상단 제목

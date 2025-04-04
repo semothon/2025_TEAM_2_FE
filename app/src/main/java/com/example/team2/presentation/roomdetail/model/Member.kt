@@ -7,6 +7,6 @@ data class Member(
     @SerializedName("nickname") val nickName: String,
     @SerializedName("icon") val illustration: Int,
     @SerializedName("major") val department: String,
-    @SerializedName("studentId") val year: String,
+    @SerializedName("studentId") val year: Int,
     @SerializedName("likeCount") val favoriteCount: Int
 )

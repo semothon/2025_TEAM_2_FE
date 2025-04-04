@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.NavigationViewModel
+import com.example.team2.navigation.home.model.HomeToDetail
 import com.example.team2.presentation.roomadd.RoomAddScreen
 import com.example.team2.presentation.roomdetail.RoomDetailScreen
 import com.example.team2.presentation.roomlist.RoomListScreen
@@ -29,19 +30,14 @@ fun HomeNavigationGraph(viewModel: NavigationViewModel) {
         }
         composable(
             route = HomeNavigationItem.RoomDetail.destination +
-                    "/{roomId}/{roomName}/{roomContent}/{roomTagChips}"
-            // /roomTagChips" },
-//            arguments = listOf(navArgument("roomId") { type = NavType.StringType },
-//                navArgument("roomName") { type = NavType.StringType },
-//                navArgument("roomContent") { type = NavType.StringType },
-//                navArgument("roomTagChips") { type = NavType.StringType }
-//            ),
+                    "/{roomId}/{roomName}/{roomContent}/{roomTagChips}/{roomStatus}"
         ) { backStackEntry ->
             val roomId = backStackEntry.arguments?.getString("roomId").toString()
             val roomName = backStackEntry.arguments?.getString("roomName").toString()
             val roomContent = backStackEntry.arguments?.getString("roomContent").toString()
             val roomTagChips = backStackEntry.arguments?.getString("roomTagChips")
-            val roomDetail = HomeToDetail(roomId, roomName, roomContent, roomTagChips)
+            val roomStatus = backStackEntry.arguments?.getString("roomStatus")?.toInt()
+            val roomDetail = HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus)
 
             viewModel.bottomEnableFalse()
             RoomDetailScreen(navController, roomDetail)

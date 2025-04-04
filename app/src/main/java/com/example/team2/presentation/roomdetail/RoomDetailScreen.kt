@@ -1,6 +1,5 @@
 package com.example.team2.presentation.roomdetail
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
@@ -26,14 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.team2.navigation.home.HomeToDetail
+import com.example.team2.navigation.home.model.HomeToDetail
 import com.example.team2.presentation.component.BottomButton
 import com.example.team2.presentation.component.CustomText5
 import com.example.team2.presentation.component.CustomText6
 import com.example.team2.presentation.component.TopBar
+import com.example.team2.presentation.roomdetail.component.MemberItem
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainWhite
+import com.example.team2.userId
 
 @Composable
 fun RoomDetailScreen(
@@ -42,18 +42,21 @@ fun RoomDetailScreen(
     viewModel: RoomDetailViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val members = viewModel.members.collectAsState()
+    val members by viewModel.members.collectAsState()
+    val isButton by viewModel.isButton.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getRoomDetail(room.roomId)
+        viewModel.getRoomDetail(room.roomId, userId)
     }
-    val restaurantName = "맥도날드"
 
     if (isLoading)
         Scaffold(
-            topBar = { TopBar(restaurantName) { navController.popBackStack() } },
+            topBar = { TopBar(room.roomName) { navController.popBackStack() } },
             bottomBar = {
-                BottomButton("참여하기", false) { } //참여하기
+                if (isButton)
+                    BottomButton("참여하기", true) {
+                        viewModel.joinRoom(room.roomId)
+                    }
             }
         ) {
             Column(
@@ -76,8 +79,8 @@ fun RoomDetailScreen(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(members.value) { member ->
-//                        MemberItem(member)
+                        items(members) { member ->
+                            MemberItem(member)
                         }
                     }
                 }
@@ -105,5 +108,5 @@ fun RoomDetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun RoomDetailPreview() {
-//    RoomDetailScreen(rememberNavController(), )
+//    RoomDetailScreen(rememberNavController(), HomeToDetail())
 }

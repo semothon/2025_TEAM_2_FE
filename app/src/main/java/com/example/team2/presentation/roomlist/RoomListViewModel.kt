@@ -55,7 +55,23 @@ class RoomListViewModel : ViewModel() {
     }
 
     fun onSearchQueryChanged(query: String) {
-        _searchQuery.value = query
+        _isLoading.value = false
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.apiService.getSearchedRoomList("Bearer $token", query)
+                if (response.isSuccessful) {
+                    _filteredRooms.value = response.body()?.roomList ?: emptyList()
+                    _isLoading.value = true
+                    Log.d("testt", response.body().toString())
+                } else {
+                    Log.d("testt", response.message())
+//                     _errorMessage.value = "Error: ${response.message()}"
+                }
+            } catch (e: Exception) {
+                Log.d("testt", e.message.toString())
+//                 _errorMessage.value = "Request failed: ${e.message}"
+            }
+        }
 //        _rooms.value = _rooms.value.filter {
 //            it.name.contains(query, ignoreCase = true)
 //        }

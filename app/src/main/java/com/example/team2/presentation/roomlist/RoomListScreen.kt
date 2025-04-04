@@ -2,6 +2,7 @@ package com.example.team2.presentation.roomlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +47,7 @@ fun RoomListScreen(
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val rooms by viewModel.filteredRooms.collectAsState()
-    val searchQuery by viewModel.searchQuery.collectAsState("")
+    var searchQuery by remember { mutableStateOf("") }
     val initialKeywords by viewModel.initialKeywords.collectAsState()
     val additionalKeywords by viewModel.additionalKeywords.collectAsState()
 
@@ -62,10 +66,15 @@ fun RoomListScreen(
             .fillMaxSize()
             .background(MainBackground)
             .padding(InnerPadding)
+            .padding(bottom = 80.dp)
     ) {
         if (isLoading) {
             Column {
-                SearchBar(searchQuery) { }
+                SearchBar(
+                    searchQuery = searchQuery,
+                    onSearchQueryChanged = { searchQuery = it },
+                    onClick = { viewModel.onSearchQueryChanged(searchQuery) }
+                )
 
                 Spacer(Modifier.height(16.dp))
                 KeywordList(viewModel, initialKeywords, additionalKeywords)
@@ -76,28 +85,21 @@ fun RoomListScreen(
                         RoomListItem(room) {
                             navController.navigate(
                                 HomeNavigationItem.RoomDetail.destination +
-                                        "/${room.roomId}/${room.restaurantName}/${room.content}/${room.tagChips}"
+                                        "/${room.roomId}/${room.restaurantName}/${room.content}/${room.tagChips}/${room.status}"
                             )
                         }
                     }
                 }
             }
 
-            FloatingActionButton(
-                onClick = { navController.navigate(HomeNavigationItem.RoomAdd.destination) },
+            Image(
+                painter = painterResource(R.drawable.room_add_button),
+                contentDescription = "add",
                 modifier = Modifier
+                    .padding(bottom = 80.dp)
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 80.dp),
-                containerColor = Color.Transparent
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.room_add_button),
-                    contentDescription = "add",
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(top = 20.dp)
-                )
-            }
+                    .clickable { navController.navigate(HomeNavigationItem.RoomAdd.destination) }
+            )
         } else
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }

@@ -17,3 +17,4 @@ class MainActivity : ComponentActivity() {
 }
 
 lateinit var token: String
+lateinit var userId: String

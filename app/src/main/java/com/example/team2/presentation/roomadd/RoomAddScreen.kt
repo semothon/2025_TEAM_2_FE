@@ -83,7 +83,7 @@ fun RoomAddScreen(
                             foodCategory.value,
                             memberCount.value,
                             if (isTogether) "같이 먹을래요" else "따로 먹을래요",
-                            if (!gender) "" else "동성만",
+                            if (!gender) "상관없음" else "동성만",
                             "패스트푸드", "분식"
                         ),
                         location = location

@@ -6,6 +6,7 @@ import com.example.team2.network.RetrofitClient
 import com.example.team2.network.model.SignInRequest
 import com.example.team2.network.model.SignInResponse
 import com.example.team2.token
+import com.example.team2.userId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
@@ -27,6 +28,7 @@ class SignInViewModel : ViewModel() {
                     if (response.isSuccessful) {
                         _isSignIn.value = true
                         token = response.body()?.token.toString()
+                        userId = response.body()?.userId.toString()
                         Log.d("testt", token)
 //                        responseMessage.value = response.body()?.message ?: "Login Successful"
                     } else {
