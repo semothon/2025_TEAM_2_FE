@@ -142,7 +142,7 @@ fun UserScreen(
                                 .padding(horizontal = 5.dp, vertical = 2.dp) // 뱃지 여백 조정
                         ) {
                             Text(
-                                text = "남",
+                                text = profileInfo.gender,
                                 fontSize = 10.sp,
                                 color = MainWhite
                             )
@@ -281,12 +281,12 @@ fun UserScreenPreview() {
         updateProfile(
             ProfileInfo(
                 nickname = "꾸벅이",
+                name = "이름 1",
+                school = "경희대학교",
                 major = "기계공학과",
                 year = "2024204883",
-                gender = "남성",
-                address = "서울시 송파구",
-                name = "이름 1",
-                school = "경희대학교"
+                gender = "남",
+                address = "서울시 송파구"
             )
         )
     }
