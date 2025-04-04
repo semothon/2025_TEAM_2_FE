@@ -9,6 +9,6 @@ data class SignUpRequest(
     @SerializedName("major") val department: String,
     @SerializedName("gender") val gender: String,
     @SerializedName("nickname") val nickName: String,
-    @SerializedName("icon") val illustration: String,
+    @SerializedName("icon") val illustration: Int,
     @SerializedName("email") val email: String
 )

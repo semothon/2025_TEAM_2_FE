@@ -1,8 +1,15 @@
 package com.example.team2.presentation.roomlist.model
 
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
 data class Room(
-    val name: String,
-    val description: String,
-    val keywords: List<String>,
-    val participants: Int
-)
+    @SerializedName("groupId") val roomId: String,
+    @SerializedName("title") val restaurantName: String,
+    @SerializedName("note") val content: String,
+    @SerializedName("hashtags") val tagChips: List<String>,
+    @SerializedName("status") val status: Int,
+    @SerializedName("icons") val creator: List<String>,
+    @SerializedName("maxPeople") val totalPeople: Int,
+    @SerializedName("creatorGender") val gender: String
+) : Serializable

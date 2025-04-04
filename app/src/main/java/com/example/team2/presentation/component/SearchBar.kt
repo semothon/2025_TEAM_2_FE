@@ -1,5 +1,6 @@
 package com.example.team2.presentation.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -21,7 +22,8 @@ import com.example.team2.ui.theme.MainWhite
 @Composable
 fun SearchBar(
     searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit
+    onSearchQueryChanged: (String) -> Unit,
+    onClick: () -> Unit
 ) {
     TextField(
         value = searchQuery,
@@ -36,7 +38,8 @@ fun SearchBar(
             Icon(
                 imageVector = Icons.Default.Search,
                 contentDescription = "검색 아이콘",
-                tint = Color.Gray
+                tint = Color.Gray,
+                modifier = Modifier.clickable { onClick() }
             )
         },
         modifier = Modifier
@@ -49,6 +52,7 @@ fun SearchBar(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        maxLines = 1
     )
 }

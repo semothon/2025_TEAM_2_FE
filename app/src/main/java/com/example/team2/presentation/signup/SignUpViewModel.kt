@@ -1,5 +1,6 @@
 package com.example.team2.presentation.signup
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
@@ -43,26 +44,28 @@ class SignUpViewModel : ViewModel() {
 
     fun univVerifyCodeRequest(email: String) {
         val requestBody = VerifyCodeRequest(email)
-        viewModelScope.launch {
-            RetrofitClient.apiService.verifyCodeRequest(requestBody)
-                .enqueue(object : Callback<ApiResponse> {
-                    override fun onResponse(
-                        call: Call<ApiResponse>,
-                        response: Response<ApiResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            // 성공적인 응답 처리
-                            response.body()
-                        } else {
+        Log.d("testt", email)
+        RetrofitClient.apiService.verifyCodeRequest(requestBody)
+            .enqueue(object : Callback<ApiResponse> {
+                override fun onResponse(
+                    call: Call<ApiResponse>,
+                    response: Response<ApiResponse>
+                ) {
+                    Log.d("testt", email)
+                    if (response.isSuccessful) {
+                        // 성공적인 응답 처리
+                        response.body()
+                        Log.d("testt", response.body().toString())
+                    } else {
 //                            responseMessage = "Error: ${response.message()}"
-                        }
                     }
+                }
 
-                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
 //                        responseMessage = "Request failed: ${t.message}"
-                    }
-                })
-        }
+                    Log.d("testt", t.message.toString())
+                }
+            })
     }
 
     fun savePassword(password: String) {
@@ -126,7 +129,7 @@ class SignUpViewModel : ViewModel() {
                 userInfo.univ,
                 userInfo.department,
                 userInfo.year,
-                userInfo.gender
+                if (userInfo.gender == "남성") "M" else "W"
             )
             _isButtonEnable.value = true
         } else {
@@ -164,32 +167,30 @@ class SignUpViewModel : ViewModel() {
         val requestBody = SignUpRequest(
             name = _userInfo.value.name,
             password = _password.value,
-            year = _userInfo.value.year,
+            year = _userInfo.value.year.takeLast(2),
             department = _userInfo.value.department,
             gender = _userInfo.value.gender,
             nickName = _nickName.value,
-            illustration = _randomProfileIllustration.value.toString(),
+            illustration = _randomProfileIllustration.value,
             email = _userEmail.value
         )
-        viewModelScope.launch {
-            RetrofitClient.apiService.signUpRequest(requestBody)
-                .enqueue(object : Callback<ApiResponse> {
-                    override fun onResponse(
-                        call: Call<ApiResponse>,
-                        response: Response<ApiResponse>
-                    ) {
-                        if (response.isSuccessful) {
+        RetrofitClient.apiService.signUpRequest(requestBody)
+            .enqueue(object : Callback<ApiResponse> {
+                override fun onResponse(
+                    call: Call<ApiResponse>,
+                    response: Response<ApiResponse>
+                ) {
+                    if (response.isSuccessful) {
 //                            responseMessage.value =
 //                                response.body()?.message ?: "Registration Successful"
-                        } else {
+                    } else {
 //                            responseMessage.value = "Error: ${response.message()}"
-                        }
                     }
+                }
 
-                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
 //                        responseMessage.value = "Request failed: ${t.message}"
-                    }
-                })
-        }
+                }
+            })
     }
 }
