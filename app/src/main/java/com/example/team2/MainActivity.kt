@@ -15,3 +15,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+lateinit var token: String

@@ -51,15 +51,15 @@ fun RoomListItem(room: Room, onClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    CustomText3(room.name)
+                    CustomText3(room.restaurantName)
                     Spacer(Modifier.height(4.dp))
-                    CustomText(room.description, 0.8f)
+                    CustomText(room.content, 0.8f)
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(room.keywords) { keyword ->
+                items(room.tagChips) { keyword ->
                     TagChip(keyword)
                 }
             }

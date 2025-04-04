@@ -52,3 +52,25 @@ fun CustomText4(text: String, alpha: Float = 1f) {
         )
     )
 }
+
+@Composable
+fun CustomText5(text: String, alpha: Float = 1f) {
+    Text(
+        text = text,
+        style = TextStyle(
+            color = Brown2.copy(alpha = alpha),
+            fontSize = 15.sp,
+        )
+    )
+}
+
+@Composable
+fun CustomText6(text: String, alpha: Float = 1f) {
+    Text(
+        text = text,
+        style = TextStyle(
+            color = Brown2.copy(alpha = alpha),
+            fontSize = 18.sp,
+        )
+    )
+}

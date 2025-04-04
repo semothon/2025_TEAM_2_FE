@@ -1,5 +1,7 @@
 package com.example.team2.presentation.roomdetail.component
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,18 +18,19 @@ import com.example.team2.R
 import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.roomdetail.model.Member
 
-@Composable
-fun MemberItem(member: Member) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.profile_illustration_1),
-            contentDescription = member.name,
-            modifier = Modifier.size(40.dp)
-        )
-        Spacer(Modifier.width(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(0.3f)) { CustomText3(text = member.name) }
-        Text(text = member.department)
-    }
-}
+//@SuppressLint("ResourceType")
+//@Composable
+//fun MemberItem(member: Member) {
+//    Row(
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Image(
+//            painter = painterResource(2130968603),
+//            contentDescription = member.name,
+//            modifier = Modifier.size(40.dp)
+//        )
+//        Spacer(Modifier.width(8.dp))
+//        Row(modifier = Modifier.fillMaxWidth(0.3f)) { CustomText3(text = member.name) }
+//        Text(text = member.department)
+//    }
+//}

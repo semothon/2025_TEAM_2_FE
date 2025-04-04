@@ -15,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +40,9 @@ import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignInScreen(
@@ -48,6 +52,13 @@ fun SignInScreen(
     val isSignIn by viewModel.isSignIn.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(isSignIn) {
+        if (isSignIn)
+            navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
+                popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
+            }
+    }
 
     Column(
         modifier = Modifier
@@ -110,11 +121,9 @@ fun SignInScreen(
         Spacer(Modifier.height(8.dp))
         Button(
             onClick = {
-//                viewModel.signIn(email, password)
-//                if (isSignIn)
-                    navController.navigate(SignNavigationItem.BottomNavigationGraph.destination) {
-                        popUpTo(SignNavigationItem.SignIn.destination) { inclusive = true }
-                    }
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.signIn(email, password)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

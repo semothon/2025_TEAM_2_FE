@@ -9,7 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.team2.navigation.home.RoomListNavigationGraph
+import com.example.team2.navigation.home.HomeNavigationGraph
+import com.example.team2.navigation.user.UserScreenNavigation
 import com.example.team2.presentation.chatlist.ChatListScreen
 import com.example.team2.presentation.participationlist.ParticipationListScreen
 import com.example.team2.presentation.tabbar.BottomBar
@@ -28,7 +29,7 @@ fun BottomNavigationGraph(viewModel: NavigationViewModel = viewModel()) {
             startDestination = BottomNavigationItem.Home.destination
         ) {
             composable(BottomNavigationItem.Home.destination) {
-                RoomListNavigationGraph(viewModel)
+                HomeNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Send.destination) {
                 ChatListScreen()

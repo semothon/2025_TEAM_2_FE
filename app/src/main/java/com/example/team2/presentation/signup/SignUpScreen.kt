@@ -113,7 +113,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = view
                     containerColor = Color.Transparent,
                     disabledContainerColor = Gray2
                 ),
-//                enabled = buttonEnable
+                enabled = buttonEnable
             ) {
                 Text(
                     text = if (selectedTabIndex == 3) "완료" else "다음",

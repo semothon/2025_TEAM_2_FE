@@ -12,7 +12,7 @@ import com.example.team2.presentation.roomlist.RoomListScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RoomListNavigationGraph(viewModel: NavigationViewModel) {
+fun HomeNavigationGraph(viewModel: NavigationViewModel) {
     val navController = rememberNavController()
 
     NavHost(
@@ -20,16 +20,31 @@ fun RoomListNavigationGraph(viewModel: NavigationViewModel) {
         startDestination = HomeNavigationItem.RoomList.destination
     ) {
         composable(HomeNavigationItem.RoomList.destination) {
-            RoomListScreen(navController)
             viewModel.bottomEnableTrue()
+            RoomListScreen(navController)
         }
         composable(HomeNavigationItem.RoomAdd.destination) {
+            viewModel.bottomEnableFalse()
             RoomAddScreen(navController)
-            viewModel.bottomEnableFalse()
         }
-        composable(HomeNavigationItem.RoomDetail.destination) {
-            RoomDetailScreen(navController)
+        composable(
+            route = HomeNavigationItem.RoomDetail.destination +
+                    "/{roomId}/{roomName}/{roomContent}/{roomTagChips}"
+            // /roomTagChips" },
+//            arguments = listOf(navArgument("roomId") { type = NavType.StringType },
+//                navArgument("roomName") { type = NavType.StringType },
+//                navArgument("roomContent") { type = NavType.StringType },
+//                navArgument("roomTagChips") { type = NavType.StringType }
+//            ),
+        ) { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getString("roomId").toString()
+            val roomName = backStackEntry.arguments?.getString("roomName").toString()
+            val roomContent = backStackEntry.arguments?.getString("roomContent").toString()
+            val roomTagChips = backStackEntry.arguments?.getString("roomTagChips")
+            val roomDetail = HomeToDetail(roomId, roomName, roomContent, roomTagChips)
+
             viewModel.bottomEnableFalse()
+            RoomDetailScreen(navController, roomDetail)
         }
     }
 }

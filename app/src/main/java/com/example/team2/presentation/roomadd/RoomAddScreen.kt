@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,6 +38,7 @@ import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.DropDownMenu
 import com.example.team2.presentation.component.RowTextAndIcon
 import com.example.team2.presentation.component.TopBar
+import com.example.team2.presentation.roomadd.model.RoomDetail
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
@@ -66,9 +68,28 @@ fun RoomAddScreen(
     Scaffold(
         topBar = { TopBar("방 개설") { navController.popBackStack() } },
         bottomBar = {
-            if (restaurantName.isNotEmpty() && roomContent.isNotEmpty() && location.isNotEmpty())
+            if (restaurantName.isNotEmpty() && roomContent.isNotEmpty() && foodCategory.value.isNotEmpty() && memberCount.value.isNotEmpty() && location.isNotEmpty())
                 isButton = true
-            BottomButton("완료", isButton){ } // 방 개설
+            BottomButton("완료", isButton) {
+                viewModel.makeRoom(
+                    RoomDetail(
+                        restaurantName = restaurantName,
+                        content = roomContent,
+                        foodCategory = foodCategory.value,
+                        totalPeople = memberCount.value.toInt(),
+                        isTogether = isTogether,
+                        gender = gender,
+                        hashTags = listOf(
+                            foodCategory.value,
+                            memberCount.value,
+                            if (isTogether) "같이 먹을래요" else "따로 먹을래요",
+                            if (!gender) "" else "동성만",
+                            "패스트푸드", "분식"
+                        ),
+                        location = location
+                    )
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -172,6 +193,7 @@ fun RoomAddScreen(
             Spacer(Modifier.height(20.dp))
             CustomText3("추천 키워드")
             // 추천 키워드 추가
+
 
             Spacer(Modifier.height(20.dp))
             Row {

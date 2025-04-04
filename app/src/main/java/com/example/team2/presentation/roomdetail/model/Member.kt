@@ -1,9 +1,12 @@
 package com.example.team2.presentation.roomdetail.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Member(
-    val name: String,
-    val department: String,
-    val year: String,
-    val icon: Int,
-    val favoriteCount: Int,
+    @SerializedName("userId") val userId: String,
+    @SerializedName("nickname") val nickName: String,
+    @SerializedName("icon") val illustration: Int,
+    @SerializedName("major") val department: String,
+    @SerializedName("studentId") val year: String,
+    @SerializedName("likeCount") val favoriteCount: Int
 )
