@@ -1,22 +1,37 @@
 package com.example.team2.presentation.user
 
-import android.graphics.Color
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
+import com.example.team2.R.drawable.ic_bell
 import com.example.team2.presentation.user.model.ProfileInfo
-
+import com.example.team2.ui.theme.Blue1
+import com.example.team2.ui.theme.Brown2
+import com.example.team2.ui.theme.MainWhite
 
 @Composable
 fun UserScreen(
@@ -26,92 +41,191 @@ fun UserScreen(
     val profileInfo by viewModel.profileInfo.collectAsState()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        Modifier.background(MainWhite)
     ) {
-        // 상단 제목
-        Text("마이페이지", style = MaterialTheme.typography.titleLarge)
-
-
-        // 🔻 중앙 정렬되는 프로필 영역
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val image = painterResource(R.drawable.profile_illustration_1)
-            Box {
-                Image(
-                    painter = image,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    alpha = 0.5F,
-                    modifier = Modifier.size(120.dp)
+            Spacer(modifier = Modifier.width(24.dp)) // 좌측 공간 (뒤로가기 없음)
+            Text(
+                text = "마이페이지",
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = 17.sp),
+                color = Brown2
+            )
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = "알림",
+                tint = Color.Gray
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF7F7F7))
+                .padding(horizontal = 12.dp)
+        ) {
+            // 상단 바
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 프로필 타이틀
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "프로필",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                )
+
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = "프로필 이동",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(28.dp)
                 )
             }
 
-            Spacer(Modifier.height(5.dp))
 
-            Text(profileInfo.nickname, style = MaterialTheme.typography.titleMedium)
-            Text("pordoneo@khu.ac.kr")
-            Text("${profileInfo.major} / ${profileInfo.year} / ${profileInfo.gender}")
-            Text(profileInfo.address)
 
-            Spacer(Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = {
-                navController.navigate("edit_profile_screen")
-            }) {
-                Text("프로필 수정")
+            // 프로필 카드
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.profile_illustration_1),
+                    contentDescription = "프로필",
+                    modifier = Modifier
+                        .size(68.18.dp)
+                        .clip(CircleShape)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = profileInfo.nickname,
+                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold, fontSize = 16.sp),
+                            color = Brown2
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Box(
+                            modifier = Modifier
+                                .background(Blue1, shape = CircleShape) // 밝은 파란색 배경
+                                .padding(horizontal = 5.dp, vertical = 2.dp) // 뱃지 여백 조정
+                        ) {
+                            Text(
+                                text = "남",
+                                fontSize = 10.sp,
+                                color = MainWhite
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(1.dp))
+                    Text(
+                        text = "${profileInfo.major} ${profileInfo.year}",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 13.sp
+                        ),
+                        color = Brown2
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "좋아요",
+                        tint = Color(0xFFFF5A5A),
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = "33개",
+                        fontSize = 12.sp
+                    )
+                }
             }
-        }
 
-        // 🔻 나머지 영역은 기존처럼 좌측 정렬
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("받은 좋아요 수")
-            Text("152")
-        }
+            // 기타 메뉴 리스트
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "기타",
+                    fontSize = 12.sp,
+                    color = Color.Blue
+                )
+                MenuItem("알림설정", ic_bell) {
+                    navController.navigate("notification_setting")
+                }
+                MenuItem("약관 및 정책", R.drawable.ic_policy) {
+                    navController.navigate("policy")
+                }
+                MenuItem("공지사항", R.drawable.ic_notice) {
+                    navController.navigate("notice")
+                }
+                MenuItem("고객 문의", R.drawable.ic_help) {
+                    navController.navigate("inquiry")
+                }
+            }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        MenuItem("알림설정") {
-            navController.navigate("notification_setting")
+            LogoutAndDeleteButtons(
+                onLogoutClick = { /* 로그아웃 처리 */ },
+                onDeleteClick = { navController.navigate("deleteAccount") }
+            )
         }
-        MenuItem("약관 및 정책") {
-            navController.navigate("policy")
-        }
-        MenuItem("공지사항") {
-            navController.navigate("notice")
-        }
-        MenuItem("고객 문의") {
-            navController.navigate("inquiry")
-        }
-        LogoutAndDeleteButtons(
-            onLogoutClick = { /* 로그아웃 처리 */ },
-            onDeleteClick = { navController.navigate("deleteAccount") }
-        )
     }
-
 }
 
 @Composable
-fun MenuItem(title: String, onClick: () -> Unit) {
+fun MenuItem(title: String, iconRes: Int, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp)
-            .clickable(onClick = onClick),
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(vertical = 14.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(title)
-        Text(">")
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = title,
+                tint = Color.Black,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(title, style = MaterialTheme.typography.bodyMedium)
+        }
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowRight,
+            contentDescription = "이동",
+            tint = Color.Gray
+        )
     }
 }
 
@@ -121,48 +235,37 @@ fun LogoutAndDeleteButtons(
     onDeleteClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize() // 화면 전체 크기
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
-                .align(Alignment.BottomStart) // 좌측 하단 정렬
-                .padding(start = 0.dp, bottom = 70.dp), // 여백 제거
-            verticalArrangement = Arrangement.spacedBy(0.dp) // 버튼 사이 여백 없애기 (원하면 조정 가능)
+                .align(Alignment.BottomStart)
+                .padding(start = 16.dp, bottom = 70.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            TextButton(
-                onClick = onLogoutClick,
-                contentPadding = PaddingValues(0.dp) // 버튼 안쪽 여백 제거 (선택)
-            ) {
+            TextButton(onClick = onLogoutClick) {
                 Text("로그아웃")
             }
-            TextButton(
-                onClick = onDeleteClick,
-                contentPadding = PaddingValues(0.dp)
-            ) {
+            TextButton(onClick = onDeleteClick) {
                 Text("회원탈퇴")
             }
         }
     }
 }
 
-
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun UserScreenPreview() {
     val fakeNavController = rememberNavController()
 
-    // 가짜 ViewModel 인스턴스 생성 + 더미 데이터 주입
     val fakeViewModel = EditProfileViewModel().apply {
         updateProfile(
             ProfileInfo(
-                nickname = "프리뷰 닉네임",
-                major = "프리뷰학과",
-                year = "22학번",
-                gender = "여성",
-                address = "프리뷰 주소"
+                nickname = "꾸벅이",
+                major = "기계공학과",
+                year = "2024204883",
+                gender = "남성",
+                address = "서울시 송파구"
             )
         )
     }
