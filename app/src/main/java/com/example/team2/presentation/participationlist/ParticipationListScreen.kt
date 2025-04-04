@@ -18,13 +18,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.team2.R
 import com.example.team2.model.Transaction
 import com.example.team2.presentation.component.CustomText2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel()) {
+fun ParticipationListScreen(
+    viewModel: TransactionViewModel = TransactionViewModel(),
+    navController: NavController? = null
+) {
     val transactions by viewModel.transactions.collectAsState()
     val (filterText, _) = viewModel.filter.collectAsState().value
 
@@ -36,9 +40,28 @@ fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewMod
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("거래내역", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
+            TopAppBar(
+                title = {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "거래내역",
+                            modifier = Modifier.align(Alignment.Center),
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF574C4D)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_notification),
+                            contentDescription = "알림",
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 18.dp)
+                                .size(24.dp),
+                            tint = Color.Unspecified
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
         }
     ) { paddingValues ->
@@ -50,8 +73,9 @@ fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewMod
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             TransactionFilter(viewModel)
+            Spacer(modifier = Modifier.height(12.dp))
 
-            LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+            LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
                 items(filteredTransactions.size) { index ->
                     val transaction = filteredTransactions[index]
                     TransactionItem(
@@ -59,6 +83,9 @@ fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewMod
                         index = index,
                         onComplete = { viewModel.completeTransaction(it) }
                     )
+                    if (index < filteredTransactions.lastIndex) {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
                 }
             }
         }
@@ -73,18 +100,26 @@ fun TransactionFilter(viewModel: TransactionViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp),
+            .padding(horizontal = 24.dp),
         horizontalArrangement = Arrangement.Start
     ) {
         filterOptions.forEach { option ->
             Button(
                 onClick = { viewModel.setFilter(option) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedFilter == option) Color.Yellow else Color.White
+                    containerColor = if (selectedFilter == option) Color(0xFFFFCC01) else Color.White
                 ),
-                modifier = Modifier.padding(horizontal = 4.dp)
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .height(34.dp)
             ) {
-                Text(option, color = Color.Black)
+                Text(
+                    option,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp
+                )
             }
         }
     }
@@ -97,44 +132,92 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text("거래를 완료하시겠습니까?", fontSize = 16.sp) },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        onComplete(transaction.id)
-                    }
+            confirmButton = {},
+            dismissButton = {},
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
                 ) {
-                    Text("완료", color = Color(0xFFFFC107))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("취소", color = Color.Gray)
+                    // 🔽 텍스트 위아래 패딩 ↓ ↓ ↓ 줄임
+                    Text(
+                        text = "거래를 완료하시겠습니까?",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF574C4D),
+                        modifier = Modifier
+                            .padding(top = 4.dp, bottom = 2.dp) // 기존 18 → 12, 16 → 10 정도로 축소
+                            .align(Alignment.CenterHorizontally)
+                    )
+
+                    Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),  // 버튼 영역 높이는 유지
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TextButton(
+                            onClick = { showDialog = false },
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        ) {
+                            Text("취소", color = Color(0xFF574C4D), fontWeight = FontWeight.Medium)
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .fillMaxHeight()
+                                .background(Color(0xFFE0E0E0))
+                        )
+
+                        TextButton(
+                            onClick = {
+                                showDialog = false
+                                onComplete(transaction.id)
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()
+                        ) {
+                            Text("완료", color = Color(0xFFFFCC01), fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
             },
             containerColor = Color.White,
             shape = RoundedCornerShape(16.dp)
         )
+
+
     }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
             .border(
                 width = if (transaction.isOngoing) 2.dp else 0.dp,
-                color = if (transaction.isOngoing) Color.Yellow else Color.Transparent,
-                shape = RoundedCornerShape(8.dp)
+                color = if (transaction.isOngoing) Color(0xFFFFCC01) else Color.Transparent,
+                shape = RoundedCornerShape(16.dp)
             ),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 👤 프로필 최대 3개 (2+1), 4명이면 +버튼
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     val displayProfiles = transaction.participants.take(3)
                     val chunked = displayProfiles.chunked(2)
@@ -174,20 +257,22 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
                         Text(
                             text = transaction.roomName,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = Color.Black
+                            fontSize = 15.sp,
+                            color = if (transaction.isOngoing) Color(0xFF574C4D) else Color(0x99574C4D)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             text = if (transaction.isOngoing) "진행 중" else "완료",
+                            fontWeight = FontWeight.Medium,
                             fontSize = 12.sp,
-                            color = if (transaction.isOngoing) Color(0xFFFFC107) else Color.Gray
+                            color = if (transaction.isOngoing) Color(0xFFFFCC01) else Color(0xFFC4C4C4)
                         )
                     }
                     Text(
                         text = transaction.roomDesc,
-                        fontSize = 14.sp,
-                        color = Color.Gray,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 13.sp,
+                        color = Color(0xCC574C4D),
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -202,12 +287,20 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
                 ) {
                     Button(
                         onClick = { showDialog = true },
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(48.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Yellow,
+                            containerColor = Color(0xFFFFCC01),
                             contentColor = Color.Black
                         )
                     ) {
-                        Text("완료하기")
+                        Text(
+                            "완료하기",
+                            color = Color(0xFF574C4D),
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 13.sp
+                        )
                     }
                 }
             }
