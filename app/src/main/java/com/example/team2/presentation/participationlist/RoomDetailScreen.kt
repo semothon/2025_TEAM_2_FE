@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.team2.R
 import com.example.team2.presentation.participationlist.ParticipationListScreen
+import com.example.team2.ui.theme.Brown2
+import com.example.team2.ui.theme.Gray6
+import com.example.team2.ui.theme.MainBackground
+import com.example.team2.ui.theme.MainWhite
 
 
 @Composable
@@ -33,7 +38,7 @@ fun RoomDetailScreen(navController: NavController? = null) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFFFFF))
+            .background(MainWhite)
     ) {
 
         Box(
@@ -78,7 +83,7 @@ fun RoomDetailScreen(navController: NavController? = null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF5F5F5))
+                .background(MainBackground)
                 .padding(horizontal = 16.dp)
         ) {
 
@@ -104,8 +109,11 @@ fun MemberSection() {
     ) {
         Text(
             text = "인원 현황",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF333333)
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            color = Brown2
         )
     }
     Column(
@@ -120,7 +128,7 @@ fun MemberSection() {
             Triple("APPLE", "시각디자인학과", true),
             Triple("도라에몽", "컴퓨터공학과", false),
             Triple("크리넥스", "산업경영공학과", false),
-            Triple("낑깡", "한국어학과 me", false)
+            Triple("낑깡", "한국어학과", false)
         )
 
         members.forEach { (name, dept, isLeader) ->
@@ -152,22 +160,38 @@ fun MemberItem(name: String, department: String, isLeader: Boolean) {
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
+        Row(
+            modifier = Modifier.weight(1f)
+        ) {
             Text(
                 text = name,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                color = Brown2
             )
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = department,
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodySmall,
+                color = Brown2
             )
         }
 
-        Icon(
-            imageVector = Icons.Default.FavoriteBorder,
-            contentDescription = "좋아요",
-            tint = Color.Gray
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = "좋아요",
+                tint = Brown2,
+                modifier = Modifier.size(25.dp) // 필요 시 크기 조정
+            )
+            Text(
+                text = "좋아요",
+                fontSize = 12.sp,
+                color = Brown2
+            )
+        }
+
     }
 }
 
@@ -182,8 +206,11 @@ fun RoomDetailSection() {
     ) {
         Text(
             text = "방 상세",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF333333)
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            color = Brown2
         )
     }
     Column(
@@ -194,21 +221,24 @@ fun RoomDetailSection() {
     ) {
         Text(
             text = "방 상세 설명",
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            color = Brown2
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
             text = "정건 맥날 같이 시켜드실 분 구합니당.",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = Brown2
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "방 키워드",
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            color = Brown2
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -230,7 +260,8 @@ fun KeywordChip(text: String, backgroundColor: Color) {
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp)
+            style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+            color = Brown2
         )
     }
 }
@@ -241,7 +272,7 @@ fun RoomStatusSection() {
         Text(
             text = "방 상태",
             style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF333333)
+            color = Brown2
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -258,7 +289,8 @@ fun RoomStatusSection() {
             ) {
                 Text(
                     text = "모집 완료",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Brown2
                 )
 
                 Spacer(modifier = Modifier.width(250.dp))
@@ -270,7 +302,7 @@ fun RoomStatusSection() {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = "메뉴 열기",
-                        tint = Color(0xFFD3D3D3)
+                        tint = Gray6
                     )
                 }
             }
