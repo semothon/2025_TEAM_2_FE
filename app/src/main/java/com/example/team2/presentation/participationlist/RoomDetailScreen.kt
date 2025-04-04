@@ -20,8 +20,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-@Preview
-fun RoomDetailScreen() {
+fun RoomDetailScreen(navController: NavController) {
     //뒤로가기 바는 Nav 설정 이후에 구현하기
 
     // Title

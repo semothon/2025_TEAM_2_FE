@@ -18,13 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.team2.R
 import com.example.team2.model.Transaction
 import com.example.team2.presentation.component.CustomText2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel()) {
+fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel(), navController: NavController? = null) {
     val transactions by viewModel.transactions.collectAsState()
     val (filterText, _) = viewModel.filter.collectAsState().value
 
