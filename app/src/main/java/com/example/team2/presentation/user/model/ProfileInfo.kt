@@ -5,5 +5,7 @@ data class ProfileInfo(
     val major: String,
     val year: String,
     val gender: String,
-    val address: String
+    val address: String,
+    val name: String,
+    val school : String
 )

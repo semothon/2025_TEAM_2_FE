@@ -10,10 +10,12 @@ class EditProfileViewModel : ViewModel(), EditProfileViewModelContract {
     private val _profileInfo = MutableStateFlow(
         ProfileInfo(
             nickname = "닉네임2",
+            name = "이름1",
             major = "컴퓨터공학과",
             year = "21학번",
             gender = "남성",
-            address = "사색의광장 배달존 A"
+            address = "사색의광장 배달존 A",
+            school = "경희대학교"
         )
     )
     override val profileInfo: StateFlow<ProfileInfo> = _profileInfo

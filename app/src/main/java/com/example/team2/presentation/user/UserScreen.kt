@@ -84,23 +84,27 @@ fun UserScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clickable {
+                        navController.navigate("edit_profile_screen")
+                    }
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "프로필",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 )
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = "프로필 이동",
+                    contentDescription = "프로필 수정으로 이동",
                     tint = Color.Gray,
                     modifier = Modifier.size(28.dp)
                 )
             }
-
-
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -280,7 +284,9 @@ fun UserScreenPreview() {
                 major = "기계공학과",
                 year = "2024204883",
                 gender = "남성",
-                address = "서울시 송파구"
+                address = "서울시 송파구",
+                name = "이름 1",
+                school = "경희대학교"
             )
         )
     }
