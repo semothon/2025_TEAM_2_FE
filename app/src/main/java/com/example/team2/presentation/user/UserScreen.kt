@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,7 +30,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
+import com.example.team2.R.drawable.alarmsetting_logo
 import com.example.team2.R.drawable.ic_bell
+import com.example.team2.R.drawable.inquiry_logo
+import com.example.team2.R.drawable.notification_logo
+import com.example.team2.R.drawable.policy_logo
 import com.example.team2.presentation.user.model.ProfileInfo
 import com.example.team2.ui.theme.Blue1
 import com.example.team2.ui.theme.Brown2
@@ -173,25 +178,25 @@ fun UserScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
                     text = "기타",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Brown2
+                    color = Brown2.copy(alpha = 0.8f)
                 )
-                MenuItem("알림설정", ic_bell) {
+                MenuItem("알림설정", alarmsetting_logo) {
                     navController.navigate("notification_setting")
                 }
-                MenuItem("약관 및 정책", R.drawable.ic_policy) {
+                MenuItem("약관 및 정책", policy_logo) {
                     navController.navigate("policy")
                 }
-                MenuItem("공지사항", R.drawable.ic_notice) {
+                MenuItem("공지사항", notification_logo) {
                     navController.navigate("notice")
                 }
-                MenuItem("고객 문의", R.drawable.ic_help) {
+                MenuItem("고객 문의", inquiry_logo) {
                     navController.navigate("inquiry")
                 }
             }
@@ -221,16 +226,20 @@ fun MenuItem(title: String, iconRes: Int, onClick: () -> Unit) {
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = title,
-                tint = Color.Black,
+                tint = Brown2,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Text(title, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                title,
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 15.sp, fontWeight = FontWeight.SemiBold),
+                color = Brown2
+            )
         }
         Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "이동",
-            tint = Color.Gray
+            tint = Brown2
         )
     }
 }
