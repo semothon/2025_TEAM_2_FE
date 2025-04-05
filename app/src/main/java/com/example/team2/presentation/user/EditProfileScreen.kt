@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun EditProfileScreen(
     viewModel: EditProfileViewModelContract,
-    navController: NavController,
+    navController: NavController
 ) {
     val scrollState = rememberScrollState()
 
@@ -67,7 +67,6 @@ fun EditProfileScreen(
             .padding(horizontal = 20.dp, vertical = 24.dp)
             .verticalScroll(scrollState)
     ) {
-
         Text("프로필 수정", style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(20.dp))
 
@@ -127,11 +126,12 @@ fun EditProfileScreen(
         )
         Spacer(Modifier.height(24.dp))
 
+        Spacer(Modifier.height(16.dp))
+
         AddressInputField(
             address = address,
             onAddressChange = { address = it }
         )
-        Spacer(Modifier.height(36.dp))
 
 
         ConfirmButton(
@@ -144,7 +144,6 @@ fun EditProfileScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
@@ -321,7 +320,7 @@ fun GenderSelectField(
     selectedGender: String,
     onGenderSelected: (String) -> Unit
 ) {
-    val genderOptions = listOf("남", "여")
+    val genderOptions = listOf("남성", "여성")
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -445,7 +444,7 @@ private class FakeEditProfileViewModel : EditProfileViewModelContract {
             name = "홍길동",
             major = "컴퓨터공학과",
             year = "22학번",
-            gender = "남",
+            gender = "남성",
             address = "정문 앞",
             school = "경희대학교"
         )
