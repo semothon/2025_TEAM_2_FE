@@ -1,6 +1,5 @@
 package com.example.team2.presentation.roomlist
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,18 +27,12 @@ import com.example.team2.presentation.roomlist.component.TagChip
 import com.example.team2.presentation.roomlist.model.Room
 
 @Composable
-fun RoomListItem(room: Room, navController: NavController) {
+fun RoomListItem(room: Room, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                onClick = {
-                    navController.navigate(
-                        HomeNavigationItem.RoomDetail.destination
-                                + "/${room.roomId}/${room.restaurantName}/${room.content}"
-                        ///${room.status}" ///${room.tagChips}
-                    )
-                },
+                onClick = { onClick() },
                 interactionSource = null,
                 indication = null
             ),
@@ -60,7 +53,7 @@ fun RoomListItem(room: Room, navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(room.tagChips.drop(4)) { keyword ->
+                items(room.tagChips.drop(2)) { keyword ->
                     TagChip(keyword)
                 }
             }

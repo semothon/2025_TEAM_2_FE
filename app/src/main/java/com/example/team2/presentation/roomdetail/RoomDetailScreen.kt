@@ -1,6 +1,5 @@
 package com.example.team2.presentation.roomdetail
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,72 +7,47 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.example.team2.navigation.home.model.HomeToDetail
 import com.example.team2.presentation.component.BottomButton
-import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.CustomText5
 import com.example.team2.presentation.component.CustomText6
-import com.example.team2.presentation.component.DropDownMenu
-import com.example.team2.presentation.component.RowTextAndIcon
 import com.example.team2.presentation.component.TopBar
 import com.example.team2.presentation.roomdetail.component.MemberItem
-import com.example.team2.presentation.roomdetail.model.Member
-import com.example.team2.presentation.roomdetail.model.User
-import com.example.team2.presentation.roomlist.RoomListViewModel
-import com.example.team2.presentation.signup.model.Infos
+import com.example.team2.presentation.roomlist.component.TagChip
 import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
-import com.example.team2.userId
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun RoomDetailScreen(
@@ -99,29 +73,27 @@ fun RoomDetailScreen(
     }
 
     if (isLoading)
-    Scaffold(
-        topBar = { TopBar(room.roomName) { navController.popBackStack() } },
+        Scaffold(
+            topBar = { TopBar(room.roomName) { navController.popBackStack() } },
             bottomBar = {
                 if (isButton)
                     BottomButton("참여하기", true) {
                         viewModel.joinRoom(room.roomId)
                     }
             }
-    ) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .background(MainBackground)
-                .padding(it)
-                .padding(InnerPadding)
         ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(MainBackground)
+                    .padding(it)
+                    .padding(InnerPadding)
+            ) {
                 CustomText6("인원 현황")
                 Spacer(Modifier.height(12.dp))
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MainWhite
-                    ),
+                    colors = CardDefaults.cardColors(containerColor = MainWhite),
                     shape = RoundedCornerShape(15.dp)
                 ) {
                     LazyColumn(
@@ -144,12 +116,17 @@ fun RoomDetailScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         CustomText5("방 상세 설명")
-                        CustomText5(room.roomContent)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomText5(" " + room.roomContent)
+                        Spacer(modifier = Modifier.height(8.dp))
                         CustomText5("방 키워드")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        val tagList: List<String> =
+                            room.roomTagChips.split(",").map { it }.drop(2)
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-//                            items(room.roomTagChips.drop(4)) { keyword ->
-//                                TagChip(keyword)
-//                            }
+                            items(tagList) { keyword ->
+                                TagChip(keyword)
+                            }
                         }
                     }
                 }
@@ -200,63 +177,69 @@ fun RoomDetailScreen(
                     }
                 }
 
-//                if (isDialog)
-//                    AlertDialog(
-//                        onDismissRequest = { viewModel.isDialogFalse() },
-//                        confirmButton = {},
-//                        dismissButton = {},
-//                        text = {
-//                            Column(
-//                                horizontalAlignment = Alignment.CenterHorizontally,
-//                                modifier = Modifier.padding(20.dp)
-//                            ) {
-//                                Image(
-//                                    painter = painterResource(memberInfo.value.illustration),
-//                                    contentDescription = "User Icon",
-//                                    modifier = Modifier.size(120.dp)
-//                                )
-//                                Spacer(modifier = Modifier.width(8.dp))
-//                                Column {
-//                                    CustomText3(memberInfo.value.nickName)
-//                                    Spacer(modifier = Modifier.width(8.dp))
-//                                    CustomText5(memberInfo.value.univInfo[2].toString())
-//                                    Spacer(modifier = Modifier.width(8.dp))
-//                                    CustomText5(memberInfo.value.univInfo[1].toString() + "학번")
-//                                    Spacer(modifier = Modifier.height(20.dp))
-//                                    CustomText5(memberInfo.value.favoriteCount.toString())
-//                                }
-//
-//                                Spacer(modifier = Modifier.height(20.dp))
-//                                Row(
-//                                    modifier = Modifier.fillMaxWidth(),
-//                                    horizontalArrangement = Arrangement.SpaceEvenly
-//                                ) {
-//                                    Button(
-//                                        onClick = { viewModel.blockUser(memberInfo.value.userId) },
-//                                        modifier = Modifier
-//                                            .weight(1f)
-//                                            .height(40.dp),
-//                                        colors = ButtonDefaults.buttonColors(containerColor = Gray2)
-//                                    ) {
-//                                        CustomText3(text = "차단하기", alpha = 0.7f)
-//                                    }
-//                                    Spacer(modifier = Modifier.width(8.dp))
-//                                    Button(
-//                                        onClick = { viewModel.isDialogFalse() },
-//                                        modifier = Modifier
-//                                            .weight(1f)
-//                                            .height(40.dp),
-//                                        colors = ButtonDefaults.buttonColors(containerColor = MainColor)
-//                                    ) {
-//                                        CustomText3(text = "채팅 걸기")
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    )
+                if (isDialog)
+                    AlertDialog(
+                        onDismissRequest = { viewModel.isDialogFalse() },
+                        confirmButton = {},
+                        dismissButton = {},
+                        text = {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.padding(20.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(memberInfo.value.illustration),
+                                    contentDescription = "User Icon",
+                                    modifier = Modifier.size(120.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Column {
+                                    CustomText3(memberInfo.value.nickName)
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    CustomText5(memberInfo.value.univInfo[2].toString())
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    CustomText5(memberInfo.value.univInfo[1].toString() + "학번")
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    CustomText5(memberInfo.value.favoriteCount.toString())
+                                }
 
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                ) {
+                                    Button(
+                                        onClick = { viewModel.blockUser(memberInfo.value.userId) },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .height(40.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Gray2)
+                                    ) {
+                                        CustomText3(text = "차단하기", alpha = 0.7f)
+                                    }
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Button(
+                                        onClick = { viewModel.isDialogFalse() },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .height(40.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = MainColor)
+                                    ) {
+                                        CustomText3(text = "채팅 걸기")
+                                    }
+                                }
+                            }
+                        }
+                    )
+
+            }
         }
-    }
     else
-        CircularProgressIndicator()
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                trackColor = MainColor.copy(alpha = 0.4f),
+                color = MainColor
+            )
+        }
 }

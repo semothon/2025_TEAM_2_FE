@@ -2,50 +2,51 @@ package com.example.team2.presentation.participationdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.team2.R
 import com.example.team2.navigation.home.model.HomeToDetail
-import com.example.team2.presentation.component.BottomButton
 import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.CustomText5
 import com.example.team2.presentation.component.CustomText6
 import com.example.team2.presentation.component.TopBar
 import com.example.team2.presentation.participationdetail.component.DealsMemberItem
-import com.example.team2.presentation.roomdetail.component.MemberItem
-import com.example.team2.ui.theme.Brown2
+import com.example.team2.presentation.roomlist.component.TagChip
 import com.example.team2.ui.theme.Gray2
-import com.example.team2.ui.theme.Gray6
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
-import com.example.team2.userId
-
 
 @Composable
 fun ParticipationDetailScreen(
@@ -62,8 +63,8 @@ fun ParticipationDetailScreen(
     val isDialog by viewModel.isDialog.collectAsState()
     val memberInfo = viewModel.member.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.getRoomDetail(room.roomId, userId)
+    LaunchedEffect(room.roomId) {
+        viewModel.getRoomDetail(room.roomId)
     }
     LaunchedEffect(popBack) {
         if (popBack)
@@ -110,13 +111,18 @@ fun ParticipationDetailScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         CustomText5("방 상세 설명")
-                        CustomText5(room.roomContent)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CustomText5("" + room.roomContent)
+                        Spacer(modifier = Modifier.height(8.dp))
                         CustomText5("방 키워드")
-//                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-//                            items(room.roomTagChips.drop(4)) { keyword ->
-//                                TagChip(keyword)
-//                            }
-//                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        val tagList: List<String> =
+                            room.roomTagChips.split(",").map { it }.drop(2)
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            items(tagList) { keyword ->
+                                TagChip(keyword)
+                            }
+                        }
                     }
                 }
 
@@ -226,5 +232,11 @@ fun ParticipationDetailScreen(
             }
         }
     else
-        CircularProgressIndicator()
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                trackColor = MainColor.copy(alpha = 0.4f),
+                color = MainColor
+            )
+        }
 }

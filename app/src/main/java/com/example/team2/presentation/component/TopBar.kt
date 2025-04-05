@@ -17,7 +17,7 @@ import com.example.team2.ui.theme.MainWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(tobBarText: String, onClick: () -> Unit) {
+fun TopBar(tobBarText: String, boolean: Boolean = true, onClick: () -> Unit) {
     TopAppBar(
         title = {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -25,15 +25,16 @@ fun TopBar(tobBarText: String, onClick: () -> Unit) {
                     text = tobBarText,
                     modifier = Modifier.align(Alignment.Center)
                 )
-                IconButton(
-                    onClick = { onClick() },
-                    modifier = Modifier.align(Alignment.CenterStart)
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "뒤로 가기"
-                    )
-                }
+                if (boolean)
+                    IconButton(
+                        onClick = { onClick() },
+                        modifier = Modifier.align(Alignment.CenterStart)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "뒤로 가기"
+                        )
+                    }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(

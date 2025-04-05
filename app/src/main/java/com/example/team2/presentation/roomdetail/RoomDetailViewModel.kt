@@ -50,7 +50,6 @@ class RoomDetailViewModel : ViewModel() {
     val roomOptions: MutableStateFlow<List<String>> = _roomOptions
 
     fun getRoomDetail(roomId: String) {
-        Log.d("testt", "ok")
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.apiService.getRoomDetail(roomId)
