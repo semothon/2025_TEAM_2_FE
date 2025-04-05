@@ -1,17 +1,19 @@
 package com.example.team2.network
 
 import com.example.team2.network.model.ApiResponse
+import com.example.team2.network.model.BlockUserIdRequest
 import com.example.team2.network.model.MakeRoomResponse
 import com.example.team2.network.model.RoomListResponse
+import com.example.team2.network.model.RoomResponseDetail
 import com.example.team2.network.model.SearchQuery
 import com.example.team2.network.model.SignInRequest
 import com.example.team2.network.model.SignInResponse
 import com.example.team2.network.model.SignUpRequest
+import com.example.team2.network.model.UserDetailResponse
 import com.example.team2.network.model.VerifyCodeCertRequest
 import com.example.team2.network.model.VerifyCodeRequest
 import com.example.team2.presentation.participationlist.model.ParticipationListResponse
 import com.example.team2.presentation.roomadd.model.RoomDetail
-import com.example.team2.presentation.roomdetail.model.RoomResponseDetail
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -81,5 +83,18 @@ interface ApiService {
     suspend fun joinRoom(
         @Header("Authorization") authorization: String,
         @Body requestBody: SearchQuery
+    ): Response<ApiResponse>
+
+    // 유정 정보
+    @GET("user/profile/detail")
+    suspend fun getUserDetail(
+        @Query("userId") requestBody: String
+    ): Response<UserDetailResponse>
+
+    // 유저 차단
+    @POST("user/block")
+    suspend fun blockUser(
+        @Header("Authorization") authorization: String,
+        @Body requestBody: BlockUserIdRequest
     ): Response<ApiResponse>
 }

@@ -1,4 +1,4 @@
-package com.example.team2.presentation.roomdetail.component
+package com.example.team2.presentation.participationdetail.component
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.team2.presentation.component.CustomText3
-import com.example.team2.presentation.roomdetail.RoomDetailViewModel
+import com.example.team2.presentation.participationdetail.ParticipationDetailViewModel
 import com.example.team2.presentation.roomdetail.model.Member
 
 @SuppressLint("ResourceType")
 @Composable
-fun MemberItem(member: Member, viewModel: RoomDetailViewModel) {
+fun DealsMemberItem(member: Member, viewModel: ParticipationDetailViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable(

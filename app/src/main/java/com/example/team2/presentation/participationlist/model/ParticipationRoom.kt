@@ -8,4 +8,5 @@ data class ParticipationRoom(
     @SerializedName("note") val roomContent: String,
     @SerializedName("status") val roomStatus: String,
     @SerializedName("icons") val illustrations: List<Int>,
+    @SerializedName("hashtags") val tagChips: List<String>,
 )

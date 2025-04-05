@@ -1,20 +1,18 @@
-package com.example.team2.presentation.roomdetail
+package com.example.team2.presentation.participationdetail
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.team2.network.RetrofitClient
 import com.example.team2.network.model.BlockUserIdRequest
-import com.example.team2.network.model.SearchQuery
 import com.example.team2.presentation.roomdetail.model.Member
 import com.example.team2.presentation.roomdetail.model.User
 import com.example.team2.token
-import com.example.team2.userId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class RoomDetailViewModel : ViewModel() {
+class ParticipationDetailViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -49,40 +47,17 @@ class RoomDetailViewModel : ViewModel() {
     private val _roomOptions = MutableStateFlow(listOf("모집 중", "모집 완료", "거래 완료"))
     val roomOptions: MutableStateFlow<List<String>> = _roomOptions
 
-    fun getRoomDetail(roomId: String) {
-        Log.d("testt", "ok")
+    fun getRoomDetail(roomId: String, userId: String) {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.apiService.getRoomDetail(roomId)
 
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        _members.value = it.memberGroup.members
-                        _location.value = it.memberGroup.location
-                        if (_members.value.isNotEmpty() && _members.value.first().userId == userId)
-                            _isButton.value = false
-                    }
+                    _members.value = response.body()?.memberGroup?.members ?: emptyList()
+                    _location.value = response.body()?.memberGroup?.location ?: ""
+                    if (_members.value.first().userId == userId)
+                        _isButton.value = false
                     _isLoading.value = true
-                    Log.d("testt", response.body().toString())
-                } else {
-                    // 실패 시 처리
-                    Log.d("testt", "Error: ${response.message()}")
-                }
-            } catch (e: Exception) {
-                // 요청 실패 시 처리
-                Log.d("testt", "Request failed: ${e.message}")
-            }
-        }
-    }
-
-    fun joinRoom(roomId: String) {
-        val groupId = SearchQuery(roomId)
-        viewModelScope.launch {
-            try {
-                val response = RetrofitClient.apiService.joinRoom("Bearer $token", groupId)
-
-                if (response.isSuccessful) {
-                    _popBack.value = true
                     Log.d("testt", response.body().toString())
                 } else {
                     // 실패 시 처리
