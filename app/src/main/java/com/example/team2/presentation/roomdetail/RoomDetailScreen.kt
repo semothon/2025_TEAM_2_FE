@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -145,11 +146,11 @@ fun RoomDetailScreen(
                         CustomText5("방 상세 설명")
                         CustomText5(room.roomContent)
                         CustomText5("방 키워드")
-//                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
 //                            items(room.roomTagChips.drop(4)) { keyword ->
 //                                TagChip(keyword)
 //                            }
-//                        }
+                        }
                     }
                 }
 
