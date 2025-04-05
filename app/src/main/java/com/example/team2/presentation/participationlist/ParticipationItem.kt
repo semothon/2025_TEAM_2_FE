@@ -38,7 +38,7 @@ fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomF
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, if (deal.roomStatus == "2") MainColor else MainWhite)
+            .border(1.dp, if (deal.roomStatus == 2) MainColor else MainWhite)
             .clickable(
                 onClick = { onClick() },
                 interactionSource = null,
@@ -53,8 +53,8 @@ fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomF
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    if (deal.roomStatus == "2") {
-                        Row {
+                    if (deal.roomStatus == 2) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             CustomText3(deal.restaurantName, 0.6f)
                             Spacer(Modifier.width(4.dp))
                             CustomText7("완료", Gray3)
@@ -62,10 +62,10 @@ fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomF
                         Spacer(Modifier.height(4.dp))
                         CustomText(deal.roomContent, 0.6f)
                     } else {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             CustomText3(deal.restaurantName)
                             Spacer(Modifier.width(4.dp))
-                            CustomText7("진행중", MainColor)
+                            CustomText7("진행 중", MainColor)
                         }
                         Spacer(Modifier.height(4.dp))
                         CustomText(deal.roomContent, 0.8f)
@@ -73,7 +73,7 @@ fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomF
                 }
             }
 
-            if (deal.roomStatus == "2")
+            if (deal.roomStatus == 2)
                 Button(
                     onClick = { onClickRoomFinish() },
                     modifier = Modifier.background(color = MainColor),

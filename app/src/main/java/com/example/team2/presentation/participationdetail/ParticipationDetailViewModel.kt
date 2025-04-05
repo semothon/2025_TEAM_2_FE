@@ -8,6 +8,7 @@ import com.example.team2.network.model.BlockUserIdRequest
 import com.example.team2.presentation.roomdetail.model.Member
 import com.example.team2.presentation.roomdetail.model.User
 import com.example.team2.token
+import com.example.team2.userId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -47,7 +48,7 @@ class ParticipationDetailViewModel : ViewModel() {
     private val _roomOptions = MutableStateFlow(listOf("모집 중", "모집 완료", "거래 완료"))
     val roomOptions: MutableStateFlow<List<String>> = _roomOptions
 
-    fun getRoomDetail(roomId: String, userId: String) {
+    fun getRoomDetail(roomId: String) {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.apiService.getRoomDetail(roomId)
