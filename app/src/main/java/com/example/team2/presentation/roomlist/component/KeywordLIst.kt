@@ -60,7 +60,11 @@ fun KeywordList(
                 shape = RoundedCornerShape(97.dp),
                 color = MainWhite,
                 modifier = Modifier
-                    .clickable { expanded = !expanded }
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = { expanded = !expanded }
+                    )
                     .border(1.dp, MainColor, RoundedCornerShape(97.dp))
             ) {
                 Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {

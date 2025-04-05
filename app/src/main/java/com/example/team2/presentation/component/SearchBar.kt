@@ -39,7 +39,11 @@ fun SearchBar(
                 imageVector = Icons.Default.Search,
                 contentDescription = "검색 아이콘",
                 tint = Color.Gray,
-                modifier = Modifier.clickable { onClick() }
+                modifier = Modifier.clickable(
+                    interactionSource = null,
+                    indication = null,
+                    onClick = { onClick() }
+                )
             )
         },
         modifier = Modifier

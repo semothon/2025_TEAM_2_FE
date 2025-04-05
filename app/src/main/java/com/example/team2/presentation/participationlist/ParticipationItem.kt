@@ -34,11 +34,20 @@ import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 
 @Composable
-fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomFinish: () -> Unit) {
+fun ParticipationItem(
+    deal: ParticipationRoom,
+    isMyRoom: Boolean,
+    onClick: () -> Unit,
+    onClickRoomFinish: (String) -> Unit
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, if (deal.roomStatus == 2) MainColor else MainWhite)
+            .border(
+                1.dp,
+                if (deal.roomStatus == 0 || deal.roomStatus == 1) MainColor else MainWhite,
+                RoundedCornerShape(15.dp)
+            )
             .clickable(
                 onClick = { onClick() },
                 interactionSource = null,
@@ -73,9 +82,9 @@ fun ParticipationItem(deal: ParticipationRoom, onClick: () -> Unit, onClickRoomF
                 }
             }
 
-            if (deal.roomStatus == 2)
+            if ((deal.roomStatus == 0 || deal.roomStatus == 1) && isMyRoom)
                 Button(
-                    onClick = { onClickRoomFinish() },
+                    onClick = { onClickRoomFinish(deal.roomId) },
                     modifier = Modifier.background(color = MainColor),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                     contentPadding = PaddingValues(0.dp)

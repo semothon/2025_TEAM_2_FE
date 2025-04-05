@@ -2,7 +2,7 @@ package com.example.team2.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SearchQuery(
+data class UpdateRoomRequest(
     @SerializedName("groupId") val roomId: String,
-    @SerializedName("myCost") val userCost: Int
+    @SerializedName("status") val status: Int
 )

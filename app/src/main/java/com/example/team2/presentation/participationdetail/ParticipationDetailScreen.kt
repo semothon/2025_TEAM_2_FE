@@ -2,9 +2,12 @@ package com.example.team2.presentation.participationdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,10 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.team2.R
 import com.example.team2.navigation.home.model.HomeToDetail
 import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.CustomText5
@@ -48,6 +55,7 @@ import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ParticipationDetailScreen(
     navController: NavController,
@@ -71,10 +79,10 @@ fun ParticipationDetailScreen(
             navController.popBackStack()
     }
 
-    if (isLoading)
-        Scaffold(
-            topBar = { TopBar(room.roomName) { navController.popBackStack() } },
-        ) {
+    Scaffold(
+        topBar = { TopBar(room.roomName) { navController.popBackStack() } },
+    ) {
+        if (isLoading)
             Column(
                 Modifier
                     .fillMaxSize()
@@ -116,10 +124,16 @@ fun ParticipationDetailScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         CustomText5("방 키워드")
                         Spacer(modifier = Modifier.height(8.dp))
-                        val tagList: List<String> =
-                            room.roomTagChips.split(",").map { it }.drop(2)
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                            items(tagList) { keyword ->
+                        val tagList: List<String> = room.roomTagChips
+                            .removeSurrounding("[", "]")
+                            .split(",")
+                            .map { it.trim() }
+                        FlowRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            tagList.forEach { keyword ->
                                 TagChip(keyword)
                             }
                         }
@@ -176,12 +190,29 @@ fun ParticipationDetailScreen(
 
                 if (isDialog)
                     AlertDialog(
+                        containerColor = MainWhite,
+                        modifier = Modifier.wrapContentHeight(),
                         onDismissRequest = { viewModel.isDialogFalse() },
                         confirmButton = {},
                         dismissButton = {},
+                        title = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .clickable { viewModel.isDialogFalse() }
+                                )
+                            }
+                        },
                         text = {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
                                 modifier = Modifier.padding(20.dp)
                             ) {
                                 Image(
@@ -189,15 +220,25 @@ fun ParticipationDetailScreen(
                                     contentDescription = "User Icon",
                                     modifier = Modifier.size(120.dp)
                                 )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Column {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     CustomText3(memberInfo.value.nickName)
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     CustomText5(memberInfo.value.univInfo[2].toString())
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    CustomText5(memberInfo.value.univInfo[1].toString() + "학번")
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    CustomText5(
+                                        memberInfo.value.univInfo[1].toString().split(".")
+                                            .first() + "학번"
+                                    )
                                     Spacer(modifier = Modifier.height(20.dp))
-                                    CustomText5(memberInfo.value.favoriteCount.toString())
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Image(
+                                            painter = painterResource(R.drawable.heart_icon),
+                                            contentDescription = ""
+                                        )
+                                        Spacer(Modifier.width(2.dp))
+                                        CustomText5(memberInfo.value.favoriteCount.toString() + "개")
+                                    }
                                 }
 
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -228,15 +269,18 @@ fun ParticipationDetailScreen(
                             }
                         }
                     )
-
             }
-        }
-    else
-        Box(modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                trackColor = MainColor.copy(alpha = 0.4f),
-                color = MainColor
-            )
-        }
+        else
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MainBackground)
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    trackColor = MainColor.copy(alpha = 0.4f),
+                    color = MainColor
+                )
+            }
+    }
 }

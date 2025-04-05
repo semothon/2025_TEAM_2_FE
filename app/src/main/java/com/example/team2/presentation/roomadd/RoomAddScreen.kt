@@ -1,10 +1,14 @@
 package com.example.team2.presentation.roomadd
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,11 +43,14 @@ import com.example.team2.presentation.component.DropDownMenu
 import com.example.team2.presentation.component.RowTextAndIcon
 import com.example.team2.presentation.component.TopBar
 import com.example.team2.presentation.roomadd.model.RoomDetail
+import com.example.team2.presentation.roomlist.component.KeywordChip
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomAddScreen(
     navController: NavController,
@@ -51,9 +58,14 @@ fun RoomAddScreen(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val popBack by viewModel.popBack.collectAsState()
+    val keywords = viewModel.keywordList.collectAsState()
+    val selectedKeywords by viewModel.selectedKeywords.collectAsState()
+
     var restaurantName by rememberSaveable { mutableStateOf("") }
     var roomContent by rememberSaveable { mutableStateOf("") }
     var location by rememberSaveable { mutableStateOf("") }
+    var userCost by rememberSaveable { mutableStateOf("") }
+    var totalCost by rememberSaveable { mutableStateOf("") }
     var isTogether by rememberSaveable { mutableStateOf(true) }
     var gender by rememberSaveable { mutableStateOf(true) }
     var isButton by rememberSaveable { mutableStateOf(false) }
@@ -77,6 +89,12 @@ fun RoomAddScreen(
             if (restaurantName.isNotEmpty() && roomContent.isNotEmpty() && foodCategory.value.isNotEmpty() && memberCount.value.isNotEmpty() && location.isNotEmpty())
                 isButton = true
             BottomButton("완료", isButton) {
+                val hashTags = mutableListOf(
+                    foodCategory.value,
+                    if (isTogether) "같이 먹을래요" else "따로 먹을래요",
+                    if (!gender) "상관없음" else "동성만"
+                )
+                hashTags += selectedKeywords
                 viewModel.makeRoom(
                     RoomDetail(
                         restaurantName = restaurantName,
@@ -85,14 +103,10 @@ fun RoomAddScreen(
                         totalPeople = memberCount.value.toInt(),
                         isTogether = isTogether,
                         gender = gender,
-                        hashTags = listOf(
-                            foodCategory.value,
-                            memberCount.value,
-                            if (isTogether) "같이 먹을래요" else "따로 먹을래요",
-                            if (!gender) "상관없음" else "동성만",
-                            "패스트푸드", "분식"
-                        ),
-                        location = location
+                        hashTags = hashTags,
+                        location = location,
+                        userCost = userCost.toInt(),
+                        totalCost = totalCost.toInt()
                     )
                 )
             }
@@ -198,8 +212,21 @@ fun RoomAddScreen(
 
             Spacer(Modifier.height(20.dp))
             CustomText3("추천 키워드")
-            // 추천 키워드 추가
-
+            Spacer(Modifier.height(8.dp))
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                keywords.value.forEach { keyword ->
+                    val color =
+                        if (selectedKeywords.contains(keyword)) MainColor
+                        else MainWhite
+                    KeywordChip(keyword, color) {
+                        viewModel.editKeyword(keyword)
+                    }
+                }
+            }
 
             Spacer(Modifier.height(20.dp))
             Row {
@@ -217,6 +244,32 @@ fun RoomAddScreen(
                 value = location,
                 placeholder = "위치를 입력하세요.",
                 onValueChanged = { location = it }
+            )
+
+            Spacer(Modifier.height(20.dp))
+            Row {
+                CustomText3("주문 희망 금액")
+                Spacer(Modifier.width(4.dp))
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "check",
+                    tint = if (location.isNotEmpty()) MainColor else Gray3,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            CustomOutlinedTextField(
+                value = totalCost,
+                placeholder = "주문 희망 금액",
+                isNumber = true,
+                onValueChanged = { totalCost = it }
+            )
+            Spacer(Modifier.height(8.dp))
+            CustomOutlinedTextField(
+                value = userCost,
+                placeholder = "내가 지불할 금액",
+                isNumber = true,
+                onValueChanged = { userCost = it }
             )
         }
     }
