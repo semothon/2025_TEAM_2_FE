@@ -25,9 +25,6 @@ class RoomListViewModel : ViewModel() {
     private val _filteredRooms = MutableStateFlow(emptyList<Room>())
     val filteredRooms: StateFlow<List<Room>> = _filteredRooms
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery
-
     private val _selectedKeywords = MutableStateFlow(listOf<String>())
     val selectedKeywords: StateFlow<List<String>> = _selectedKeywords
 

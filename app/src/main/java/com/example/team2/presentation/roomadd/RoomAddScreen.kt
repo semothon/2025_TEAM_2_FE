@@ -17,9 +17,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -50,6 +50,7 @@ fun RoomAddScreen(
     viewModel: RoomAddViewModel = viewModel()
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val popBack by viewModel.popBack.collectAsState()
     var restaurantName by rememberSaveable { mutableStateOf("") }
     var roomContent by rememberSaveable { mutableStateOf("") }
     var location by rememberSaveable { mutableStateOf("") }
@@ -64,6 +65,11 @@ fun RoomAddScreen(
     val memberCountOptions = viewModel.memberCountOptions.collectAsState()
     val memberCount = rememberSaveable { mutableStateOf("") }
     val memberCountExpanded = remember { mutableStateOf(false) }
+
+    LaunchedEffect(popBack) {
+        if (popBack)
+            navController.popBackStack()
+    }
 
     Scaffold(
         topBar = { TopBar("방 개설") { navController.popBackStack() } },

@@ -1,5 +1,6 @@
 package com.example.team2.presentation.roomlist
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,46 +9,46 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.team2.navigation.home.HomeNavigationItem
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.component.CustomText3
+import com.example.team2.presentation.component.IllustrationGrid
 import com.example.team2.presentation.roomlist.component.TagChip
 import com.example.team2.presentation.roomlist.model.Room
 
 @Composable
-fun RoomListItem(room: Room, onClick: () -> Unit) {
+fun RoomListItem(room: Room, navController: NavController) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { onClick() },
+                onClick = {
+                    navController.navigate(
+                        HomeNavigationItem.RoomDetail.destination
+                                + "/${room.roomId}/${room.restaurantName}/${room.content}"
+                        ///${room.status}" ///${room.tagChips}
+                    )
+                },
                 interactionSource = null,
                 indication = null
             ),
         color = Color.White,
         shape = RoundedCornerShape(15.dp),
     ) {
-        Column(modifier = Modifier.padding(10.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = null,
-                    modifier = Modifier.size(60.dp),
-                    tint = Color.Gray
-                )
+                IllustrationGrid(room.illustrations)
 
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
