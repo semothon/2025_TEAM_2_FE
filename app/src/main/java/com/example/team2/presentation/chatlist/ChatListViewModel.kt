@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.team2.network.RetrofitClient
-import com.example.team2.network.exChatData
 import com.example.team2.network.model.UpdateRoomRequest
-import com.example.team2.presentation.chatlist.model.Chat
-import com.example.team2.presentation.chatlist.model.ChatStatus
 import com.example.team2.presentation.participationlist.model.ParticipationRoom
 import com.example.team2.token
 import kotlinx.coroutines.flow.MutableStateFlow

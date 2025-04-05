@@ -17,6 +17,9 @@ class SignInViewModel : ViewModel() {
     private val _isSignIn = MutableStateFlow(false)
     val isSignIn: StateFlow<Boolean> = _isSignIn
 
+    private val _responseMessage = MutableStateFlow("")
+    val responseMessage: StateFlow<String> = _responseMessage
+
     fun signIn(email: String, password: String) {
         val requestBody = SignInRequest(email, password)
         RetrofitClient.apiService.signInRequest(requestBody)
@@ -30,14 +33,13 @@ class SignInViewModel : ViewModel() {
                         token = response.body()?.token.toString()
                         userId = response.body()?.userId.toString()
                         Log.d("testt", token)
-//                        responseMessage.value = response.body()?.message ?: "Login Successful"
                     } else {
-//                        responseMessage.value = "Error: ${response.message()}"
+                        _responseMessage.value = "이메일이나 비밀번호를 다시 확인해주세요."
                     }
                 }
 
                 override fun onFailure(call: Call<SignInResponse>, t: Throwable) {
-//                    responseMessage.value = "Request failed: ${t.message}"
+                    _responseMessage.value = "Request failed: ${t.message}"
                 }
             })
     }

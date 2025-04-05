@@ -96,7 +96,7 @@ fun RoomListScreen(
                             .background(MainBackground)
                     ) {
                         Text(
-                            text = "검색 결과가 없습니다.",
+                            text = "방이 없습니다.",
                             modifier = Modifier.align(Alignment.Center),
                             color = Gray7
                         )
