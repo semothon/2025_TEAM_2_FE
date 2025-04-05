@@ -86,13 +86,13 @@ fun RoomAddScreen(
     Scaffold(
         topBar = { TopBar("방 개설") { navController.popBackStack() } },
         bottomBar = {
-            if (restaurantName.isNotEmpty() && roomContent.isNotEmpty() && foodCategory.value.isNotEmpty() && memberCount.value.isNotEmpty() && location.isNotEmpty())
+            if (restaurantName.isNotEmpty() && roomContent.isNotEmpty() && foodCategory.value.isNotEmpty() && memberCount.value.isNotEmpty() && location.isNotEmpty() && userCost.isNotEmpty() && totalCost.isNotEmpty())
                 isButton = true
             BottomButton("완료", isButton) {
                 val hashTags = mutableListOf(
                     foodCategory.value,
                     if (isTogether) "같이 먹을래요" else "따로 먹을래요",
-                    if (!gender) "상관없음" else "동성만"
+                    if (gender) "상관없음" else "동성만"
                 )
                 hashTags += selectedKeywords
                 viewModel.makeRoom(

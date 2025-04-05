@@ -44,6 +44,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.participation.ParticipationNavigationItem
 import com.example.team2.presentation.component.CustomText2
 import com.example.team2.presentation.component.TopBar
+import com.example.team2.ui.theme.Gray7
 import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
@@ -108,24 +109,46 @@ fun ParticipationListScreen(
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    items(roomDeals) { deal ->
-                        ParticipationItem(
-                            deal = deal,
-                            isMyRoom = deal.creatorId == userId,
-                            onClick = {
-                                navController.navigate(
-                                    ParticipationNavigationItem.ParticipationDetail.destination +
-                                            "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}/${deal.tagChips}/${deal.roomStatus}"
-                                )
-                            },
-                            onClickRoomFinish = {
-                                roomId = it
-                                isDialog = true
-                            }
-                        )
+                if (roomDeals.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MainBackground)
+                    ) {
+                        Column(
+                            modifier = Modifier.align(Alignment.Center),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "거래내역이 없어요.",
+                                color = Gray7
+                            )
+                            Text(
+                                text = "버디방에 참여해보세요!",
+                                color = Gray7
+                            )
+                        }
                     }
-                    item { Spacer(modifier = Modifier.height(20.dp)) }
+                } else {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        items(roomDeals) { deal ->
+                            ParticipationItem(
+                                deal = deal,
+                                isMyRoom = deal.creatorId == userId,
+                                onClick = {
+                                    navController.navigate(
+                                        ParticipationNavigationItem.ParticipationDetail.destination +
+                                                "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}/${deal.tagChips}/${deal.roomStatus}"
+                                    )
+                                },
+                                onClickRoomFinish = {
+                                    roomId = it
+                                    isDialog = true
+                                }
+                            )
+                        }
+                        item { Spacer(modifier = Modifier.height(20.dp)) }
+                    }
                 }
 
                 if (isDialog) {
