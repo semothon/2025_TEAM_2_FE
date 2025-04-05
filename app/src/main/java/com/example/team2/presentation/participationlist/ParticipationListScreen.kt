@@ -74,9 +74,6 @@ fun ParticipationListScreen(
                     .padding(InnerPadding)
                     .padding(bottom = 80.dp)
             ) {
-                var selectedFilter by remember { mutableStateOf("") }
-                val filterOptions = listOf("진행 중", "완료")
-
                 Row {
                     filterOptions.forEach { option ->
                         Button(
