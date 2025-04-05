@@ -11,6 +11,7 @@ import com.example.team2.presentation.user.EditProfileViewModel
 import com.example.team2.presentation.user.FaqScreen
 import com.example.team2.presentation.user.FaqScreenWrapper
 import com.example.team2.presentation.user.InquiryFormScreen
+import com.example.team2.presentation.user.InquiryHistoryScreen
 import com.example.team2.presentation.user.InquiryScreen
 import com.example.team2.presentation.user.NoticeScreen
 import com.example.team2.presentation.user.NotificationSettingScreen
@@ -46,6 +47,9 @@ fun UserScreenNavigation() {
         }
         composable("inquiry_form") {
             InquiryFormScreen(navController)
+        }
+        composable("inquiry_history") {
+            InquiryHistoryScreen(navController)
         }
         composable("deleteAccount") {
             DeleteAccountScreen(navController)

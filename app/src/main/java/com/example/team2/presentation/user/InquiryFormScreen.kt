@@ -64,7 +64,7 @@ fun InquiryFormScreen(navController: NavController) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* 문의 내역 조회 이동 */ },
+                    .clickable { navController.navigate("inquiry_history") },
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation = CardDefaults.cardElevation(1.dp)
