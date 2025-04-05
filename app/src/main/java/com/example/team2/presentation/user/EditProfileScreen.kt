@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -20,16 +21,22 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
+import com.example.team2.R.drawable.ic_back_arrow
 import com.example.team2.presentation.user.model.ProfileInfo
+import com.example.team2.ui.theme.Brown1
+import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray1
 import com.example.team2.ui.theme.Gray4
 import com.example.team2.ui.theme.Gray5
+import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,87 +70,128 @@ fun EditProfileScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 24.dp)
-            .verticalScroll(scrollState)
+            .background(MainWhite)
     ) {
-        Text("프로필 수정", style = MaterialTheme.typography.titleLarge)
-        Spacer(Modifier.height(20.dp))
-
-        val image = painterResource(R.drawable.profile_illustration_1)
-        Box(
+        Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(top = 24.dp, start = 24.dp, end = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = image,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha = 0.5F
+            Icon(
+                painter = painterResource(id = ic_back_arrow),
+                contentDescription = "뒤로가기",
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable { navController.popBackStack() }
             )
+
+            Box(
+                modifier = Modifier.weight(1f), // 가운데 정렬을 위한 공간 분배
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "프로필 수정",
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Brown2
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.size(20.dp))
         }
 
-        NicknameInputField(
-            nickname = nickname,
-            onNicknameChange = { nickname = it }
-        )
-        Spacer(Modifier.height(24.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 12.dp)
+                .verticalScroll(scrollState)
+                .background(MainBackground)
+        ) {
 
-        NameInputField(
-            name = name,
-            onNameChange = { name = it }
-        )
-        Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
-        SchoolSelectField(
-            school = school,
-            onClick = {
-                // 검색 다이얼로그 띄우거나 이동 처리
-            }
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-
-        SelectField(
-            label = "학과",
-            selectedOption = major,
-            options = majorOptions,
-            onOptionSelected = { major = it }
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-
-        SelectField(
-            label = "입학연도",
-            selectedOption = year,
-            options = yearOptions,
-            onOptionSelected = { year = it }
-        )
-        Spacer(Modifier.height(24.dp))
-
-        GenderSelectField(
-            selectedGender = gender,
-            onGenderSelected = { gender = it }
-        )
-        Spacer(Modifier.height(24.dp))
-
-        Spacer(Modifier.height(16.dp))
-
-        AddressInputField(
-            address = address,
-            onAddressChange = { address = it }
-        )
-
-
-        ConfirmButton(
-            text = "완료",
-            onClick = {
-                viewModel.updateProfile(
-                    ProfileInfo(nickname, name, school, major, year, gender, address)
+            val image = painterResource(R.drawable.profile_illustration_1)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = image,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.5F
                 )
-                navController.popBackStack()
             }
-        )
 
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp),
+            ) {
+                NicknameInputField(
+                    nickname = nickname,
+                    onNicknameChange = { nickname = it }
+                )
+                Spacer(Modifier.height(24.dp))
+
+                NameInputField(
+                    name = name,
+                    onNameChange = { name = it }
+                )
+                Spacer(Modifier.height(24.dp))
+
+                SchoolSelectField(
+                    school = school,
+                    onClick = {
+                        // 검색 다이얼로그 띄우거나 이동 처리
+                    }
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SelectField(
+                    label = "학과",
+                    selectedOption = major,
+                    options = majorOptions,
+                    onOptionSelected = { major = it }
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SelectField(
+                    label = "입학연도",
+                    selectedOption = year,
+                    options = yearOptions,
+                    onOptionSelected = { year = it }
+                )
+                Spacer(Modifier.height(24.dp))
+
+                GenderSelectField(
+                    selectedGender = gender,
+                    onGenderSelected = { gender = it }
+                )
+                Spacer(Modifier.height(24.dp))
+
+                Spacer(Modifier.height(16.dp))
+
+                AddressInputField(
+                    address = address,
+                    onAddressChange = { address = it }
+                )
+            }
+
+            Spacer(modifier = Modifier.size(20.dp))
+            ConfirmButton(
+                text = "완료",
+                onClick = {
+                    viewModel.updateProfile(
+                        ProfileInfo(nickname, name, school, major, year, gender, address)
+                    )
+                    navController.popBackStack()
+                }
+            )
+
+        }
     }
 }
 
@@ -156,27 +204,37 @@ fun NicknameInputField(
         Text(
             text = "닉네임",
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
         )
-        OutlinedTextField(
-            value = nickname,
-            onValueChange = onNicknameChange,
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainColor,
-                unfocusedBorderColor = Gray5,
-                cursorColor = MainColor
-            ),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-        )
+                .height(42.dp)
+                .background(Color.White, RoundedCornerShape(7.86.dp))
+                .border(1.dp, Brown1.copy(alpha = 0.2f), RoundedCornerShape(7.86.dp))
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            BasicTextField(
+                value = nickname,
+                onValueChange = onNicknameChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    fontSize = 15.sp,
+                    color = Brown2
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
+        }
     }
 }
+
 
 @Composable
 fun NameInputField(
@@ -187,25 +245,35 @@ fun NameInputField(
         Text(
             text = "이름",
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
         )
-        OutlinedTextField(
-            value = name,
-            onValueChange = onNameChange,
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainColor,
-                unfocusedBorderColor = Gray5,
-                cursorColor = MainColor
-            ),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-        )
+                .height(42.dp)
+                .background(Color.White, RoundedCornerShape(7.86.dp))
+                .border(1.dp, Brown1.copy(alpha = 0.2f), RoundedCornerShape(7.86.dp))
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            BasicTextField(
+                value = name,
+                onValueChange = onNameChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    fontSize = 15.sp,
+                    color = Brown2
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
+        }
+
     }
 }
 
@@ -218,39 +286,43 @@ fun SchoolSelectField(
         Text(
             text = "학교",
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
         )
 
-        OutlinedTextField(
-            value = school,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(42.dp)
+                .background(Color.White, RoundedCornerShape(7.86.dp))
+                .border(1.dp, Brown1.copy(alpha = 0.2f), RoundedCornerShape(7.86.dp))                .clickable { onClick() }
+                .padding(horizontal = 12.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = if (school.isNotEmpty()) school else "학교 검색",
+                    fontSize = 15.sp,
+                    color = if (school.isNotEmpty()) Brown2 else Gray4
+                )
+
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "학교 검색",
                     tint = Gray4
                 )
-            },
-            shape = RoundedCornerShape(12.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .clickable { onClick() },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainColor,
-                unfocusedBorderColor = Gray5,
-                disabledBorderColor = Gray5,
-                cursorColor = Color.Transparent,
-                disabledTextColor = Color.Black
-            ),
-            enabled = false // 텍스트 수동 입력 막음
-        )
+            }
+        }
     }
 }
+
 
 @Composable
 fun SelectField(
@@ -265,8 +337,9 @@ fun SelectField(
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
         )
@@ -274,10 +347,10 @@ fun SelectField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .border(1.dp, Gray5, RoundedCornerShape(12.dp))
-                .clickable { expanded = true }
-                .padding(horizontal = 16.dp),
+                .height(42.dp)
+                .background(Color.White, RoundedCornerShape(7.86.dp))
+                .border(1.dp, Brown1.copy(alpha = 0.2f), RoundedCornerShape(7.86.dp))                .clickable { expanded = true }
+                .padding(horizontal = 12.dp),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -287,8 +360,8 @@ fun SelectField(
             ) {
                 Text(
                     text = selectedOption.ifEmpty { "선택해주세요" },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = if (selectedOption.isEmpty()) Gray4 else Color.Black
+                    fontSize = 15.sp,
+                    color = if (selectedOption.isEmpty()) Gray4 else Brown2
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -303,7 +376,13 @@ fun SelectField(
             ) {
                 options.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(option) },
+                        text = {
+                            Text(
+                                text = option,
+                                fontSize = 13.sp,
+                                color = Brown2
+                            )
+                        },
                         onClick = {
                             onOptionSelected(option)
                             expanded = false
@@ -314,6 +393,7 @@ fun SelectField(
         }
     }
 }
+
 
 @Composable
 fun GenderSelectField(
@@ -326,43 +406,48 @@ fun GenderSelectField(
         Text(
             text = "성별",
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            genderOptions.forEach { gender ->
+            genderOptions.forEachIndexed { index, gender ->
                 val isSelected = gender == selectedGender
 
                 OutlinedButton(
                     onClick = { onGenderSelected(gender) },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = if (isSelected) MainColor else Color.Transparent,
-                        contentColor = if (isSelected) MainWhite else Gray4
+                        containerColor = MainWhite, // ✅ 내부 색 항상 흰색
+                        contentColor = if (isSelected) MainColor else Gray5 // ✅ 텍스트 색
                     ),
                     border = BorderStroke(
-                        width = 1.dp,
-                        color = if (isSelected) MainColor else Gray5
+                        1.dp,
+                        if (isSelected) MainColor else Color.Transparent // ✅ 테두리 색
                     ),
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
                         .weight(1f)
-                        .height(48.dp)
+                        .height(42.dp)
                 ) {
                     Text(
                         text = gender,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
                     )
                 }
             }
         }
     }
 }
+
+
 
 @Composable
 fun AddressInputField(
@@ -371,29 +456,40 @@ fun AddressInputField(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "주소",
+            text = "위치",
             style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color = Gray4
+                color = Brown2
             ),
             modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
         )
-        OutlinedTextField(
-            value = address,
-            onValueChange = onAddressChange,
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MainColor,
-                unfocusedBorderColor = Gray5,
-                cursorColor = MainColor
-            ),
+
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-        )
+                .height(42.dp)
+                .background(Color.White, RoundedCornerShape(7.86.dp))
+                .border(1.dp, Brown1.copy(alpha = 0.2f), RoundedCornerShape(7.86.dp))
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            BasicTextField(
+                value = address,
+                onValueChange = onAddressChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    fontSize = 15.sp,
+                    color = Brown2
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            )
+        }
     }
 }
+
 
 @Composable
 fun ConfirmButton(
@@ -406,20 +502,23 @@ fun ConfirmButton(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(0.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MainColor,
-            contentColor = MainWhite
+            contentColor = Brown2 // ✅ 여기에 넣어도 되고,
         )
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.SemiBold
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Brown2 // ✅ 여기서 확실하게 명시
             )
         )
     }
 }
+
 
 
 
