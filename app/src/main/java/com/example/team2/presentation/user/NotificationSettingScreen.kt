@@ -1,16 +1,22 @@
 package com.example.team2.presentation.user
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.team2.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun NotificationSettingScreen(navController: NavController) {
-    // 상태 (토글)
     var chatAlarm by remember { mutableStateOf(false) }
     var roomAlarm by remember { mutableStateOf(false) }
     var likeAlarm by remember { mutableStateOf(false) }
@@ -18,20 +24,39 @@ fun NotificationSettingScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("알림설정") },
+                title = {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "알림설정",
+                            modifier = Modifier.align(Alignment.Center),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Text("←") // 아이콘 대신 텍스트 사용
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_back_arrow),
+                            contentDescription = "Back"
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    scrolledContainerColor = Color.White,
+                    navigationIconContentColor = Color.Black,
+                    titleContentColor = Color.Black
+                ),
+                scrollBehavior = null
             )
-        }
+        },
+        containerColor = Color.White
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 24.dp, vertical = 32.dp),
+                .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             NotificationItem("채팅 알림", chatAlarm) { chatAlarm = it }
@@ -44,10 +69,40 @@ fun NotificationSettingScreen(navController: NavController) {
 @Composable
 fun NotificationItem(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = label)
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        CustomSwitch(checked = checked, onCheckedChange = onCheckedChange)
     }
+}
+
+@Composable
+fun CustomSwitch(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val imageRes = if (checked) R.drawable.switch_on else R.drawable.switch_off
+
+    Image(
+        painter = painterResource(id = imageRes),
+        contentDescription = if (checked) "On" else "Off",
+        modifier = modifier
+            .clickable { onCheckedChange(!checked) }
+    )
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun NotificationSettingScreenPreview() {
+    val navController = rememberNavController()
+    NotificationSettingScreen(navController = navController)
 }

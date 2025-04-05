@@ -31,7 +31,7 @@ fun BottomNavigationGraph(viewModel: NavigationViewModel = viewModel()) {
                 HomeNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Send.destination) {
-//                ParticipationNavigationGraph(viewModel)
+                ParticipationNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Check.destination) {
                 ParticipationNavigationGraph(viewModel)

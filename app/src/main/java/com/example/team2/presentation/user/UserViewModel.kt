@@ -11,11 +11,11 @@ class EditProfileViewModel : ViewModel(), EditProfileViewModelContract {
         ProfileInfo(
             nickname = "닉네임2",
             name = "이름1",
+            school = "경희대학교",
             major = "컴퓨터공학과",
             year = "21학번",
             gender = "남성",
-            address = "사색의광장 배달존 A",
-            school = "경희대학교"
+            address = "사색의광장 배달존 A"
         )
     )
     override val profileInfo: StateFlow<ProfileInfo> = _profileInfo
