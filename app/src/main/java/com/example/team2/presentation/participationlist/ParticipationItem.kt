@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -87,13 +88,23 @@ fun ParticipationItem(
             }
 
             if ((deal.roomStatus == 0 || deal.roomStatus == 1) && isMyRoom)
-                Button(
-                    onClick = { onClickRoomFinish(deal.roomId) },
-                    modifier = Modifier.background(color = MainColor),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    contentPadding = PaddingValues(0.dp)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    CustomText("완료하기")
+                    Button(
+                        onClick = { onClickRoomFinish(deal.roomId) },
+                        modifier = Modifier
+                            .background(
+                                color = MainColor,
+                                shape = RoundedCornerShape(97.dp)
+                            )
+                            .width(150.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        CustomText("완료하기")
+                    }
                 }
         }
     }
