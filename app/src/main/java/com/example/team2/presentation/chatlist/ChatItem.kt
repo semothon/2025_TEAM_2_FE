@@ -1,9 +1,8 @@
-package com.example.team2.presentation.participationlist
+package com.example.team2.presentation.chatlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,14 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,7 +30,7 @@ import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
 
 @Composable
-fun ParticipationItem(
+fun ChatItem(
     deal: ParticipationRoom,
     isMyRoom: Boolean,
     onClick: () -> Unit,
@@ -58,10 +53,7 @@ fun ParticipationItem(
         shape = RoundedCornerShape(15.dp),
     ) {
         Column(modifier = Modifier.padding(10.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 IllustrationGrid(deal.illustrations)
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -72,29 +64,15 @@ fun ParticipationItem(
                             Spacer(Modifier.width(4.dp))
                             CustomText7("완료", Gray3)
                         }
-                        Spacer(Modifier.height(4.dp))
-                        CustomText(deal.roomContent, 0.6f)
                     } else {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CustomText3(deal.restaurantName)
                             Spacer(Modifier.width(4.dp))
                             CustomText7("진행 중", MainColor)
                         }
-                        Spacer(Modifier.height(4.dp))
-                        CustomText(deal.roomContent, 0.8f)
                     }
                 }
             }
-
-            if ((deal.roomStatus == 0 || deal.roomStatus == 1) && isMyRoom)
-                Button(
-                    onClick = { onClickRoomFinish(deal.roomId) },
-                    modifier = Modifier.background(color = MainColor),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    contentPadding = PaddingValues(0.dp)
-                ) {
-                    CustomText("완료하기")
-                }
         }
     }
 }

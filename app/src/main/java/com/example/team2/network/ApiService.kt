@@ -2,10 +2,13 @@ package com.example.team2.network
 
 import com.example.team2.network.model.ApiResponse
 import com.example.team2.network.model.BlockUserIdRequest
+import com.example.team2.network.model.ChatHistoryResponse
 import com.example.team2.network.model.MakeRoomResponse
 import com.example.team2.network.model.RoomListResponse
 import com.example.team2.network.model.RoomResponseDetail
 import com.example.team2.network.model.SearchQuery
+import com.example.team2.network.model.SendMessageRequest
+import com.example.team2.network.model.SendMessageResponse
 import com.example.team2.network.model.SignInRequest
 import com.example.team2.network.model.SignInResponse
 import com.example.team2.network.model.SignUpRequest
@@ -106,4 +109,17 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Body requestBody: UpdateRoomRequest
     ): Response<ApiResponse>
+
+    // 채팅 내역
+    @GET("chat/history")
+    suspend fun getChatHistory(
+        @Query("groupId") requestBody: String
+    ): Response<ChatHistoryResponse>
+
+    // 채팅 보내기
+    @POST("chat/send/groupRoom")
+    suspend fun sendMessage(
+        @Header("Authorization") authorization: String,
+        @Body requestBody: SendMessageRequest
+    ): Response<SendMessageResponse>
 }
