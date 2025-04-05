@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,11 +21,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.CustomText7
@@ -87,14 +91,26 @@ fun ParticipationItem(
             }
 
             if ((deal.roomStatus == 0 || deal.roomStatus == 1) && isMyRoom)
-                Button(
-                    onClick = { onClickRoomFinish(deal.roomId) },
-                    modifier = Modifier.background(color = MainColor),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                    contentPadding = PaddingValues(0.dp)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    CustomText("완료하기")
+                    Button(
+                        onClick = { onClickRoomFinish(deal.roomId) },
+                        shape = RoundedCornerShape(50), // pill-shaped
+                        colors = ButtonDefaults.buttonColors(containerColor = MainColor),
+                        contentPadding = PaddingValues(horizontal = 40.dp, vertical = 12.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                    ) {
+                        Text(
+                            text = "완료하기",
+                            color = Color.White,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
+
         }
     }
 }
