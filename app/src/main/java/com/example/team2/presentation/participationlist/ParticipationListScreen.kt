@@ -3,8 +3,10 @@ package com.example.team2.presentation.participationlist
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,13 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
 import com.example.team2.model.Transaction
-import com.example.team2.presentation.component.CustomText2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel(), navController: NavController? = null) {
+fun ParticipationListScreen(
+    viewModel: TransactionViewModel = TransactionViewModel(),
+    navController: NavController
+) {
     val transactions by viewModel.transactions.collectAsState()
     val (filterText, _) = viewModel.filter.collectAsState().value
 
@@ -73,18 +78,21 @@ fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewMod
             Spacer(modifier = Modifier.height(12.dp))
 
             LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
-                items(filteredTransactions.size) { index ->
-                    val transaction = filteredTransactions[index]
+                itemsIndexed(filteredTransactions) { index, transaction ->
                     TransactionItem(
                         transaction = transaction,
                         index = index,
-                        onComplete = { viewModel.completeTransaction(it) }
+                        onComplete = { viewModel.completeTransaction(it) },
+                        onClick = {
+                            navController?.navigate("room_detail")
+                        }
                     )
                     if (index < filteredTransactions.lastIndex) {
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
             }
+
         }
     }
 }
@@ -123,7 +131,12 @@ fun TransactionFilter(viewModel: TransactionViewModel) {
 }
 
 @Composable
-fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> Unit) {
+fun TransactionItem(
+    transaction: Transaction,
+    index: Int,
+    onComplete: (Int) -> Unit,
+    onClick: () -> Unit
+) {
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
@@ -137,14 +150,13 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    // 🔽 텍스트 위아래 패딩 ↓ ↓ ↓ 줄임
                     Text(
                         text = "거래를 완료하시겠습니까?",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF574C4D),
                         modifier = Modifier
-                            .padding(top = 4.dp, bottom = 2.dp) // 기존 18 → 12, 16 → 10 정도로 축소
+                            .padding(top = 4.dp, bottom = 2.dp)
                             .align(Alignment.CenterHorizontally)
                     )
 
@@ -153,16 +165,14 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp),  // 버튼 영역 높이는 유지
+                            .height(48.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
                         TextButton(
                             onClick = { showDialog = false },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
+                            modifier = Modifier.weight(1f)
                         ) {
-                            Text("취소", color = Color(0xFF574C4D), fontWeight = FontWeight.Medium)
+                            Text("취소", color = Color(0xFF574C4D))
                         }
 
                         Box(
@@ -177,9 +187,7 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
                                 showDialog = false
                                 onComplete(transaction.id)
                             },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
+                            modifier = Modifier.weight(1f)
                         ) {
                             Text("완료", color = Color(0xFFFFCC01), fontWeight = FontWeight.Bold)
                         }
@@ -189,13 +197,12 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
             containerColor = Color.White,
             shape = RoundedCornerShape(16.dp)
         )
-
-
     }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .border(
                 width = if (transaction.isOngoing) 2.dp else 0.dp,
                 color = if (transaction.isOngoing) Color(0xFFFFCC01) else Color.Transparent,
@@ -204,15 +211,9 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -308,5 +309,7 @@ fun TransactionItem(transaction: Transaction, index: Int, onComplete: (Int) -> U
 @Preview(showBackground = true)
 @Composable
 fun ParticipationListPreview() {
-    ParticipationListScreen()
+    val navController = rememberNavController()
+    ParticipationListScreen(navController = navController)
 }
+
