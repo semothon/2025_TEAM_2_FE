@@ -34,6 +34,7 @@ import com.example.team2.presentation.component.CustomText3
 import com.example.team2.presentation.component.CustomText7
 import com.example.team2.presentation.component.IllustrationGrid
 import com.example.team2.presentation.participationlist.model.ParticipationRoom
+import com.example.team2.ui.theme.Brown2
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
@@ -104,7 +105,7 @@ fun ParticipationItem(
                     ) {
                         Text(
                             text = "완료하기",
-                            color = Color.White,
+                            color = Brown2,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold
                         )
