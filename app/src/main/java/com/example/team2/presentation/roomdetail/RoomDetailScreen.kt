@@ -74,7 +74,6 @@ fun RoomDetailScreen(
     room: HomeToDetail,
     viewModel: RoomDetailViewModel = viewModel()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val isLoading by viewModel.isLoading.collectAsState()
     val members by viewModel.members.collectAsState()
     val isButton by viewModel.isButton.collectAsState()
@@ -82,9 +81,7 @@ fun RoomDetailScreen(
     val popBack by viewModel.popBack.collectAsState()
     val isDialog by viewModel.isDialog.collectAsState()
     val memberInfo = viewModel.member.collectAsState()
-
     var userCost by remember { mutableStateOf("") }
-    var totalCost by remember { mutableStateOf("") }
 
     LaunchedEffect(room.roomId) {
         viewModel.getRoomDetail(room.roomId)
