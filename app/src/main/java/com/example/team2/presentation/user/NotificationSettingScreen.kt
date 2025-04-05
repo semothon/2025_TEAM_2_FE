@@ -1,18 +1,25 @@
 package com.example.team2.presentation.user
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.team2.R
+import com.example.team2.ui.theme.Brown2
+import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,15 +30,16 @@ fun NotificationSettingScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "알림설정",
-                            modifier = Modifier.align(Alignment.Center),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
+                    Text(
+                        text = "알림설정",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 17.sp
+                        ),
+                        color = Brown2
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
@@ -41,22 +49,22 @@ fun NotificationSettingScreen(navController: NavController) {
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.White,
                     scrolledContainerColor = Color.White,
                     navigationIconContentColor = Color.Black,
                     titleContentColor = Color.Black
-                ),
-                scrollBehavior = null
+                )
             )
         },
-        containerColor = Color.White
+                containerColor = Color.White
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
+                .background(MainWhite)
+                .padding(horizontal = 30.dp, vertical = 20.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             NotificationItem("채팅 알림", chatAlarm) { chatAlarm = it }
@@ -76,7 +84,11 @@ fun NotificationItem(label: String, checked: Boolean, onCheckedChange: (Boolean)
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Brown2
         )
         CustomSwitch(checked = checked, onCheckedChange = onCheckedChange)
     }
