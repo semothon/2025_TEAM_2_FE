@@ -4,7 +4,9 @@ data class Chat(
     val id: Int,
     val name: String,
     val lastMessage: String,
-    var status: ChatStatus
+    var status: ChatStatus,
+    val participantProfileImages: List<Int>,
+    val unreadCount: Int
 )
 
 enum class ChatStatus {
