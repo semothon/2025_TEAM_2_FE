@@ -2,6 +2,7 @@ package com.example.team2.presentation.user
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -9,11 +10,14 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
+import com.example.team2.ui.theme.Brown2
 
 data class NoticeItem(
     val title: String,
@@ -28,92 +32,164 @@ data class NoticeItem(
 fun NoticeScreen(navController: NavController) {
     val noticeList = listOf(
         NoticeItem(
-            title = "서버 점검 안내",
-            date = "25/3/25",
-            createdDate = "2025-03-25",
-            createdTime = "10:00",
-            content = "3월 25일 오전 10시부터 1시간 동안 서버 점검이 진행됩니다."
-        ),
-        NoticeItem(
-            title = "신기능 업데이트",
-            date = "25/3/22",
+            title = "딜리버리를 슬기롭게 이용하는 방법",
+            date = "25/03/22",
             createdDate = "2025-03-22",
-            createdTime = "14:30",
-            content = "새로운 채팅 기능이 추가되었습니다. 업데이트를 확인해주세요!"
+            createdTime = "10:00",
+            content = "이곳에는 공지사항을 자유롭게 적을 거예요. 서로 본론 결론 멋있는 말을 잔뜩 쓰기."
         ),
-        NoticeItem(
-            title = "약관 개정 안내",
-            date = "25/3/10",
-            createdDate = "2025-03-10",
-            createdTime = "09:15",
-            content = "이용약관이 일부 개정되었습니다. 변경된 내용을 확인해 주세요."
-        )
+        NoticeItem("딜리버리 정기 업데이트 공지", "25/03/22", "2025-03-22", "09:00", "딜리버리 정기 업데이트가 3월 23일 실시됩니다."),
+        NoticeItem("공지 제목 3", "25/03/22", "2025-03-22", "08:30", "내용 3입니다."),
+        NoticeItem("공지 제목 4", "25/03/22", "2025-03-22", "07:45", "내용 4입니다.")
     )
+
+    var selectedNotice by remember { mutableStateOf<NoticeItem?>(null) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("공지사항") },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = "공지사항",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 17.sp
+                    )
+                },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
+                    if (selectedNotice != null) {
+                        IconButton(onClick = { selectedNotice = null }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "뒤로가기"
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "뒤로가기"
+                            )
+                        }
                     }
-                }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.White
+                )
             )
-        }
+        },
+        containerColor = Color(0xFFF9F9F9) // 연회색 배경
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 12.dp)
-        ) {
-            noticeList.forEach { item ->
-                NoticeAccordionItem(item)
+        Box(modifier = Modifier.padding(innerPadding)) {
+            if (selectedNotice == null) {
+                NoticeListView(noticeList) { selectedNotice = it }
+            } else {
+                NoticeDetailView(notice = selectedNotice!!)
             }
         }
     }
 }
 
 @Composable
-fun NoticeAccordionItem(item: NoticeItem) {
-    var expanded by remember { mutableStateOf(false) }
-
+fun NoticeListView(notices: List<NoticeItem>, onItemClick: (NoticeItem) -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { expanded = !expanded }
-            .padding(vertical = 12.dp)
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(item.title, fontWeight = FontWeight.Medium)
-            Text(item.date, style = MaterialTheme.typography.bodySmall)
-        }
+        Text(
+            text = "목록",
+            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 16.sp),
+            fontWeight = FontWeight.Bold,
+            color = Brown2
+        )
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Icon(
-                imageVector = if (expanded) Icons.Filled.KeyboardArrowDown
-                else Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null
-            )
-        }
+        notices.forEach { notice ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp)
+                    .clickable { onItemClick(notice) },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Text(
+                            text = notice.date,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 10.sp
+                            ),
+                            color = Brown2.copy(alpha = 0.6f)
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = notice.title,
+                            style = MaterialTheme.typography.bodyLarge.copy(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Brown2
+                        )
+                    }
 
-        if (expanded) {
-            Spacer(Modifier.height(8.dp))
-            Text("작성일: ${item.createdDate}")
-            Text("작성시간: ${item.createdTime}")
-            Spacer(Modifier.height(4.dp))
-            Text(item.content)
+                    Spacer(modifier = Modifier.weight(1f)) // 남은 공간 모두 차지해서 아이콘 밀어냄
+
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null
+                    )
+                }
+
+            }
         }
     }
 }
+
+@Composable
+fun NoticeDetailView(notice: NoticeItem) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 20.dp)
+    ) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(20.dp)) {
+                Text(
+                    text = notice.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "운영자   ${notice.date}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.Gray
+                )
+                Divider(
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    color = Color(0xFFE0E0E0)
+                )
+                Text(
+                    text = notice.content,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

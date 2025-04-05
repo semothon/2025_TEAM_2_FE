@@ -190,7 +190,6 @@ fun EditProfileScreen(
                     navController.popBackStack()
                 }
             )
-
         }
     }
 }
@@ -541,11 +540,11 @@ private class FakeEditProfileViewModel : EditProfileViewModelContract {
         ProfileInfo(
             nickname = "apple",
             name = "홍길동",
+            school = "경희대학교",
             major = "컴퓨터공학과",
             year = "22학번",
             gender = "남성",
-            address = "정문 앞",
-            school = "경희대학교"
+            address = "정문 앞"
         )
     )
 

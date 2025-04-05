@@ -281,12 +281,12 @@ fun UserScreenPreview() {
         updateProfile(
             ProfileInfo(
                 nickname = "꾸벅이",
+                name = "이름 1",
+                school = "경희대학교",
                 major = "기계공학과",
                 year = "2024204883",
                 gender = "남성",
-                address = "서울시 송파구",
-                name = "이름 1",
-                school = "경희대학교"
+                address = "서울시 송파구"
             )
         )
     }
