@@ -16,12 +16,16 @@ class RoomAddViewModel : ViewModel() {
     private val _memberCountOptions = MutableStateFlow((2..10).map { it.toString() })
     val memberCountOptions: MutableStateFlow<List<String>> = _memberCountOptions
 
+    private val _popBack = MutableStateFlow(false)
+    val popBack: MutableStateFlow<Boolean> = _popBack
+
     fun makeRoom(newRoom: RoomDetail) {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.apiService.makeRoom("Bearer $token", newRoom)
 
                 if (response.isSuccessful) {
+                    _popBack.value = true
                     Log.d("testt", response.body().toString())
                 } else {
                     // 실패 시 처리

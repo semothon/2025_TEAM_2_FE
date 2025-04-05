@@ -1,5 +1,6 @@
 package com.example.team2.presentation.roomlist
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,12 +83,7 @@ fun RoomListScreen(
                 Spacer(Modifier.height(16.dp))
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     items(rooms) { room ->
-                        RoomListItem(room) {
-                            navController.navigate(
-                                HomeNavigationItem.RoomDetail.destination +
-                                        "/${room.roomId}/${room.restaurantName}/${room.content}/${room.tagChips}/${room.status}"
-                            )
-                        }
+                        RoomListItem(room, navController)
                     }
                 }
             }
@@ -96,9 +92,12 @@ fun RoomListScreen(
                 painter = painterResource(R.drawable.room_add_button),
                 contentDescription = "add",
                 modifier = Modifier
-                    .padding(bottom = 80.dp)
                     .align(Alignment.BottomEnd)
-                    .clickable { navController.navigate(HomeNavigationItem.RoomAdd.destination) }
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = { navController.navigate(HomeNavigationItem.RoomAdd.destination) }
+                    )
             )
         } else
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

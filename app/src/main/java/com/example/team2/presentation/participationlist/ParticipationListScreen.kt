@@ -1,316 +1,197 @@
 package com.example.team2.presentation.participationlist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.team2.R
-import com.example.team2.model.Transaction
+import androidx.navigation.compose.rememberNavController
+import com.example.team2.navigation.home.HomeNavigationItem
+import com.example.team2.navigation.participation.ParticipationNavigationItem
 import com.example.team2.presentation.component.CustomText2
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ParticipationListScreen(viewModel: TransactionViewModel = TransactionViewModel(), navController: NavController? = null) {
-    val transactions by viewModel.transactions.collectAsState()
-    val (filterText, _) = viewModel.filter.collectAsState().value
-
-    val filteredTransactions = when (filterText) {
-        "진행 중" -> transactions.filter { it.isOngoing }
-        "완료" -> transactions.filter { !it.isOngoing }
-        else -> transactions
-    }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "거래내역",
-                            modifier = Modifier.align(Alignment.Center),
-                            fontSize = 17.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF574C4D)
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_notification),
-                            contentDescription = "알림",
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .padding(end = 18.dp)
-                                .size(24.dp),
-                            tint = Color.Unspecified
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF5F5F5))
-                .padding(paddingValues)
-        ) {
-            Spacer(modifier = Modifier.height(12.dp))
-            TransactionFilter(viewModel)
-            Spacer(modifier = Modifier.height(12.dp))
-
-            LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
-                items(filteredTransactions.size) { index ->
-                    val transaction = filteredTransactions[index]
-                    TransactionItem(
-                        transaction = transaction,
-                        index = index,
-                        onComplete = { viewModel.completeTransaction(it) }
-                    )
-                    if (index < filteredTransactions.lastIndex) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        }
-    }
-}
+import com.example.team2.presentation.component.TopBar
+import com.example.team2.ui.theme.InnerPadding
+import com.example.team2.ui.theme.MainBackground
+import com.example.team2.ui.theme.MainColor
+import com.example.team2.ui.theme.MainWhite
 
 @Composable
-fun TransactionFilter(viewModel: TransactionViewModel) {
-    val filterOptions = listOf("진행 중", "완료")
-    val (selectedFilter, _) = viewModel.filter.collectAsState().value
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.Start
-    ) {
-        filterOptions.forEach { option ->
-            Button(
-                onClick = { viewModel.setFilter(option) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (selectedFilter == option) Color(0xFFFFCC01) else Color.White
-                ),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .height(34.dp)
-            ) {
-                Text(
-                    option,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun TransactionItem(
-    transaction: Transaction,
-    index: Int, onComplete: (Int) -> Unit,
+fun ParticipationListScreen(
+    navController: NavController,
+    viewModel: ParticipationListViewModel = viewModel()
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val roomDeals = viewModel.roomDeals.collectAsState()
+    var isDialog by remember { mutableStateOf(false) }
 
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {},
-            dismissButton = {},
-            text = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                ) {
-                    // 🔽 텍스트 위아래 패딩 ↓ ↓ ↓ 줄임
-                    Text(
-                        text = "거래를 완료하시겠습니까?",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF574C4D),
-                        modifier = Modifier
-                            .padding(top = 4.dp, bottom = 2.dp) // 기존 18 → 12, 16 → 10 정도로 축소
-                            .align(Alignment.CenterHorizontally)
-                    )
+    LaunchedEffect(Unit) { viewModel.getRoomDeals() }
 
-                    Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+    if (isLoading)
+        Scaffold(
+            topBar = { TopBar("거래내역") { navController.popBackStack() } },
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(MainBackground)
+                    .padding(it)
+                    .padding(InnerPadding)
+                    .padding(bottom = 80.dp)
+            ) {
+                var selectedFilter by remember { mutableStateOf("") }
+                val filterOptions = listOf("진행 중", "완료")
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),  // 버튼 영역 높이는 유지
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        TextButton(
-                            onClick = { showDialog = false },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                        ) {
-                            Text("취소", color = Color(0xFF574C4D), fontWeight = FontWeight.Medium)
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .width(1.dp)
-                                .fillMaxHeight()
-                                .background(Color(0xFFE0E0E0))
-                        )
-
-                        TextButton(
+                Row {
+                    filterOptions.forEach { option ->
+                        Button(
                             onClick = {
-                                showDialog = false
-                                onComplete(transaction.id)
+                                selectedFilter = if (selectedFilter == option) "" else option
                             },
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                        ) {
-                            Text("완료", color = Color(0xFFFFCC01), fontWeight = FontWeight.Bold)
-                        }
-                    }
-                }
-            },
-            containerColor = Color.White,
-            shape = RoundedCornerShape(16.dp)
-        )
-
-
-    }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                width = if (transaction.isOngoing) 2.dp else 0.dp,
-                color = if (transaction.isOngoing) Color(0xFFFFCC01) else Color.Transparent,
-                shape = RoundedCornerShape(16.dp)
-            ),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    val displayProfiles = transaction.participants.take(3)
-                    val chunked = displayProfiles.chunked(2)
-
-                    chunked.forEachIndexed { rowIndex, rowProfiles ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                            rowProfiles.forEach { profile ->
-                                Image(
-                                    painter = painterResource(id = profile),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(CircleShape)
-                                        .border(1.dp, Color.Gray, CircleShape)
-                                )
-                            }
-
-                            if (rowIndex == 1 && transaction.participants.size > 3) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_plus),
-                                    contentDescription = "더보기",
-                                    modifier = Modifier
-                                        .size(40.dp)
-                                        .clip(CircleShape)
-                                )
-                            }
-                        }
+                                .background(
+                                    color = if (selectedFilter == option) MainColor else MainWhite
+                                ),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            contentPadding = PaddingValues(0.dp)
+                        ) { CustomText2(option) }
+                        Spacer(modifier = Modifier.width(4.dp))
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        Text(
-                            text = transaction.roomName,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = if (transaction.isOngoing) Color(0xFF574C4D) else Color(0x99574C4D)
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = if (transaction.isOngoing) "진행 중" else "완료",
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 12.sp,
-                            color = if (transaction.isOngoing) Color(0xFFFFCC01) else Color(0xFFC4C4C4)
+                LazyColumn {
+                    items(roomDeals.value) { deal ->
+                        ParticipationItem(
+                            deal = deal,
+                            onClick = {
+                                navController.navigate(
+                                    ParticipationNavigationItem.ParticipationDetail.destination +
+                                            "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}" ///${deal.tagChips}/${deal.roomStatus}"
+                                )
+                            },
+                            onClickRoomFinish = { isDialog = true }
                         )
                     }
-                    Text(
-                        text = transaction.roomDesc,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 13.sp,
-                        color = Color(0xCC574C4D),
-                        modifier = Modifier.padding(top = 4.dp)
+                }
+
+                if (isDialog) {
+                    AlertDialog(
+                        onDismissRequest = { isDialog = false },
+                        confirmButton = {},
+                        dismissButton = {},
+                        text = {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                            ) {
+                                // 🔽 텍스트 위아래 패딩 ↓ ↓ ↓ 줄임
+                                Text(
+                                    text = "거래를 완료하시겠습니까?",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF574C4D),
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 4.dp,
+                                            bottom = 2.dp
+                                        ) // 기존 18 → 12, 16 → 10 정도로 축소
+                                        .align(Alignment.CenterHorizontally)
+                                )
+
+                                HorizontalDivider(thickness = 1.dp, color = Color(0xFFE0E0E0))
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(48.dp),  // 버튼 영역 높이는 유지
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    TextButton(
+                                        onClick = { isDialog = false },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight()
+                                    ) {
+                                        Text(
+                                            "취소",
+                                            color = Color(0xFF574C4D),
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .width(1.dp)
+                                            .fillMaxHeight()
+                                            .background(Color(0xFFE0E0E0))
+                                    )
+
+                                    TextButton(
+                                        onClick = {
+                                            isDialog = false
+                                            // 완료 API
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxHeight()
+                                    ) {
+                                        Text(
+                                            "완료",
+                                            color = Color(0xFFFFCC01),
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        containerColor = Color.White,
+                        shape = RoundedCornerShape(16.dp)
                     )
                 }
             }
-
-            if (index == 0 && transaction.isOngoing) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = { showDialog = true },
-                        modifier = Modifier
-                            .width(150.dp)
-                            .height(48.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFFFCC01),
-                            contentColor = Color.Black
-                        )
-                    ) {
-                        Text(
-                            "완료하기",
-                            color = Color(0xFF574C4D),
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
         }
-    }
+    else
+        CircularProgressIndicator()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun ParticipationListPreview() {
-    ParticipationListScreen()
+    ParticipationListScreen(rememberNavController())
 }

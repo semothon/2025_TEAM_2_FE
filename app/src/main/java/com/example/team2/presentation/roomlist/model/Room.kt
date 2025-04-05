@@ -9,7 +9,7 @@ data class Room(
     @SerializedName("note") val content: String,
     @SerializedName("hashtags") val tagChips: List<String>,
     @SerializedName("status") val status: Int,
-    @SerializedName("icons") val creator: List<String>,
+    @SerializedName("icons") val illustrations: List<Int>,
     @SerializedName("maxPeople") val totalPeople: Int,
     @SerializedName("creatorGender") val gender: String
 ) : Serializable

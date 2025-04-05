@@ -12,7 +12,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.team2.navigation.home.HomeNavigationGraph
 import com.example.team2.navigation.participation.ParticipationNavigationGraph
 import com.example.team2.navigation.user.UserScreenNavigation
-import com.example.team2.presentation.participationlist.ParticipationListScreen
 import com.example.team2.presentation.tabbar.BottomBar
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -32,10 +31,10 @@ fun BottomNavigationGraph(viewModel: NavigationViewModel = viewModel()) {
                 HomeNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Send.destination) {
-                ParticipationNavigationGraph(viewModel)
+//                ParticipationNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Check.destination) {
-                ParticipationListScreen()
+                ParticipationNavigationGraph(viewModel)
             }
             composable(BottomNavigationItem.Person.destination) {
                 UserScreenNavigation()
