@@ -21,11 +21,11 @@ fun CustomText(text: String, alpha: Float = 1f) {
 }
 
 @Composable
-fun CustomText2(text: String) {
+fun CustomText2(text: String, color: Color = Brown2, alpha: Float = 1f) {
     Text(
         text = text,
         style = TextStyle(
-            color = Brown2,
+            color = color.copy(alpha = alpha),
             fontSize = 12.sp
         )
     )

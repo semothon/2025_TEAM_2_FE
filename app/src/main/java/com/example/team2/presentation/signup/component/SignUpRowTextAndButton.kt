@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.example.team2.presentation.component.CustomText
 import com.example.team2.ui.theme.Brown1
 import com.example.team2.ui.theme.Brown2
-import com.example.team2.ui.theme.Gray2
 import com.example.team2.ui.theme.Gray3
 import com.example.team2.ui.theme.Gray4
 import com.example.team2.ui.theme.MainColor
@@ -34,6 +33,7 @@ fun SignUpRowTextAndButton(
     label: String,
     placeHolder: String,
     buttonText: String,
+    isButton: Boolean = true,
     value: String,
     onValueChange: (String) -> Unit,
     onClick: (String) -> Unit,
@@ -69,27 +69,28 @@ fun SignUpRowTextAndButton(
             )
 
             Spacer(Modifier.width(8.dp))
-            Button(
-                onClick = { onClick(label) },
-                modifier = Modifier
-                    .weight(0.4f)
-                    .height(55.dp)
-                    .background(
-                        if (value.isNotEmpty()) MainColor else Gray4.copy(alpha = 0.2f),
-                        RoundedCornerShape(8.dp)
+            if (isButton)
+                Button(
+                    onClick = { onClick(label) },
+                    modifier = Modifier
+                        .weight(0.4f)
+                        .height(55.dp)
+                        .background(
+                            if (value.isNotEmpty()) MainColor else Gray4.copy(alpha = 0.2f),
+                            RoundedCornerShape(8.dp)
+                        ),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        disabledContainerColor = Gray4.copy(alpha = 0.2f)
                     ),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    disabledContainerColor = Gray4.copy(alpha = 0.2f)
-                ),
-                enabled = value.isNotEmpty()
-            ) {
-                Text(
-                    text = buttonText,
-                    style = TextStyle(color = Brown2.copy(alpha = if (value.isNotEmpty()) 1f else 0.5f))
-                )
-            }
+                    enabled = value.isNotEmpty()
+                ) {
+                    Text(
+                        text = buttonText,
+                        style = TextStyle(color = Brown2.copy(alpha = if (value.isNotEmpty()) 1f else 0.5f))
+                    )
+                }
         }
     }
 }

@@ -27,21 +27,15 @@ fun ParticipationNavigationGraph(viewModel: NavigationViewModel) {
         }
         composable(
             route = ParticipationNavigationItem.ParticipationDetail.destination +
-                    "/{roomId}/{roomName}/{roomContent}", ///{roomStatus}" //{roomTagChips}/
-            arguments = listOf(
-                navArgument("roomId") { type = NavType.StringType },
-                navArgument("roomName") { type = NavType.StringType },
-                navArgument("roomContent") { type = NavType.StringType },
-//                navArgument("roomStatus") { type = NavType.StringType },
-//                navArgument("roomTagChips") { type = NavType.StringType }
-            )
+                    "/{roomId}/{roomName}/{roomContent}/{roomTagChips}/{roomStatus}"
         ) { backStackEntry ->
             val roomId = backStackEntry.arguments?.getString("roomId").toString()
             val roomName = backStackEntry.arguments?.getString("roomName").toString()
             val roomContent = backStackEntry.arguments?.getString("roomContent").toString()
-//            val roomTagChips = backStackEntry.arguments?.getString("roomTagChips").toString()
-//            val roomStatus = backStackEntry.arguments?.getString("roomStatus").toString()
-            val roomDetail = HomeToDetail(roomId, roomName, roomContent) //, roomStatus)
+            val roomTagChips = backStackEntry.arguments?.getString("roomTagChips").toString()
+            val roomStatus = backStackEntry.arguments?.getString("roomStatus").toString()
+            val roomDetail =
+                HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus, "")
 
             viewModel.bottomEnableFalse()
             ParticipationDetailScreen(navController, roomDetail)

@@ -12,12 +12,30 @@ import kotlinx.coroutines.launch
 
 class RoomListViewModel : ViewModel() {
     private val _initialKeywords = MutableStateFlow(
-        listOf("같이 먹을래요", "따로 먹을래요", "동성만!", "분식", "일식")
+        listOf(
+            "같이 먹을래요",
+            "따로 먹을래요",
+            "동성만",
+            "한식",
+            "중식",
+            "양식",
+            "일식"
+        )
     )
     val initialKeywords: StateFlow<List<String>> = _initialKeywords
 
     private val _additionalKeywords = MutableStateFlow(
-        listOf("패스트푸드", "디저트", "양식", "아시안", "중식", "고기", "치킨")
+        listOf(
+            "패스트푸드",
+            "분식",
+            "디저트",
+            "치킨",
+            "피자",
+            "맵찔이",
+            "비흡연자만",
+            "고단백",
+            "비건"
+        )
     )
     val additionalKeywords: StateFlow<List<String>> = _additionalKeywords
 

@@ -69,16 +69,11 @@ fun SignInScreen(
     ) {
         Spacer(Modifier.weight(3f))
         Image(
-            painter = painterResource(R.drawable.logo),
+            painter = painterResource(R.drawable.app_loading),
             contentDescription = "logo"
         )
-        Spacer(Modifier.height(30.dp))
-        Text(
-            text = "학교 이메일로 로그인이 가능합니다 :)",
-            style = TextStyle(color = Brown2),
-        )
 
-        Spacer(Modifier.weight(2f))
+        Spacer(Modifier.weight(1f))
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -141,7 +136,7 @@ fun SignInScreen(
             onPasswordClick = { },
             onSignUpClick = { navController.navigate(SignNavigationItem.SignUp.destination) }
         )
-        Spacer(Modifier.weight(3f))
+        Spacer(Modifier.weight(2f))
     }
 }
 

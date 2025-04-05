@@ -1,10 +1,10 @@
 package com.example.team2.presentation.participationlist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,12 +17,11 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -42,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.team2.navigation.home.HomeNavigationItem
 import com.example.team2.navigation.participation.ParticipationNavigationItem
 import com.example.team2.presentation.component.CustomText2
 import com.example.team2.presentation.component.TopBar
@@ -50,6 +48,10 @@ import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
+import com.example.team2.userId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun ParticipationListScreen(
@@ -57,56 +59,73 @@ fun ParticipationListScreen(
     viewModel: ParticipationListViewModel = viewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
-    val roomDeals = viewModel.roomDeals.collectAsState()
+    val roomDeals by viewModel.filteredRoomDeals.collectAsState()
     var isDialog by remember { mutableStateOf(false) }
+    var roomId by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) { viewModel.getRoomDeals() }
 
-    if (isLoading)
-        Scaffold(
-            topBar = { TopBar("거래내역") { navController.popBackStack() } },
-        ) {
+    Scaffold(
+        topBar = { TopBar("거래내역", false) {} }
+    ) { paddingValues ->
+        if (isLoading)
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(MainBackground)
-                    .padding(it)
+                    .padding(paddingValues)
                     .padding(InnerPadding)
-                    .padding(bottom = 80.dp)
+                    .padding(bottom = 50.dp)
             ) {
                 var selectedFilter by remember { mutableStateOf("") }
                 val filterOptions = listOf("진행 중", "완료")
 
                 Row {
                     filterOptions.forEach { option ->
-                        Button(
-                            onClick = {
-                                selectedFilter = if (selectedFilter == option) "" else option
-                            },
+                        Surface(
                             modifier = Modifier
+                                .clickable(
+                                    interactionSource = null,
+                                    indication = null,
+                                    onClick = {
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            selectedFilter =
+                                                if (selectedFilter == option) "" else option
+                                            viewModel.filterList(selectedFilter)
+                                        }
+                                    }
+                                )
                                 .background(
+                                    shape = RoundedCornerShape(97.dp),
                                     color = if (selectedFilter == option) MainColor else MainWhite
-                                ),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                            contentPadding = PaddingValues(0.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 6.dp),
+                            shape = RoundedCornerShape(97.dp),
+                            color = Color.Transparent,
                         ) { CustomText2(option) }
                         Spacer(modifier = Modifier.width(4.dp))
                     }
                 }
 
-                LazyColumn {
-                    items(roomDeals.value) { deal ->
+                Spacer(modifier = Modifier.height(20.dp))
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    items(roomDeals) { deal ->
                         ParticipationItem(
                             deal = deal,
+                            isMyRoom = deal.creatorId == userId,
                             onClick = {
                                 navController.navigate(
                                     ParticipationNavigationItem.ParticipationDetail.destination +
-                                            "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}" ///${deal.tagChips}/${deal.roomStatus}"
+                                            "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}/${deal.tagChips}/${deal.roomStatus}"
                                 )
                             },
-                            onClickRoomFinish = { isDialog = true }
+                            onClickRoomFinish = {
+                                roomId = it
+                                isDialog = true
+                            }
                         )
                     }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
                 }
 
                 if (isDialog) {
@@ -164,8 +183,9 @@ fun ParticipationListScreen(
 
                                     TextButton(
                                         onClick = {
+                                            viewModel.isLoadingFalse()
+                                            viewModel.updateRoom(roomId)
                                             isDialog = false
-                                            // 완료 API
                                         },
                                         modifier = Modifier
                                             .weight(1f)
@@ -185,9 +205,19 @@ fun ParticipationListScreen(
                     )
                 }
             }
-        }
-    else
-        CircularProgressIndicator()
+        else
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MainBackground)
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    trackColor = MainColor.copy(alpha = 0.4f),
+                    color = MainColor
+                )
+            }
+    }
 }
 
 @Preview(showBackground = true)

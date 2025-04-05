@@ -11,5 +11,7 @@ data class Room(
     @SerializedName("status") val status: Int,
     @SerializedName("icons") val illustrations: List<Int>,
     @SerializedName("maxPeople") val totalPeople: Int,
-    @SerializedName("creatorGender") val gender: String
+    @SerializedName("creatorGender") val gender: String,
+    @SerializedName("cost") val userCost: Int,
+    @SerializedName("hopeCost") val totalCost: Int
 ) : Serializable
