@@ -62,10 +62,8 @@ fun ParticipationDetailScreen(
     room: HomeToDetail,
     viewModel: ParticipationDetailViewModel = viewModel()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val isLoading by viewModel.isLoading.collectAsState()
     val members by viewModel.members.collectAsState()
-    val isButton by viewModel.isButton.collectAsState()
     val location by viewModel.location.collectAsState()
     val popBack by viewModel.popBack.collectAsState()
     val isDialog by viewModel.isDialog.collectAsState()
