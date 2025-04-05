@@ -263,11 +263,19 @@ fun LogoutAndDeleteButtons(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             TextButton(onClick = onLogoutClick) {
-                Text("로그아웃")
+                Text(
+                    text = "로그아웃",
+                    color = Color.Transparent
+                )
             }
+
             TextButton(onClick = onDeleteClick) {
-                Text("회원탈퇴")
+                Text(
+                    text = "회원탈퇴",
+                    color = Color.Transparent
+                )
             }
+
         }
     }
 }
