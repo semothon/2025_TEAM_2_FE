@@ -9,6 +9,7 @@ import com.example.team2.network.model.SearchQuery
 import com.example.team2.network.model.SignInRequest
 import com.example.team2.network.model.SignInResponse
 import com.example.team2.network.model.SignUpRequest
+import com.example.team2.network.model.UpdateRoomRequest
 import com.example.team2.network.model.UserDetailResponse
 import com.example.team2.network.model.VerifyCodeCertRequest
 import com.example.team2.network.model.VerifyCodeRequest
@@ -19,6 +20,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -96,5 +98,12 @@ interface ApiService {
     suspend fun blockUser(
         @Header("Authorization") authorization: String,
         @Body requestBody: BlockUserIdRequest
+    ): Response<ApiResponse>
+
+    // 방 상태 변경
+    @PATCH("group/update")
+    suspend fun updateRoom(
+        @Header("Authorization") authToken: String,
+        @Body requestBody: UpdateRoomRequest
     ): Response<ApiResponse>
 }

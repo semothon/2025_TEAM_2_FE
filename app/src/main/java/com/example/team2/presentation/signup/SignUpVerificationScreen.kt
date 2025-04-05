@@ -29,6 +29,7 @@ fun SignUpVerificationScreen(viewModel: SignUpViewModel) {
                 label = value.label,
                 placeHolder = value.textPlaceholder,
                 buttonText = value.buttonText,
+                isButton = value.label != "비밀번호",
                 value = when (value.label) {
                     "학교 이메일" -> email
                     "인증 코드" -> verificationCode

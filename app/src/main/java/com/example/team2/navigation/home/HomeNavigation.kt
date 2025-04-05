@@ -35,15 +35,16 @@ fun HomeNavigationGraph(viewModel: NavigationViewModel) {
         }
         composable(
             route = HomeNavigationItem.RoomDetail.destination
-                    + "/{roomId}/{roomName}/{roomContent}/{roomTagChips}/{roomStatus}"
+                    + "/{roomId}/{roomName}/{roomContent}/{roomTagChips}/{roomStatus}/{totalCost}"
         ) { backStackEntry ->
             val roomId = backStackEntry.arguments?.getString("roomId").toString()
             val roomName = backStackEntry.arguments?.getString("roomName").toString()
             val roomContent = backStackEntry.arguments?.getString("roomContent").toString()
             val roomTagChips = backStackEntry.arguments?.getString("roomTagChips").toString()
             val roomStatus = backStackEntry.arguments?.getString("roomStatus").toString()
+            val totalCost = backStackEntry.arguments?.getString("totalCost").toString()
             val roomDetail =
-                HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus)
+                HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus, totalCost)
 
             viewModel.bottomEnableFalse()
             RoomDetailScreen(navController, roomDetail)

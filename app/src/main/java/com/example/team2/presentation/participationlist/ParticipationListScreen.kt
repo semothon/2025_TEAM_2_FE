@@ -1,6 +1,7 @@
 package com.example.team2.presentation.participationlist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import com.example.team2.ui.theme.InnerPadding
 import com.example.team2.ui.theme.MainBackground
 import com.example.team2.ui.theme.MainColor
 import com.example.team2.ui.theme.MainWhite
+import com.example.team2.userId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,20 +61,21 @@ fun ParticipationListScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val roomDeals by viewModel.filteredRoomDeals.collectAsState()
     var isDialog by remember { mutableStateOf(false) }
+    var roomId by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) { viewModel.getRoomDeals() }
 
     Scaffold(
         topBar = { TopBar("거래내역", false) {} }
-    ) {
+    ) { paddingValues ->
         if (isLoading)
             Column(
                 Modifier
                     .fillMaxSize()
                     .background(MainBackground)
-                    .padding(it)
+                    .padding(paddingValues)
                     .padding(InnerPadding)
-                    .padding(bottom = 80.dp)
+                    .padding(bottom = 50.dp)
             ) {
                 var selectedFilter by remember { mutableStateOf("") }
                 val filterOptions = listOf("진행 중", "완료")
@@ -80,18 +83,23 @@ fun ParticipationListScreen(
                 Row {
                     filterOptions.forEach { option ->
                         Surface(
-                            onClick = {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    selectedFilter = if (selectedFilter == option) "" else option
-                                    viewModel.filterList(selectedFilter)
-                                }
-                            },
                             modifier = Modifier
-                                .height(20.dp)
+                                .clickable(
+                                    interactionSource = null,
+                                    indication = null,
+                                    onClick = {
+                                        CoroutineScope(Dispatchers.Main).launch {
+                                            selectedFilter =
+                                                if (selectedFilter == option) "" else option
+                                            viewModel.filterList(selectedFilter)
+                                        }
+                                    }
+                                )
                                 .background(
-                                    color = if (selectedFilter == option) MainColor else MainWhite,
-                                    shape = RoundedCornerShape(97.dp)
-                                ),
+                                    shape = RoundedCornerShape(97.dp),
+                                    color = if (selectedFilter == option) MainColor else MainWhite
+                                )
+                                .padding(horizontal = 8.dp, vertical = 6.dp),
                             shape = RoundedCornerShape(97.dp),
                             color = Color.Transparent,
                         ) { CustomText2(option) }
@@ -100,19 +108,24 @@ fun ParticipationListScreen(
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     items(roomDeals) { deal ->
                         ParticipationItem(
                             deal = deal,
+                            isMyRoom = deal.creatorId == userId,
                             onClick = {
                                 navController.navigate(
                                     ParticipationNavigationItem.ParticipationDetail.destination +
                                             "/${deal.roomId}/${deal.restaurantName}/${deal.roomContent}/${deal.tagChips}/${deal.roomStatus}"
                                 )
                             },
-                            onClickRoomFinish = { isDialog = true }
+                            onClickRoomFinish = {
+                                roomId = it
+                                isDialog = true
+                            }
                         )
                     }
+                    item { Spacer(modifier = Modifier.height(20.dp)) }
                 }
 
                 if (isDialog) {
@@ -170,8 +183,9 @@ fun ParticipationListScreen(
 
                                     TextButton(
                                         onClick = {
+                                            viewModel.isLoadingFalse()
+                                            viewModel.updateRoom(roomId)
                                             isDialog = false
-                                            // 완료 API
                                         },
                                         modifier = Modifier
                                             .weight(1f)
@@ -192,7 +206,11 @@ fun ParticipationListScreen(
                 }
             }
         else
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MainBackground)
+            ) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
                     trackColor = MainColor.copy(alpha = 0.4f),

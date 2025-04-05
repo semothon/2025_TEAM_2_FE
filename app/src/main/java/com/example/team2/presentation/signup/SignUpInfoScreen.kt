@@ -37,7 +37,7 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
     val univ = rememberSaveable { mutableStateOf("") }
     val univExpanded = remember { mutableStateOf(false) }
 
-    val departmentOptions = viewModel.departmentOptions.collectAsState()
+    val departmentOptions by viewModel.departmentOptions.collectAsState()
     val department = rememberSaveable { mutableStateOf("") }
     val departmentExpanded = remember { mutableStateOf(false) }
 
@@ -48,11 +48,28 @@ fun SignUpInfoScreen(viewModel: SignUpViewModel) {
     LaunchedEffect(userName, univ, department, year, gender) {
         viewModel.infoSave(UserInfo(userName, univ.value, department.value, year.value, gender))
     }
+    LaunchedEffect(univ.value) {
+        viewModel.selectedDepartments(univ.value)
+    }
 
     val infos = listOf(
         Infos("학교", univ, "학교를 선택하세요.", univOptions.value, univExpanded, Icons.Default.Search),
-        Infos("학과", department, "학과를 선택하세요.", departmentOptions.value, departmentExpanded, Icons.Default.KeyboardArrowDown),
-        Infos("입학연도", year, "입학연도를 선택하세요.", yearOptions.value, yearExpanded, Icons.Default.KeyboardArrowDown)
+        Infos(
+            "학과",
+            department,
+            "학과를 선택하세요.",
+            departmentOptions,
+            departmentExpanded,
+            Icons.Default.KeyboardArrowDown
+        ),
+        Infos(
+            "입학연도",
+            year,
+            "입학연도를 선택하세요.",
+            yearOptions.value,
+            yearExpanded,
+            Icons.Default.KeyboardArrowDown
+        )
     )
 
     Column {

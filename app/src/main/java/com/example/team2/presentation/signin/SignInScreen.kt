@@ -67,20 +67,10 @@ fun SignInScreen(
             .padding(InnerPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.weight(2f))
+        Spacer(Modifier.weight(3f))
         Image(
-            painter = painterResource(R.drawable.logo),
+            painter = painterResource(R.drawable.app_loading),
             contentDescription = "logo"
-        )
-        Spacer(Modifier.height(20.dp))
-        Image(
-            painter = painterResource(R.drawable.app_name),
-            contentDescription = "logo"
-        )
-        Spacer(Modifier.height(20.dp))
-        Text(
-            text = "학교 이메일로 로그인이 가능합니다 :)",
-            style = TextStyle(color = Brown2),
         )
 
         Spacer(Modifier.weight(1f))

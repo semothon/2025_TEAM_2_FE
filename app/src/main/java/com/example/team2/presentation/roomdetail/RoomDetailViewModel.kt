@@ -74,11 +74,11 @@ class RoomDetailViewModel : ViewModel() {
         }
     }
 
-    fun joinRoom(roomId: String) {
-        val groupId = SearchQuery(roomId)
+    fun joinRoom(roomId: String, userCost: Int) {
+        val joinRoom = SearchQuery(roomId, userCost)
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.apiService.joinRoom("Bearer $token", groupId)
+                val response = RetrofitClient.apiService.joinRoom("Bearer $token", joinRoom)
 
                 if (response.isSuccessful) {
                     _popBack.value = true

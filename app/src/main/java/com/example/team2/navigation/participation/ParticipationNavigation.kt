@@ -34,7 +34,8 @@ fun ParticipationNavigationGraph(viewModel: NavigationViewModel) {
             val roomContent = backStackEntry.arguments?.getString("roomContent").toString()
             val roomTagChips = backStackEntry.arguments?.getString("roomTagChips").toString()
             val roomStatus = backStackEntry.arguments?.getString("roomStatus").toString()
-            val roomDetail = HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus)
+            val roomDetail =
+                HomeToDetail(roomId, roomName, roomContent, roomTagChips, roomStatus, "")
 
             viewModel.bottomEnableFalse()
             ParticipationDetailScreen(navController, roomDetail)

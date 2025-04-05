@@ -9,4 +9,5 @@ data class ParticipationRoom(
     @SerializedName("status") val roomStatus: Int,
     @SerializedName("icons") val illustrations: List<Int>,
     @SerializedName("hashtags") val tagChips: List<String>,
+    @SerializedName("creator") val creatorId: String
 )

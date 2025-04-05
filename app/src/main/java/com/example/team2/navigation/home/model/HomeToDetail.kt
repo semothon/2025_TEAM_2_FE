@@ -5,5 +5,6 @@ data class HomeToDetail(
     val roomName: String,
     val roomContent: String,
     val roomTagChips: String,
-    val roomStatus: String
+    val roomStatus: String,
+    val totalCost: String
 )
